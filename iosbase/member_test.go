@@ -11,14 +11,14 @@ func TestMember(t *testing.T) {
 		m, err := NewMember(nil)
 		Convey("New member: ", func() {
 			So(err, ShouldBeNil)
-			So(len(m.Pubkey), ShouldEqual, 33)
-			So(len(m.Seckey), ShouldEqual, 32)
+			So(len(m.PubKey), ShouldEqual, 33)
+			So(len(m.SecKey), ShouldEqual, 32)
 		})
 
 		Convey("sign and verify: ", func() {
 			info := []byte("hello world")
-			sig := Sign(Sha256(info), m.Seckey)
-			So(VerifySignature(Sha256(info), m.Pubkey, sig), ShouldBeTrue)
+			sig := Sign(Sha256(info), m.SecKey)
+			So(VerifySignature(Sha256(info), m.PubKey, sig), ShouldBeTrue)
 		})
 	})
 }

@@ -8,7 +8,7 @@ import (
 
 type Member struct {
 	ID       string
-	userName string
+	UserName string
 	PubKey   []byte
 	SecKey   []byte
 }
