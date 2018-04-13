@@ -40,8 +40,8 @@ func ParseHex(s string) []byte {
 	return d
 }
 
-func Sign(info, privkey []byte) []byte {
-	sig, err := secp256k1.Sign(info, privkey)
+func Sign(info, pubKey []byte) []byte {
+	sig, err := secp256k1.Sign(info, privKey)
 	if err != nil {
 		println(err)
 		return nil
@@ -49,12 +49,12 @@ func Sign(info, privkey []byte) []byte {
 	return sig[:64]
 }
 
-func VerifySignature(info, pubkey, sig []byte) bool {
-	return secp256k1.VerifySignature(pubkey, info, sig)
+func VerifySignature(info, pubKey, sig []byte) bool {
+	return secp256k1.VerifySignature(pubKey, info, sig)
 }
 
-func CalcPubkey(privkey []byte) []byte {
+func CalcPubKey(privKey []byte) []byte {
 	myCurve := secp256k1.S256()
-	x, y := myCurve.ScalarBaseMult(privkey)
-	return secp256k1.CompressPubkey(x, y)
+	x, y := myCurve.ScalarBaseMult(privKey)
+	return secp256k1.CompressPubKey(x, y)
 }
