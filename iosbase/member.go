@@ -8,27 +8,27 @@ import (
 
 type Member struct {
 	ID       string
-	Username string
-	Pubkey   []byte
-	Seckey   []byte
+	userName string
+	PubKey   []byte
+	SecKey   []byte
 }
 
-func NewMember(seckey []byte) (Member, error) {
+func NewMember(secKey []byte) (Member, error) {
 	var m Member
-	if seckey == nil {
+	if secKey == nil {
 		rand.Seed(time.Now().UnixNano())
 		bin := NewBinary()
 		for i := 0; i < 4; i++ {
 			bin.PutULong(rand.Uint64())
 		}
-		seckey = bin.bytes
+		secKey = bin.bytes
 	}
-	if len(seckey) != 32 {
+	if len(secKey) != 32 {
 		return Member{}, fmt.Errorf("seckey length error")
 	}
 
-	m.Seckey = seckey
-	m.Pubkey = CalcPubkey(seckey)
-	m.ID = Base58Encode(m.Pubkey)
+	m.SecKey = secKey
+	m.PubKey = CalcPubkey(secKey)
+	m.ID = Base58Encode(m.PubKey)
 	return m, nil
 }
