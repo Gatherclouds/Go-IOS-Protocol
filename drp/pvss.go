@@ -20,17 +20,17 @@ type DecryptedShare struct {
 func escrow(threshold int, participants []Point) (DhSecret, []EncryptedShare) {
 	poly := polynomialGen(threshold)
 	dh := poly.elements[0].toPoint()
-	dhsec := dh.ToDhSecret()
+	dhSec := dh.ToDhSecret()
 	fmt.Println(poly)
 	shares := make([]EncryptedShare, len(participants))
 	for p := 0; p < len(participants); p++ {
 		evalVal := poly.evaluate(big.NewInt(int64(p + 2)))
 		key := participants[p]
 		yi := PointMul(&key, &evalVal)
-		eshare := EncryptedShare{ShareId(p + 2), *yi}
-		shares[p] = eshare
+		eShare := EncryptedShare{ShareId(p + 2), *yi}
+		shares[p] = eShare
 	}
-	return dhsec, shares
+	return dhSec, shares
 }
 
 func (share *EncryptedShare) decryptShare(priv *Scalar) DecryptedShare {
