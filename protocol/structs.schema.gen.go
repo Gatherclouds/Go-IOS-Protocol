@@ -19,7 +19,7 @@ sender should sign the block to ensure security
 */
 type SignedBlock struct {
 	Sig         []byte
-	Pubkey      []byte
+	PubKey      []byte
 	Blk         []byte
 	BlkHeadHash []byte
 }
@@ -42,7 +42,7 @@ func (d *SignedBlock) Size() (s uint64) {
 		s += l
 	}
 	{
-		l := uint64(len(d.Pubkey))
+		l := uint64(len(d.PubKey))
 
 		{
 
@@ -119,7 +119,7 @@ func (d *SignedBlock) Marshal(buf []byte) ([]byte, error) {
 		i += l
 	}
 	{
-		l := uint64(len(d.Pubkey))
+		l := uint64(len(d.PubKey))
 
 		{
 
@@ -134,7 +134,7 @@ func (d *SignedBlock) Marshal(buf []byte) ([]byte, error) {
 			i++
 
 		}
-		copy(buf[i+0:], d.Pubkey)
+		copy(buf[i+0:], d.PubKey)
 		i += l
 	}
 	{
@@ -223,12 +223,12 @@ func (d *SignedBlock) Unmarshal(buf []byte) (uint64, error) {
 			l = t
 
 		}
-		if uint64(cap(d.Pubkey)) >= l {
-			d.Pubkey = d.Pubkey[:l]
+		if uint64(cap(d.PubKey)) >= l {
+			d.PubKey = d.PubKey[:l]
 		} else {
-			d.Pubkey = make([]byte, l)
+			d.PubKey = make([]byte, l)
 		}
-		copy(d.Pubkey, buf[i+0:])
+		copy(d.PubKey, buf[i+0:])
 		i += l
 	}
 	{
