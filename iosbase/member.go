@@ -28,7 +28,7 @@ func NewMember(secKey []byte) (Member, error) {
 	}
 
 	m.SecKey = secKey
-	m.PubKey = CalcPubkey(secKey)
+	m.PubKey = CalcPubKkey(secKey)
 	m.ID = Base58Encode(m.PubKey)
 	return m, nil
 }
