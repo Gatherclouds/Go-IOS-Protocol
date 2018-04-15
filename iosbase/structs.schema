@@ -1,26 +1,26 @@
 struct State  {
-  BirthTxHash []byte
+  BirthTextHash []byte
   Value int64
   Script string
 }
 
-struct TxInput {
-   TxHash []byte
+struct TextInput {
+   TextHash []byte
    UnlockScript string
    StateHash []byte
 }
 
-struct Tx {
+struct Text {
    Version int32
    Recorder string
-   Inputs []TxInput
+   Inputs []TextInput
    Outputs []State
    Time int64
 }
 
-struct TxPoolRaw {
-    Txs []Tx
-    TxHash [][]byte
+struct TextPoolRaw {
+    Texts []Text
+    TextHash [][]byte
 }
 
 struct BlockHead {
