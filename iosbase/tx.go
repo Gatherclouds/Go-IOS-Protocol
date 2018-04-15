@@ -1,6 +1,6 @@
 package iosbase
 
-func (d *TxInput) Encode() []byte {
+func (d *TextInput) Encode() []byte {
 	bin, err := d.Marshal(nil)
 	if err != nil {
 		panic(err)
@@ -8,15 +8,15 @@ func (d *TxInput) Encode() []byte {
 	return bin
 }
 
-func (d *TxInput) Decode(bin []byte) error {
+func (d *TextInput) Decode(bin []byte) error {
 	_, err := d.Unmarshal(bin)
 	return err
 }
-func (d *TxInput) Hash() []byte {
+func (d *TextInput) Hash() []byte {
 	return Sha256(d.Encode())
 }
 
-func (d *Tx) Encode() []byte {
+func (d *Text) Encode() []byte {
 	bin, err := d.Marshal(nil)
 	if err != nil {
 		panic(err)
@@ -24,10 +24,10 @@ func (d *Tx) Encode() []byte {
 	return bin
 }
 
-func (d *Tx) Decode(bin []byte) error {
+func (d *Text) Decode(bin []byte) error {
 	_, err := d.Unmarshal(bin)
 	return err
 }
-func (d *Tx) Hash() []byte {
+func (d *Text) Hash() []byte {
 	return Sha256(d.Encode())
 }

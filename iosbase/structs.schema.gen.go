@@ -13,7 +13,7 @@ var (
 )
 
 type State struct {
-	BirthTxHash []byte
+	BirthTextHash []byte
 	Value       int64
 	Script      string
 }
@@ -21,7 +21,7 @@ type State struct {
 func (d *State) Size() (s uint64) {
 
 	{
-		l := uint64(len(d.BirthTxHash))
+		l := uint64(len(d.BirthTextHash))
 
 		{
 
@@ -65,7 +65,7 @@ func (d *State) Marshal(buf []byte) ([]byte, error) {
 	i := uint64(0)
 
 	{
-		l := uint64(len(d.BirthTxHash))
+		l := uint64(len(d.BirthTextHash))
 
 		{
 
@@ -80,7 +80,7 @@ func (d *State) Marshal(buf []byte) ([]byte, error) {
 			i++
 
 		}
-		copy(buf[i+0:], d.BirthTxHash)
+		copy(buf[i+0:], d.BirthTextHash)
 		i += l
 	}
 	{
@@ -144,12 +144,12 @@ func (d *State) Unmarshal(buf []byte) (uint64, error) {
 			l = t
 
 		}
-		if uint64(cap(d.BirthTxHash)) >= l {
-			d.BirthTxHash = d.BirthTxHash[:l]
+		if uint64(cap(d.BirthTextHash)) >= l {
+			d.BirthTextHash = d.BirthTextHash[:l]
 		} else {
-			d.BirthTxHash = make([]byte, l)
+			d.BirthTextHash = make([]byte, l)
 		}
-		copy(d.BirthTxHash, buf[i+0:])
+		copy(d.BirthTextHash, buf[i+0:])
 		i += l
 	}
 	{
@@ -235,7 +235,7 @@ func (d *TxInput) Size() (s uint64) {
 	}
 	return
 }
-func (d *TxInput) Marshal(buf []byte) ([]byte, error) {
+func (d *TextInput) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
 		if uint64(cap(buf)) >= size {
@@ -247,7 +247,7 @@ func (d *TxInput) Marshal(buf []byte) ([]byte, error) {
 	i := uint64(0)
 
 	{
-		l := uint64(len(d.TxHash))
+		l := uint64(len(d.TextHash))
 
 		{
 
@@ -262,7 +262,7 @@ func (d *TxInput) Marshal(buf []byte) ([]byte, error) {
 			i++
 
 		}
-		copy(buf[i+0:], d.TxHash)
+		copy(buf[i+0:], d.TextHash)
 		i += l
 	}
 	{
