@@ -1,6 +1,9 @@
 package protocol
 
-import "sort"
+import (
+	"sort"
+	"fmt"
+)
 
 /*
 view determined by the preview block's recorder, the best come into committee, and the preview
@@ -9,6 +12,14 @@ primary leaves
 type PobView struct {
 	primary iosbase.Member
 	backup  []iosbase.Member
+}
+
+func ViewFactory(target string) (View, error) {
+	switch target {
+	case "pob":
+		return &PobView{}, nil
+	}
+	return nil, fmt.Errorf("target view not found")
 }
 
 func (v *PobView) Init(chain iosbase.BlockChain) {

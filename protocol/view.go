@@ -23,12 +23,6 @@ type View interface {
 	ByzantineTolerance() int
 }
 
-func ViewFactory(target string) (View, error) {
-	switch target {
-	case "pob":
-		return &PobView{}, nil
-	}
-	return nil, fmt.Errorf("target view not found")
-}
+
 
 
