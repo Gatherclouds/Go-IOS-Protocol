@@ -1,8 +1,8 @@
 package drp
 
 import (
-	"fmt"
-	"math/big"
+	_ "fmt"
+	_ "math/big"
 )
 
 type ShareId int
