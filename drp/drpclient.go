@@ -1,7 +1,7 @@
 package drp
 
-type Client interface {
-	RequestRan(seed []byte) []byte
+type UserClient interface {
+	RequestRandom(seed []byte) []byte
 	AddServer(server Server)
 	OnReceivingProof()
 	OnReceivingSignOff()
