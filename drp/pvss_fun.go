@@ -1,5 +1,10 @@
 package drp
 
+import (
+	"fmt"
+	"math/big"
+)
+
 func escrow(threshold int, participants []Point) (DhSecret, []EncryptedShare) {
 	poly := polynomialGen(threshold)
 	dh := poly.elements[0].toPoint()
