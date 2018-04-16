@@ -21,7 +21,7 @@ import (
 )
 
 // attachCmd represents the attach command
-var attachCmd = &cobra.Command{
+var attachCommand = &cobra.Command{
 	Use: "attach",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -36,7 +36,7 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	RootCmd.AddCommand(attachCmd)
+	RootCmd.AddCommand(attachCommand)
 
 	// Here you will define your flags and configuration settings.
 
