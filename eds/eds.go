@@ -1,4 +1,4 @@
 package eds
 
-type Shard interface {
+type Fragment interface {
 }
