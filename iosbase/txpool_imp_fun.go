@@ -1,5 +1,7 @@
 package iosbase
 
+import "fmt"
+
 func (tp *TxPoolImpl) Add(tx Tx) error {
 	tp.Txs = append(tp.Txs, tx)
 	return nil
