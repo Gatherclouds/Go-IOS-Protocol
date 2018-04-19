@@ -177,3 +177,9 @@ func (d *UTXO) Unmarshal(buf []byte) (uint64, error) {
 	}
 	return i + 8, nil
 }
+
+type TxInput struct {
+	TxHash       []byte
+	UnlockScript string
+	UTXOHash     []byte
+}
