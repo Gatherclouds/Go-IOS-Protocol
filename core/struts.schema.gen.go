@@ -385,3 +385,55 @@ type Tx struct {
 	Time    int64
 }
 
+func (d *Tx) Size() (s uint64) {
+
+	{
+		l := uint64(len(d.Inputs))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+
+		for k0 := range d.Inputs {
+
+			{
+				s += d.Inputs[k0].Size()
+			}
+
+		}
+
+	}
+	{
+		l := uint64(len(d.Outputs))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+
+		for k0 := range d.Outputs {
+
+			{
+				s += d.Outputs[k0].Size()
+			}
+
+		}
+
+	}
+	s += 12
+	return
+}
+
