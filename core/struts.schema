@@ -27,7 +27,6 @@ struct BlockHead {
    Info []byte
    Time    int64
 }
-
 struct Block {
    Version   int32
    Head      BlockHead
