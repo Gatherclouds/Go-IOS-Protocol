@@ -537,3 +537,87 @@ func (d *Tx) Marshal(buf []byte) ([]byte, error) {
 	return buf[:i+12], nil
 }
 
+func (d *Tx) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+
+		d.Version = 0 | (int32(buf[i+0+0]) << 0) | (int32(buf[i+1+0]) << 8) | (int32(buf[i+2+0]) << 16) | (int32(buf[i+3+0]) << 24)
+
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+4] & 0x7F)
+			for buf[i+4]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+4]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Inputs)) >= l {
+			d.Inputs = d.Inputs[:l]
+		} else {
+			d.Inputs = make([]TxInput, l)
+		}
+		for k0 := range d.Inputs {
+
+			{
+				ni, err := d.Inputs[k0].Unmarshal(buf[i+4:])
+				if err != nil {
+					return 0, err
+				}
+				i += ni
+			}
+
+		}
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+4] & 0x7F)
+			for buf[i+4]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+4]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Outputs)) >= l {
+			d.Outputs = d.Outputs[:l]
+		} else {
+			d.Outputs = make([]UTXO, l)
+		}
+		for k0 := range d.Outputs {
+
+			{
+				ni, err := d.Outputs[k0].Unmarshal(buf[i+4:])
+				if err != nil {
+					return 0, err
+				}
+				i += ni
+			}
+
+		}
+	}
+	{
+
+		d.Time = 0 | (int64(buf[i+0+4]) << 0) | (int64(buf[i+1+4]) << 8) | (int64(buf[i+2+4]) << 16) | (int64(buf[i+3+4]) << 24) | (int64(buf[i+4+4]) << 32) | (int64(buf[i+5+4]) << 40) | (int64(buf[i+6+4]) << 48) | (int64(buf[i+7+4]) << 56)
+
+	}
+	return i + 12, nil
+}
+
