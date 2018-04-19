@@ -17,3 +17,38 @@ type UTXO struct {
 	Value       int64
 	Script      string
 }
+func (d *UTXO) Size() (s uint64) {
+
+	{
+		l := uint64(len(d.BirthTxHash))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	{
+		l := uint64(len(d.Script))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	s += 8
+	return
+}
