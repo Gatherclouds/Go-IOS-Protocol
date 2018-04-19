@@ -183,3 +183,52 @@ type TxInput struct {
 	UnlockScript string
 	UTXOHash     []byte
 }
+func (d *TxInput) Size() (s uint64) {
+
+	{
+		l := uint64(len(d.TxHash))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	{
+		l := uint64(len(d.UnlockScript))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	{
+		l := uint64(len(d.UTXOHash))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	return
+}
