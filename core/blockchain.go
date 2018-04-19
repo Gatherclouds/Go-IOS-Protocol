@@ -70,3 +70,27 @@ func (bc *BlockChainImpl) Top() *Block {
 	}
 	return blk
 }
+func (bc *BlockChainImpl) Init() error {
+	var err error
+	bc.db, err = iostdb.NewLDBDatabase(DBPath, 1, 1)
+	if err != nil {
+		return err
+	}
+
+	bc.redis, err = redis.Dial(Conn, DBAddr)
+	if err != nil {
+		return err
+	}
+
+	len, err := redis.Int(bc.redis.Do("llen", "BC_index"))
+	if err != nil {
+		return err
+	}
+	bc.length = len
+	return nil
+}
+
+func (bc *BlockChainImpl) Close() error {
+	bc.db.Close()
+	return nil
+}
