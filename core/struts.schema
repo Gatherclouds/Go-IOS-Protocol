@@ -1,0 +1,11 @@
+struct UTXO  {
+  BirthTxHash []byte
+  Value int64
+  Script string
+}
+
+struct TxInput {
+   TxHash []byte
+   UnlockScript string
+   UTXOHash []byte
+}
