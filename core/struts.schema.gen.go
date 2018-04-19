@@ -437,3 +437,103 @@ func (d *Tx) Size() (s uint64) {
 	return
 }
 
+func (d *Tx) Marshal(buf []byte) ([]byte, error) {
+	size := d.Size()
+	{
+		if uint64(cap(buf)) >= size {
+			buf = buf[:size]
+		} else {
+			buf = make([]byte, size)
+		}
+	}
+	i := uint64(0)
+
+	{
+
+		buf[0+0] = byte(d.Version >> 0)
+
+		buf[1+0] = byte(d.Version >> 8)
+
+		buf[2+0] = byte(d.Version >> 16)
+
+		buf[3+0] = byte(d.Version >> 24)
+
+	}
+	{
+		l := uint64(len(d.Inputs))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+4] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+4] = byte(t)
+			i++
+
+		}
+		for k0 := range d.Inputs {
+
+			{
+				nbuf, err := d.Inputs[k0].Marshal(buf[i+4:])
+				if err != nil {
+					return nil, err
+				}
+				i += uint64(len(nbuf))
+			}
+
+		}
+	}
+	{
+		l := uint64(len(d.Outputs))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+4] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+4] = byte(t)
+			i++
+
+		}
+		for k0 := range d.Outputs {
+
+			{
+				nbuf, err := d.Outputs[k0].Marshal(buf[i+4:])
+				if err != nil {
+					return nil, err
+				}
+				i += uint64(len(nbuf))
+			}
+
+		}
+	}
+	{
+
+		buf[i+0+4] = byte(d.Time >> 0)
+
+		buf[i+1+4] = byte(d.Time >> 8)
+
+		buf[i+2+4] = byte(d.Time >> 16)
+
+		buf[i+3+4] = byte(d.Time >> 24)
+
+		buf[i+4+4] = byte(d.Time >> 32)
+
+		buf[i+5+4] = byte(d.Time >> 40)
+
+		buf[i+6+4] = byte(d.Time >> 48)
+
+		buf[i+7+4] = byte(d.Time >> 56)
+
+	}
+	return buf[:i+12], nil
+}
+
