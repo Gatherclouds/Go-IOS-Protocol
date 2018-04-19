@@ -1,9 +1,5 @@
 package common
 
-import "testing"
-
-package common
-
 import (
 "testing"
 
