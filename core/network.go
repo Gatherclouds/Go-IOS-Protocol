@@ -15,3 +15,11 @@ type Request struct {
 //	Code        int
 //	Description string
 //}
+
+//go:generate mockgen -destination mocks/mock_network.go -package iosbase_mock -source network.go -imports .=github.com/iost-official/PrototypeWorks/iosbase
+
+type Network interface {
+	Send(req Request)
+	Listen(port uint16) (<-chan Request, error)
+	Close(port uint16) error
+}
