@@ -302,3 +302,78 @@ func (d *TxInput) Marshal(buf []byte) ([]byte, error) {
 	}
 	return buf[:i+0], nil
 }
+func (d *TxInput) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+0] & 0x7F)
+			for buf[i+0]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+0]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.TxHash)) >= l {
+			d.TxHash = d.TxHash[:l]
+		} else {
+			d.TxHash = make([]byte, l)
+		}
+		copy(d.TxHash, buf[i+0:])
+		i += l
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+0] & 0x7F)
+			for buf[i+0]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+0]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		d.UnlockScript = string(buf[i+0 : i+0+l])
+		i += l
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+0] & 0x7F)
+			for buf[i+0]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+0]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.UTXOHash)) >= l {
+			d.UTXOHash = d.UTXOHash[:l]
+		} else {
+			d.UTXOHash = make([]byte, l)
+		}
+		copy(d.UTXOHash, buf[i+0:])
+		i += l
+	}
+	return i + 0, nil
+}
