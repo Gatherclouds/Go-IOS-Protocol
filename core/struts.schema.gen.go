@@ -870,3 +870,54 @@ type BlockHead struct {
 	Info      []byte
 	Time      int64
 }
+
+func (d *BlockHead) Size() (s uint64) {
+
+	{
+		l := uint64(len(d.SuperHash))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	{
+		l := uint64(len(d.TreeHash))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	{
+		l := uint64(len(d.Info))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	s += 9
+	return
+}
