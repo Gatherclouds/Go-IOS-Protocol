@@ -1016,3 +1016,94 @@ func (d *BlockHead) Marshal(buf []byte) ([]byte, error) {
 	}
 	return buf[:i+9], nil
 }
+
+func (d *BlockHead) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+
+		d.Version = 0 | (int8(buf[i+0+0]) << 0)
+
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+1] & 0x7F)
+			for buf[i+1]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+1]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.SuperHash)) >= l {
+			d.SuperHash = d.SuperHash[:l]
+		} else {
+			d.SuperHash = make([]byte, l)
+		}
+		copy(d.SuperHash, buf[i+1:])
+		i += l
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+1] & 0x7F)
+			for buf[i+1]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+1]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.TreeHash)) >= l {
+			d.TreeHash = d.TreeHash[:l]
+		} else {
+			d.TreeHash = make([]byte, l)
+		}
+		copy(d.TreeHash, buf[i+1:])
+		i += l
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+1] & 0x7F)
+			for buf[i+1]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+1]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Info)) >= l {
+			d.Info = d.Info[:l]
+		} else {
+			d.Info = make([]byte, l)
+		}
+		copy(d.Info, buf[i+1:])
+		i += l
+	}
+	{
+
+		d.Time = 0 | (int64(buf[i+0+1]) << 0) | (int64(buf[i+1+1]) << 8) | (int64(buf[i+2+1]) << 16) | (int64(buf[i+3+1]) << 24) | (int64(buf[i+4+1]) << 32) | (int64(buf[i+5+1]) << 40) | (int64(buf[i+6+1]) << 48) | (int64(buf[i+7+1]) << 56)
+
+	}
+	return i + 9, nil
+}
