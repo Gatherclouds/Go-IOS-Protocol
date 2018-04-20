@@ -862,3 +862,11 @@ func (d *TxPoolRaw) Unmarshal(buf []byte) (uint64, error) {
 	}
 	return i + 0, nil
 }
+
+type BlockHead struct {
+	Version   int8
+	SuperHash []byte
+	TreeHash  []byte
+	Info      []byte
+	Time      int64
+}
