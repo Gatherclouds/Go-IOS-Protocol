@@ -770,3 +770,95 @@ func (d *TxPoolRaw) Marshal(buf []byte) ([]byte, error) {
 	}
 	return buf[:i+0], nil
 }
+
+func (d *TxPoolRaw) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+0] & 0x7F)
+			for buf[i+0]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+0]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Txs)) >= l {
+			d.Txs = d.Txs[:l]
+		} else {
+			d.Txs = make([]Tx, l)
+		}
+		for k0 := range d.Txs {
+
+			{
+				ni, err := d.Txs[k0].Unmarshal(buf[i+0:])
+				if err != nil {
+					return 0, err
+				}
+				i += ni
+			}
+
+		}
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+0] & 0x7F)
+			for buf[i+0]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+0]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.TxHash)) >= l {
+			d.TxHash = d.TxHash[:l]
+		} else {
+			d.TxHash = make([][]byte, l)
+		}
+		for k0 := range d.TxHash {
+
+			{
+				l := uint64(0)
+
+				{
+
+					bs := uint8(7)
+					t := uint64(buf[i+0] & 0x7F)
+					for buf[i+0]&0x80 == 0x80 {
+						i++
+						t |= uint64(buf[i+0]&0x7F) << bs
+						bs += 7
+					}
+					i++
+
+					l = t
+
+				}
+				if uint64(cap(d.TxHash[k0])) >= l {
+					d.TxHash[k0] = d.TxHash[k0][:l]
+				} else {
+					d.TxHash[k0] = make([]byte, l)
+				}
+				copy(d.TxHash[k0], buf[i+0:])
+				i += l
+			}
+
+		}
+	}
+	return i + 0, nil
+}
