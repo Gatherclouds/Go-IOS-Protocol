@@ -688,3 +688,85 @@ func (d *TxPoolRaw) Size() (s uint64) {
 	}
 	return
 }
+
+func (d *TxPoolRaw) Marshal(buf []byte) ([]byte, error) {
+	size := d.Size()
+	{
+		if uint64(cap(buf)) >= size {
+			buf = buf[:size]
+		} else {
+			buf = make([]byte, size)
+		}
+	}
+	i := uint64(0)
+
+	{
+		l := uint64(len(d.Txs))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+0] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+0] = byte(t)
+			i++
+
+		}
+		for k0 := range d.Txs {
+
+			{
+				nbuf, err := d.Txs[k0].Marshal(buf[i+0:])
+				if err != nil {
+					return nil, err
+				}
+				i += uint64(len(nbuf))
+			}
+
+		}
+	}
+	{
+		l := uint64(len(d.TxHash))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+0] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+0] = byte(t)
+			i++
+
+		}
+		for k0 := range d.TxHash {
+
+			{
+				l := uint64(len(d.TxHash[k0]))
+
+				{
+
+					t := uint64(l)
+
+					for t >= 0x80 {
+						buf[i+0] = byte(t) | 0x80
+						t >>= 7
+						i++
+					}
+					buf[i+0] = byte(t)
+					i++
+
+				}
+				copy(buf[i+0:], d.TxHash[k0])
+				i += l
+			}
+
+		}
+	}
+	return buf[:i+0], nil
+}
