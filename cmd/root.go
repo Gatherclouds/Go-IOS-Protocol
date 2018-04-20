@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	_ "github.com/spf13/viper"
 )
 
 var cfgFile string
@@ -48,4 +48,4 @@ func init() {
 	RootCommand.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-}
+
