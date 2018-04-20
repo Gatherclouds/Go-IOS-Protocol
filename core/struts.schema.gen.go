@@ -621,3 +621,70 @@ func (d *Tx) Unmarshal(buf []byte) (uint64, error) {
 	return i + 12, nil
 }
 
+type TxPoolRaw struct {
+	Txs    []Tx
+	TxHash [][]byte
+}
+
+func (d *TxPoolRaw) Size() (s uint64) {
+
+	{
+		l := uint64(len(d.Txs))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+
+		for k0 := range d.Txs {
+
+			{
+				s += d.Txs[k0].Size()
+			}
+
+		}
+
+	}
+	{
+		l := uint64(len(d.TxHash))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+
+		for k0 := range d.TxHash {
+
+			{
+				l := uint64(len(d.TxHash[k0]))
+
+				{
+
+					t := l
+					for t >= 0x80 {
+						t >>= 7
+						s++
+					}
+					s++
+
+				}
+				s += l
+			}
+
+		}
+
+	}
+	return
+}
