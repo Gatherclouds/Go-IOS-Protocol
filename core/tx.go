@@ -7,3 +7,7 @@ func (d *TxInput) Encode() []byte {
 	}
 	return bin
 }
+func (d *TxInput) Decode(bin []byte) error {
+	_, err := d.Unmarshal(bin)
+	return err
+}
