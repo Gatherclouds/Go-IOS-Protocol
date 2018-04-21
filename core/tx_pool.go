@@ -1,5 +1,11 @@
 package core
 
+import (
+	"fmt"
+
+	"github.com/iost-official/prototype/common"
+)
+
 type Serializable interface {
 	Encode() []byte
 	Decode([]byte) error
@@ -10,7 +16,8 @@ type Serializable interface {
 type TxPool interface {
 	Add(tx Tx) error
 	Del(tx Tx) error
-	
+	Find(txHash []byte) (Tx, error)
+
 }
 
 type TxPoolImpl struct {
@@ -39,3 +46,10 @@ func (tp *TxPoolImpl) Del(tx Tx) error {
 	return nil
 }
 
+func (tp *TxPoolImpl) Find(txHash []byte) (Tx, error) {
+	tx, ok := tp.txMap[common.Base58Encode(txHash)]
+	if !ok {
+		return tx, fmt.Errorf("not found")
+	}
+	return tx, nil
+}
