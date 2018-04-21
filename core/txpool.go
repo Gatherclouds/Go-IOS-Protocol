@@ -9,10 +9,24 @@ type Serializable interface {
 type TxPool interface {
 	Add(tx Tx) error
 	Del(tx Tx) error
-	Updae(tx Tx) error
 	Find(txHash []byte) (Tx, error)
 	GetSlice() ([]Tx, error)
 	Has(txHash []byte) (bool, error)
 	Size() int
 	Serializable
+}
+type TxPoolImpl struct {
+	TxPoolRaw
+	txMap map[string]Tx
+}
+
+func NewTxPool() TxPool {
+	txp := TxPoolImpl{
+		txMap: make(map[string]Tx),
+		TxPoolRaw: TxPoolRaw{
+			Txs:    make([]Tx, 0),
+			TxHash: make([][]byte, 0),
+		},
+	}
+	return &txp
 }
