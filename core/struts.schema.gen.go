@@ -1107,3 +1107,33 @@ func (d *BlockHead) Unmarshal(buf []byte) (uint64, error) {
 	}
 	return i + 9, nil
 }
+
+type Block struct {
+	Version int32
+	Head    BlockHead
+	Content []byte
+}
+
+func (d *Block) Size() (s uint64) {
+
+	{
+		s += d.Head.Size()
+	}
+	{
+		l := uint64(len(d.Content))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	s += 4
+	return
+}
