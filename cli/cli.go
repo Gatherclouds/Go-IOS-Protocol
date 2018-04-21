@@ -84,21 +84,7 @@ func Run() {
 					Usage: "amount of btc to be sent",
 				},
 			},
-			Action: func(c *cli.Context) error {
-				from := c.String("from")
-				to := c.String("to")
-				amount := c.Int("amount")
-				if from == "" || to == "" {
-					fmt.Println("Address can't be empty!")
-					return nil
-				}
-				if amount <= 0 {
-					fmt.Println("Amount must be greater than 0.")
-					return nil
-				}
-				send(from, to, amount)
-				return nil
-			},
+			
 		},
 	}
 
@@ -107,3 +93,4 @@ func Run() {
 		log.Fatal(err)
 	}
 }
+

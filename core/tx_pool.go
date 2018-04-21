@@ -2,8 +2,6 @@ package core
 
 import (
 	"fmt"
-
-	"github.com/iost-official/prototype/common"
 )
 
 type Serializable interface {
@@ -17,6 +15,10 @@ type TxPool interface {
 	Add(tx Tx) error
 	Del(tx Tx) error
 	Find(txHash []byte) (Tx, error)
+	GetSlice() ([]Tx, error)
+	Has(txHash []byte) (bool, error)
+	Size() int
+	Serializable
 
 }
 
