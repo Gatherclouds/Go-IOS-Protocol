@@ -84,7 +84,7 @@ func Run() {
 					Usage: "amount of btc to be sent",
 				},
 			},
-			
+
 		},
 	}
 
