@@ -30,3 +30,8 @@ func NewTxPool() TxPool {
 	}
 	return &txp
 }
+func (tp *TxPoolImpl) Add(tx Tx) error {
+	tp.txMap[common.Base58Encode(tx.Hash())] = tx
+	return nil
+}
+
