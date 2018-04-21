@@ -5,16 +5,14 @@ type Serializable interface {
 	Decode([]byte) error
 	Hash() []byte
 }
+
 //go:generate mockgen -destination mocks/mock_tx_pool.go -package core_mock github.com/iost-official/prototype/core TxPool
 type TxPool interface {
 	Add(tx Tx) error
 	Del(tx Tx) error
-	Find(txHash []byte) (Tx, error)
-	GetSlice() ([]Tx, error)
-	Has(txHash []byte) (bool, error)
-	Size() int
-	Serializable
+	
 }
+
 type TxPoolImpl struct {
 	TxPoolRaw
 	txMap map[string]Tx
@@ -30,8 +28,14 @@ func NewTxPool() TxPool {
 	}
 	return &txp
 }
+
 func (tp *TxPoolImpl) Add(tx Tx) error {
 	tp.txMap[common.Base58Encode(tx.Hash())] = tx
+	return nil
+}
+
+func (tp *TxPoolImpl) Del(tx Tx) error {
+	delete(tp.txMap, common.Base58Encode(tx.Hash()))
 	return nil
 }
 
