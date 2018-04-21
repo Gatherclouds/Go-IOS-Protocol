@@ -1188,3 +1188,45 @@ func (d *Block) Marshal(buf []byte) ([]byte, error) {
 	}
 	return buf[:i+4], nil
 }
+func (d *Block) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+
+		d.Version = 0 | (int32(buf[i+0+0]) << 0) | (int32(buf[i+1+0]) << 8) | (int32(buf[i+2+0]) << 16) | (int32(buf[i+3+0]) << 24)
+
+	}
+	{
+		ni, err := d.Head.Unmarshal(buf[i+4:])
+		if err != nil {
+			return 0, err
+		}
+		i += ni
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+4] & 0x7F)
+			for buf[i+4]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+4]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Content)) >= l {
+			d.Content = d.Content[:l]
+		} else {
+			d.Content = make([]byte, l)
+		}
+		copy(d.Content, buf[i+4:])
+		i += l
+	}
+	return i + 4, nil
+}
