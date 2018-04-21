@@ -1137,3 +1137,54 @@ func (d *Block) Size() (s uint64) {
 	s += 4
 	return
 }
+
+func (d *Block) Marshal(buf []byte) ([]byte, error) {
+	size := d.Size()
+	{
+		if uint64(cap(buf)) >= size {
+			buf = buf[:size]
+		} else {
+			buf = make([]byte, size)
+		}
+	}
+	i := uint64(0)
+
+	{
+
+		buf[0+0] = byte(d.Version >> 0)
+
+		buf[1+0] = byte(d.Version >> 8)
+
+		buf[2+0] = byte(d.Version >> 16)
+
+		buf[3+0] = byte(d.Version >> 24)
+
+	}
+	{
+		nbuf, err := d.Head.Marshal(buf[4:])
+		if err != nil {
+			return nil, err
+		}
+		i += uint64(len(nbuf))
+	}
+	{
+		l := uint64(len(d.Content))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+4] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+4] = byte(t)
+			i++
+
+		}
+		copy(buf[i+4:], d.Content)
+		i += l
+	}
+	return buf[:i+4], nil
+}
