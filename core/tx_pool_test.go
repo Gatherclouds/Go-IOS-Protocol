@@ -31,5 +31,22 @@ func TestTxPoolImpl(t *testing.T) {
 			_, err = txp.Find([]byte("hello"))
 			So(err, ShouldNotBeNil)
 		})
+		Convey("Has", func() {
+			txp.Add(tx)
+			bt, err := txp.Has(tx.Hash())
+			So(err, ShouldBeNil)
+			So(bt, ShouldBeTrue)
+
+			bt, err = txp.Has([]byte("hello"))
+			So(bt, ShouldBeFalse)
+		})
+
+		Convey("GetSlice", func() {
+			txp.Add(tx)
+			s, err := txp.GetSlice()
+			So(err, ShouldBeNil)
+			So(len(s), ShouldEqual, 1)
+			So(s[0].Time, ShouldEqual, tx.Time)
+		})
 	})
 }
