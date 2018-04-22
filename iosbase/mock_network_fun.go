@@ -1,4 +1,4 @@
-package iosbase_mock
+package iosbase
 
 import "reflect"
 

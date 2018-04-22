@@ -2,7 +2,7 @@
 // Source: network.go
 
 // Package iosbase_mock is a generated GoMock package.
-package iosbase_mock
+package iosbase
 
 import (
 	gomock "github.com/golang/mock/gomock"
