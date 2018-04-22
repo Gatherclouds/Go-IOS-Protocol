@@ -48,5 +48,11 @@ func TestTxPoolImpl(t *testing.T) {
 			So(len(s), ShouldEqual, 1)
 			So(s[0].Time, ShouldEqual, tx.Time)
 		})
+
+		Convey("Size", func() {
+			txp.Add(tx)
+			l := txp.Size()
+			So(l, ShouldEqual, 1)
+		})
 	})
 }
