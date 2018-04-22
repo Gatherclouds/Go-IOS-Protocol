@@ -69,4 +69,12 @@ func (tp *TxPoolImpl) GetSlice() ([]Tx, error) {
 	return txs, nil
 }
 
+func (tp *TxPoolImpl) Size() int {
+	if tp.txMap == nil {
+		tp.txMap = make(map[string]Tx)
+		return 0
+	}
+	return len(tp.txMap)
+}
+
 
