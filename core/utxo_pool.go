@@ -10,6 +10,18 @@ type UTXOPool interface {
 	Find(stateHash []byte) (UTXO, error)
 	Del(StateHash []byte) error
 	Transact(block *Block) error
-	Flush() error
-	Copy() UTXOPool
+	
+}
+
+func BuildStatePoolCore(chain BlockChain) *StatePoolCore {
+	var spc StatePoolCore
+	spc.cli, _ = redis.Dial(Conn, DBAddr) // TODO : rebuild pool by block chain
+	return &spc
+}
+
+type StatePoolImpl struct {
+	*StatePoolCore
+	addList []UTXO
+	delList [][]byte
+	base    *StatePoolImpl
 }
