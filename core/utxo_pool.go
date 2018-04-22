@@ -1,5 +1,7 @@
 package core
 
+import "sync"
+
 //go:generate mockgen -destination mocks/mock_statepool.go -package core_mock -source utxo_pool.go -imports .=github.com/iost-official/prototype/core
 
 /*
@@ -10,7 +12,7 @@ type UTXOPool interface {
 	Find(stateHash []byte) (UTXO, error)
 	Del(StateHash []byte) error
 	Transact(block *Block) error
-	
+
 }
 
 func BuildStatePoolCore(chain BlockChain) *StatePoolCore {
@@ -24,4 +26,22 @@ type StatePoolImpl struct {
 	addList []UTXO
 	delList [][]byte
 	base    *StatePoolImpl
+}
+
+var pCore *StatePoolCore
+var once sync.Once
+
+func NewUtxoPool(chain BlockChain) UTXOPool {
+	if pCore == nil {
+		once.Do(func() {
+			pCore = BuildStatePoolCore(chain)
+		})
+	}
+	spi := StatePoolImpl{
+		StatePoolCore: pCore,
+		addList:       make([]UTXO, 0),
+		delList:       make([][]byte, 0),
+		base:          nil,
+	}
+	return &spi
 }
