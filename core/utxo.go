@@ -1,7 +1,5 @@
 package core
 
-import "github.com/iost-official/prototype/common"
-
 func (d *UTXO) Encode() []byte {
 	bin, err := d.Marshal(nil)
 	if err != nil {
