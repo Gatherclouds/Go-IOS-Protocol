@@ -1,5 +1,7 @@
 package core
 
+import "fmt"
+
 type TxPoolImpl struct {
 	TxPoolRaw
 	txMap map[string]Tx

@@ -1,9 +1,5 @@
 package core
 
-import (
-	"fmt"
-)
-
 type Serializable interface {
 	Encode() []byte
 	Decode([]byte) error

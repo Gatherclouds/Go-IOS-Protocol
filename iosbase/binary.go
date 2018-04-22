@@ -5,11 +5,6 @@ This package contains structures of IOS block-chain and functions to operate the
 */
 package iosbase
 
-import (
-	"bytes"
-	"encoding/binary"
-)
-
 type Serializable interface {
 	Encode() []byte
 	Decode([]byte) error
