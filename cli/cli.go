@@ -118,3 +118,20 @@ func createBlockchain(address string) {
 
 	fmt.Println("Done!")
 }
+
+func getBalance(address string) {
+	bc, to_print := transaction.NewBlockchain(address)
+
+	if bc == nil {
+		fmt.Println(to_print)
+	}
+
+	balance := 0
+	UTXOs := bc.FindUTXO(address)
+
+	for _, out := range UTXOs {
+		balance += out.Value
+	}
+
+	fmt.Printf("Balance of '%s': %d\n", address, balance)
+}
