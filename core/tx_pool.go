@@ -77,4 +77,19 @@ func (tp *TxPoolImpl) Size() int {
 	return len(tp.txMap)
 }
 
+func (tp *TxPoolImpl) Encode() []byte {
+	for k, v := range tp.txMap {
+		tp.TxHash = append(tp.TxHash, common.Base58Decode(k))
+		tp.Txs = append(tp.Txs, v)
+	}
+	bytes, err := tp.Marshal(nil)
+	if err != nil {
+		panic(err)
+	}
+	tp.TxHash = [][]byte{}
+	tp.Txs = []Tx{}
+	return bytes
+}
+
+
 
