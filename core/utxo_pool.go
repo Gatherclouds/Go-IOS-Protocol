@@ -91,6 +91,11 @@ func (sp *StatePoolImpl) Find(stateHash []byte) (UTXO, error) {
 	//}
 }
 
+func (sp *StatePoolImpl) Del(stateHash []byte) error {
+	sp.delList = append(sp.delList, stateHash)
+	return nil
+}
+
 func (sp *StatePoolImpl) Transact(block *Block) error {
 	var txp TxPoolImpl
 	txp.Decode(block.Content)
