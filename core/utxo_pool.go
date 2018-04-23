@@ -119,3 +119,22 @@ func (sp *StatePoolImpl) Transact(block *Block) error {
 	}
 	return nil
 }
+
+func (sp *StatePoolImpl) Flush() error {
+	if sp.base != nil {
+		sp.base.Flush()
+	}
+
+	for _, h := range sp.delList {
+		sp.StatePoolCore.Del(h)
+	}
+
+	for _, u := range sp.addList {
+		sp.StatePoolCore.Add(u)
+	}
+
+	sp.base = nil
+	sp.addList = make([]UTXO, 0)
+	sp.delList = make([][]byte, 0)
+	return nil
+}
