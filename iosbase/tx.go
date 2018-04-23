@@ -28,6 +28,5 @@ func (d *Text) Decode(bin []byte) error {
 	_, err := d.Unmarshal(bin)
 	return err
 }
-func (d *Text) Hash() []byte {
-	return Sha256(d.Encode())
-}
+
+
