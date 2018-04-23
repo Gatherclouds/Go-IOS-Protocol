@@ -81,12 +81,12 @@ func (sp *StatePoolImpl) Find(stateHash []byte) (UTXO, error) {
 
 	return sp.StatePoolCore.Find(stateHash)
 
-	reply, err := redis.Values(sp.cli.Do("HMGET", stateHash, "value", "script", "tx_hash"))
-	if err != nil {
-		return s, err
-	}
-	_, err = redis.Scan(reply, &s.Value, &s.Script, s.BirthTxHash)
-	if err != nil {
-		return s, err
-	}
+	//reply, err := redis.Values(sp.cli.Do("HMGET", stateHash, "value", "script", "tx_hash"))
+	//if err != nil {
+	//	return s, err
+	//}
+	//_, err = redis.Scan(reply, &s.Value, &s.Script, s.BirthTxHash)
+	//if err != nil {
+	//	return s, err
+	//}
 }
