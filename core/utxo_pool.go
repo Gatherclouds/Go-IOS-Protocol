@@ -1,6 +1,9 @@
 package core
 
-import "sync"
+import (
+	"github.com/gomodule/redigo/redis"
+	"sync"
+)
 
 //go:generate mockgen -destination mocks/mock_statepool.go -package core_mock -source utxo_pool.go -imports .=github.com/iost-official/prototype/core
 
@@ -12,7 +15,8 @@ type UTXOPool interface {
 	Find(stateHash []byte) (UTXO, error)
 	Del(StateHash []byte) error
 	Transact(block *Block) error
-
+	Flush() error
+	Copy() UTXOPool
 }
 
 func BuildStatePoolCore(chain BlockChain) *StatePoolCore {
@@ -44,4 +48,14 @@ func NewUtxoPool(chain BlockChain) UTXOPool {
 		base:          nil,
 	}
 	return &spi
+}
+
+const (
+	Conn   = "tcp"
+	DBAddr = "localhost:6379"
+)
+
+func (sp *StatePoolImpl) Add(state UTXO) error {
+	sp.addList = append(sp.addList, state)
+	return nil
 }
