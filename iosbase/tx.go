@@ -24,9 +24,5 @@ func (d *Text) Encode() []byte {
 	return bin
 }
 
-func (d *Text) Decode(bin []byte) error {
-	_, err := d.Unmarshal(bin)
-	return err
-}
 
 
