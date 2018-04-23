@@ -1,10 +1,10 @@
 package core
 
 import (
-	"github.com/gomodule/redigo/redis"
 	"sync"
 	"bytes"
 	"fmt"
+	"github.com/gomodule/redigo/redis"
 )
 
 //go:generate mockgen -destination mocks/mock_statepool.go -package core_mock -source utxo_pool.go -imports .=github.com/iost-official/prototype/core
@@ -20,6 +20,7 @@ type UTXOPool interface {
 	Flush() error
 	Copy() UTXOPool
 }
+
 
 func BuildStatePoolCore(chain BlockChain) *StatePoolCore {
 	var spc StatePoolCore
@@ -79,7 +80,7 @@ func (sp *StatePoolImpl) Find(stateHash []byte) (UTXO, error) {
 		return sp.base.Find(stateHash)
 	}
 
-	return sp.StatePoolCore.Find(stateHash)
+	return sp.StatePoolCore.Find(stateHash), nil
 
 	//reply, err := redis.Values(sp.cli.Do("HMGET", stateHash, "value", "script", "tx_hash"))
 	//if err != nil {
@@ -136,5 +137,30 @@ func (sp *StatePoolImpl) Flush() error {
 	sp.base = nil
 	sp.addList = make([]UTXO, 0)
 	sp.delList = make([][]byte, 0)
+	return nil
+}
+
+func (sp *StatePoolImpl) Copy() UTXOPool {
+	spi := StatePoolImpl{
+		base:          sp,
+		addList:       make([]UTXO, 0),
+		delList:       make([][]byte, 0),
+		StatePoolCore: sp.StatePoolCore,
+	}
+	return &spi
+}
+
+type StatePoolCore struct {
+	cli redis.Conn
+}
+
+func (spc *StatePoolCore) Add(state UTXO) error {
+	_, err := spc.cli.Do("HMSET", state.Hash(),
+		"value", state.Value,
+		"script", state.Script,
+		"tx_hash", state.BirthTxHash)
+	if err != nil {
+		return err
+	}
 	return nil
 }

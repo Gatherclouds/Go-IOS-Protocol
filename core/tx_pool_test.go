@@ -13,14 +13,17 @@ func TestTxPoolImpl(t *testing.T) {
 			Version: 1,
 			Time:    time.Now().Unix(),
 		}
+
 		Convey("Add", func() {
 			txp.Add(tx)
 			So(len(txp.txMap), ShouldEqual, 1)
 		})
+
 		Convey("Del", func() {
 			txp.Del(tx)
 			So(len(txp.txMap), ShouldEqual, 0)
 		})
+
 		Convey("Find", func() {
 			txp.Add(tx)
 			tx2, err := txp.Find(tx.Hash())
@@ -30,6 +33,7 @@ func TestTxPoolImpl(t *testing.T) {
 			_, err = txp.Find([]byte("hello"))
 			So(err, ShouldNotBeNil)
 		})
+
 		Convey("Has", func() {
 			txp.Add(tx)
 			bt, err := txp.Has(tx.Hash())
@@ -39,6 +43,7 @@ func TestTxPoolImpl(t *testing.T) {
 			bt, err = txp.Has([]byte("hello"))
 			So(bt, ShouldBeFalse)
 		})
+
 		Convey("GetSlice", func() {
 			txp.Add(tx)
 			s, err := txp.GetSlice()
@@ -46,6 +51,7 @@ func TestTxPoolImpl(t *testing.T) {
 			So(len(s), ShouldEqual, 1)
 			So(s[0].Time, ShouldEqual, tx.Time)
 		})
+
 		Convey("Size", func() {
 			txp.Add(tx)
 			l := txp.Size()

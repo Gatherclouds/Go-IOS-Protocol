@@ -12,6 +12,7 @@ func (d *UTXO) Decode(bin []byte) error {
 	_, err := d.Unmarshal(bin)
 	return err
 }
+
 func (d *UTXO) Hash() []byte {
 	return common.Sha256(d.Encode())
 }
