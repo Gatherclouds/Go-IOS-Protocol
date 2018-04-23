@@ -175,3 +175,15 @@ func (spc *StatePoolCore) Find(stateHash []byte) (UTXO, error) {
 	return s, err
 
 }
+
+func (spc *StatePoolCore) Del(StateHash []byte) error {
+	_, err := spc.cli.Do("DEL", StateHash)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (spc *StatePoolCore) Transact(block *Block) error {
+	return nil
+}
