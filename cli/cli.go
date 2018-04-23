@@ -135,3 +135,33 @@ func getBalance(address string) {
 
 	fmt.Printf("Balance of '%s': %d\n", address, balance)
 }
+
+func printChain() {
+	bc, to_print := transaction.NewBlockchain("")
+
+	if bc == nil {
+		fmt.Println(to_print)
+		return
+	}
+
+	if bc == nil {
+		return
+	}
+
+	bci := bc.Iterator()
+
+	for {
+		block := bci.Next()
+
+		fmt.Printf("Prev hash: %x\n", block.PrevBlockHash)
+		fmt.Printf("Hash: %x\n", block.Hash)
+		for _, tx := range block.Transactions {
+			fmt.Printf(tx.String())
+		}
+		fmt.Println()
+
+		if len(block.PrevBlockHash) == 0 {
+			break
+		}
+	}
+}
