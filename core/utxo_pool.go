@@ -3,6 +3,8 @@ package core
 import (
 	"github.com/gomodule/redigo/redis"
 	"sync"
+	"bytes"
+	"fmt"
 )
 
 //go:generate mockgen -destination mocks/mock_statepool.go -package core_mock -source utxo_pool.go -imports .=github.com/iost-official/prototype/core
@@ -58,4 +60,33 @@ const (
 func (sp *StatePoolImpl) Add(state UTXO) error {
 	sp.addList = append(sp.addList, state)
 	return nil
+}
+
+func (sp *StatePoolImpl) Find(stateHash []byte) (UTXO, error) {
+	for _, u := range sp.addList {
+		if bytes.Equal(u.Hash(), stateHash) {
+			return u, nil
+		}
+	}
+
+	for _, h := range sp.delList {
+		if bytes.Equal(h, stateHash) {
+			return UTXO{}, fmt.Errorf("not found")
+		}
+	}
+
+	if sp.base != nil {
+		return sp.base.Find(stateHash)
+	}
+
+	return sp.StatePoolCore.Find(stateHash)
+
+	reply, err := redis.Values(sp.cli.Do("HMGET", stateHash, "value", "script", "tx_hash"))
+	if err != nil {
+		return s, err
+	}
+	_, err = redis.Scan(reply, &s.Value, &s.Script, s.BirthTxHash)
+	if err != nil {
+		return s, err
+	}
 }
