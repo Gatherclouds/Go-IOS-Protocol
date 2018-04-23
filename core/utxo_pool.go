@@ -164,3 +164,14 @@ func (spc *StatePoolCore) Add(state UTXO) error {
 	}
 	return nil
 }
+
+func (spc *StatePoolCore) Find(stateHash []byte) (UTXO, error) {
+	s := UTXO{}
+	reply, err := redis.Values(spc.cli.Do("HMGET", stateHash, "value", "script", "tx_hash"))
+	if err != nil {
+		return s, err
+	}
+	_, err = redis.Scan(reply, &s.Value, &s.Script, s.BirthTxHash)
+	return s, err
+
+}
