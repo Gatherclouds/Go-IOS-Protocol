@@ -42,3 +42,11 @@ func (db *LDBDatabase) Path() string {
 func (db *LDBDatabase) Put(key []byte, value []byte) error {
 	return db.db.Put(key, value, nil)
 }
+
+func (db *LDBDatabase) Get(key []byte) ([]byte, error) {
+	value, err := db.db.Get(key, nil)
+	if err != nil {
+		return nil, err
+	}
+	return value, nil
+}
