@@ -2,7 +2,6 @@ package iostdb
 
 import (
 	"sync"
-
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/errors"
 	"github.com/syndtr/goleveldb/leveldb/filter"
@@ -13,7 +12,6 @@ import (
 type LDBDatabase struct {
 	fn string
 	db *leveldb.DB
-
 	quitLock sync.Mutex
 	quitChan chan chan error
 }
@@ -37,3 +35,10 @@ func NewLDBDatabase(file string, cache int, handles int) (*LDBDatabase, error) {
 	}, nil
 }
 
+func (db *LDBDatabase) Path() string {
+	return db.fn
+}
+
+func (db *LDBDatabase) Put(key []byte, value []byte) error {
+	return db.db.Put(key, value, nil)
+}
