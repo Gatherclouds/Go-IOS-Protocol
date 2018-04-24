@@ -32,6 +32,4 @@ func (d *BlockHead) Decode(bin []byte) error {
 	_, err := d.Unmarshal(bin)
 	return err
 }
-func (d *BlockHead) Hash() []byte {
-	return Sha256(d.Encode())
-}
+
