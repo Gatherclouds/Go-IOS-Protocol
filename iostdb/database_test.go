@@ -4,9 +4,6 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
-
-	"strconv"
-	"sync"
 	"testing"
 )
 
@@ -22,3 +19,22 @@ func TestLDB_PutGet(t *testing.T) {
 	db, _ := NewLDBDatabase(dirname, 0, 0)
 	testPutGet(db, t)
 }
+
+func testPutGet(db Database, t *testing.T) {
+	t.Parallel()
+
+	for _, v := range test_values {
+		err := db.Put([]byte(v), []byte(v))
+		if err != nil {
+			t.Fatalf("put failed: %v", err)
+		}
+	}
+	for _, v := range test_values {
+		data, err := db.Get([]byte(v))
+		if err != nil {
+			t.Fatalf("get failed: %v", err)
+		}
+		if !bytes.Equal(data, []byte(v)) {
+			t.Fatalf("get returned wrong result, got %q", string(data))
+		}
+	}
