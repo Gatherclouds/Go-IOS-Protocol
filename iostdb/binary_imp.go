@@ -72,13 +72,5 @@ func GetInt64(b []byte, start int) int64 {
 	return ans
 }
 
-func (bin *Binary) Bytes() []byte {
-	return bin.bytes
-}
-
-func (bin Binary) Hash160() Binary {
-	bin.bytes = Hash160(bin.bytes)
-	return bin
-}
 
 
