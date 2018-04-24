@@ -1,12 +1,11 @@
 package iostdb
-
 import (
 	"bytes"
 	"io/ioutil"
 	"os"
-	"testing"
-	"sync"
 	"strconv"
+	"sync"
+	"testing"
 )
 
 var test_values = []string{"", "a", "123", "\x00"}
@@ -70,6 +69,7 @@ func testPutGet(db Database, t *testing.T) {
 	if err == nil {
 		t.Fatalf("get returned wrong result, got %q", string(data))
 	}
+
 	for _, v := range test_values {
 		err := db.Delete([]byte(v))
 		if err != nil {

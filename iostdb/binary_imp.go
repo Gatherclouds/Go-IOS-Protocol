@@ -51,12 +51,6 @@ func (bin *Binary) PutBytes(b []byte) *Binary {
 	return bin
 }
 
-func (bin *Binary) Put(o Serializable) *Binary {
-	bytes := o.Encode()
-	bin.bytes = append(bin.bytes, bytes...)
-	bin.length += len(bytes)
-	return bin
-}
 
 
 
