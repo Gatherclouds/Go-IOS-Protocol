@@ -54,4 +54,18 @@ func testPutGet(db Database, t *testing.T) {
 			t.Fatalf("put failed: %v", err)
 		}
 	}
+	for _, v := range test_values {
+		data, err := db.Get([]byte(v))
+		if err != nil {
+			t.Fatalf("get failed: %v", err)
+		}
+		if !bytes.Equal(data, []byte("test")) {
+			t.Fatalf("get returned wrong result, got %q", string(data))
+		}
+	}
+
+	data, err := db.Get([]byte("temp"))
+	if err == nil {
+		t.Fatalf("get returned wrong result, got %q", string(data))
+	}
 }
