@@ -68,4 +68,17 @@ func testPutGet(db Database, t *testing.T) {
 	if err == nil {
 		t.Fatalf("get returned wrong result, got %q", string(data))
 	}
+	for _, v := range test_values {
+		err := db.Delete([]byte(v))
+		if err != nil {
+			t.Fatalf("delete %q failed: %v", v, err)
+		}
+	}
+
+	for _, v := range test_values {
+		_, err := db.Get([]byte(v))
+		if err == nil {
+			t.Fatalf("got deleted value %q", v)
+		}
+	}
 }
