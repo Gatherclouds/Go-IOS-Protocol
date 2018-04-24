@@ -65,12 +65,7 @@ func GetInt(b []byte, start int) int {
 	return ans
 }
 
-func GetInt64(b []byte, start int) int64 {
-	var ans int64
-	bBuf := bytes.NewBuffer(b[start : start+8])
-	binary.Read(bBuf, binary.BigEndian, &ans)
-	return ans
-}
+
 
 
 
