@@ -165,3 +165,22 @@ func printChain() {
 		}
 	}
 }
+
+func send(from, to string, amount int) {
+	bc, to_print := transaction.NewBlockchain(from)
+
+	if bc == nil {
+		fmt.Println(to_print)
+		return
+	}
+
+	tx, to_print := transaction.NewUTXOTransaction(from, to, amount, bc)
+
+	if tx == nil {
+		fmt.Println(to_print)
+		return
+	}
+
+	bc.MineBlock([]*transaction.Transaction{tx})
+	fmt.Println("Success!")
+}
