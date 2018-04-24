@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+	"sync"
+	"strconv"
 )
 
 var test_values = []string{"", "a", "123", "\x00"}
@@ -81,4 +83,27 @@ func testPutGet(db Database, t *testing.T) {
 			t.Fatalf("got deleted value %q", v)
 		}
 	}
+}
+
+func TestMemoryDB_ParallelPutGet(t *testing.T) {
+	db, _ := NewMemDatabase()
+	testParallelPutGet(db, t)
+}
+
+func testParallelPutGet(db Database, t *testing.T) {
+	const n = 8
+	var pending sync.WaitGroup
+
+	pending.Add(n)
+	for i := 0; i < n; i++ {
+		go func(key string) {
+			defer pending.Done()
+			err := db.Put([]byte(key), []byte(key))
+			if err != nil {
+				panic("put failed" + err.Error())
+			}
+		}(strconv.Itoa(i))
+	}
+	pending.Wait()
+
 }

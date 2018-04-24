@@ -58,12 +58,7 @@ func (bin *Binary) Put(o Serializable) *Binary {
 	return bin
 }
 
-func GetInt(b []byte, start int) int {
-	var ans int
-	bBuf := bytes.NewBuffer(b[start : start+4])
-	binary.Read(bBuf, binary.BigEndian, &ans)
-	return ans
-}
+
 
 
 
