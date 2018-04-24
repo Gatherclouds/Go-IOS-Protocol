@@ -2,7 +2,7 @@
 // Source: blockchain.go
 
 // Package iosbase_mock is a generated GoMock package.
-package iosbase
+package iostdb
 
 import (
 	gomock "github.com/golang/mock/gomock"

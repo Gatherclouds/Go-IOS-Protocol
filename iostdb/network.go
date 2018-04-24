@@ -1,4 +1,4 @@
-package iosbase
+package iostdb
 
 type Request struct {
 	Time    int64

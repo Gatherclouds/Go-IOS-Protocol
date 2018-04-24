@@ -1,4 +1,4 @@
-package iosbase
+package iostdb
 
 func (d *TextInput) Encode() []byte {
 	bin, err := d.Marshal(nil)

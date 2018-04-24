@@ -2,7 +2,7 @@
 // Source: statepool.go
 
 // Package iosbase_mock is a generated GoMock package.
-package iosbase
+package iostdb
 
 import (
 	"github.com/golang/mock/gomock"

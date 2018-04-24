@@ -1,4 +1,4 @@
-package iosbase
+package iostdb
 
 func (sp *StatePoolImpl) Init() error {
 	var err error

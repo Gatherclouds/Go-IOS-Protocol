@@ -1,4 +1,4 @@
-package iosbase
+package iostdb
 
 import (
 	"crypto/sha256"

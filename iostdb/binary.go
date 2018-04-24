@@ -3,7 +3,7 @@
 /*
 This package contains structures of IOS block-chain and functions to operate them
 */
-package iosbase
+package iostdb
 
 type Serializable interface {
 	Encode() []byte
