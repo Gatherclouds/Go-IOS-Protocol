@@ -30,3 +30,12 @@ func (db *MemDatabase) Put(key []byte, value []byte) error {
 	db.db[string(key)] = CopyBytes(value)
 	return nil
 }
+
+func (db *MemDatabase) Get(key []byte) ([]byte, error) {
+	db.lock.RLock()
+	defer db.lock.RUnlock()
+	if value, ok := db.db[string(key)]; ok {
+		return CopyBytes(value), nil
+	}
+	return nil, errors.New("Not found")
+}
