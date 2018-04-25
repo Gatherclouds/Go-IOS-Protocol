@@ -57,11 +57,6 @@ func (bc *BlockChainImpl) Init() error {
 		return err
 	}
 
-	len, err := redis.Int(bc.redis.Do("llen", "BC_index"))
-	if err != nil {
-		return err
-	}
-	bc.length = len
 	return nil
 }
 
