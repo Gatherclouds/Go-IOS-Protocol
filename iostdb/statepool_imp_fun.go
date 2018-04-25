@@ -48,27 +48,5 @@ func (sp *StatePoolImpl) Del(stateHash []byte) error {
 	return nil
 }
 
-func (sp *StatePoolImpl) Transact(block *Block) error {
-	var txp TxPoolImpl
-	txp.Decode(block.Content)
-	txs, err := txp.GetSlice()
-	if err != nil {
-		return err
-	}
-	for _, tx := range txs {
-		for _, in := range tx.Inputs {
-			err = sp.Del(in.StateHash)
-			if err != nil {
-				return err
-			}
-		}
-		for _, out := range tx.Outputs {
-			err = sp.Add(out)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
+
 
