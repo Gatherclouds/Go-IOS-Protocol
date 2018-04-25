@@ -1,6 +1,9 @@
 package iostdb
 
-import "sync"
+import (
+	"sync"
+	"errors"
+)
 
 func CopyBytes(b []byte) (copiedBytes []byte) {
 	if b == nil {
@@ -38,4 +41,11 @@ func (db *MemDatabase) Get(key []byte) ([]byte, error) {
 		return CopyBytes(value), nil
 	}
 	return nil, errors.New("Not found")
+}
+
+func (db *MemDatabase) Has(key []byte) (bool, error) {g
+	db.lock.RLock()
+	defer db.lock.RUnlock()
+	_, ok := db.db[string(key)]
+	return ok, nil
 }
