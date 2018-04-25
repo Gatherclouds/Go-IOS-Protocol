@@ -1179,25 +1179,7 @@ func (d *Block) Marshal(buf []byte) ([]byte, error) {
 		}
 		i += uint64(len(nbuf))
 	}
-	{
-		l := uint64(len(d.Content))
 
-		{
-
-			t := uint64(l)
-
-			for t >= 0x80 {
-				buf[i+4] = byte(t) | 0x80
-				t >>= 7
-				i++
-			}
-			buf[i+4] = byte(t)
-			i++
-
-		}
-		copy(buf[i+4:], d.Content)
-		i += l
-	}
 	return buf[:i+4], nil
 }
 
