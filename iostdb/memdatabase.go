@@ -43,9 +43,19 @@ func (db *MemDatabase) Get(key []byte) ([]byte, error) {
 	return nil, errors.New("Not found")
 }
 
-func (db *MemDatabase) Has(key []byte) (bool, error) {g
+func (db *MemDatabase) Has(key []byte) (bool, error) {
 	db.lock.RLock()
 	defer db.lock.RUnlock()
 	_, ok := db.db[string(key)]
 	return ok, nil
+}
+
+func (db *MemDatabase) Keys() [][]byte {
+	db.lock.RLock()
+	defer db.lock.RUnlock()
+	keys := [][]byte{}
+	for key := range db.db {
+		keys = append(keys, []byte(key))
+	}
+	return keys
 }
