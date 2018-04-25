@@ -59,3 +59,11 @@ func (db *MemDatabase) Keys() [][]byte {
 	}
 	return keys
 }
+func (db *MemDatabase) Delete(key []byte) error {
+	db.lock.Lock()
+	defer db.lock.Unlock()
+	delete(db.db, string(key))
+	return nil
+}
+
+func (db *MemDatabase) Close() {}
