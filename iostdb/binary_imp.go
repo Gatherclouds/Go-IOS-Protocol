@@ -45,11 +45,6 @@ func (bin *Binary) PutInt(i int) *Binary {
 	return bin
 }
 
-func (bin *Binary) PutBytes(b []byte) *Binary {
-	bin.bytes = append(bin.bytes, b...)
-	bin.length += len(b)
-	return bin
-}
 
 
 
