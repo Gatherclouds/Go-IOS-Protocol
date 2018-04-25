@@ -59,6 +59,7 @@ func (db *MemDatabase) Keys() [][]byte {
 	}
 	return keys
 }
+
 func (db *MemDatabase) Delete(key []byte) error {
 	db.lock.Lock()
 	defer db.lock.Unlock()
@@ -67,3 +68,17 @@ func (db *MemDatabase) Delete(key []byte) error {
 }
 
 func (db *MemDatabase) Close() {}
+
+func (db *MemDatabase) NewBatch() Batch {
+	return &memBatch{db: db}
+}
+
+type kv struct {
+	k, v []byte
+}
+
+type memBatch struct {
+	db     *MemDatabase
+	writes []kv
+	size   int
+}
