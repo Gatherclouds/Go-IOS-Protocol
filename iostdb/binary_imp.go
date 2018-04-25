@@ -37,13 +37,7 @@ func (bin *Binary) PutULong(u uint64) *Binary {
 	return bin
 }
 
-func (bin *Binary) PutInt(i int) *Binary {
-	var bBuf = bytes.NewBuffer([]byte{})
-	binary.Write(bBuf, binary.BigEndian, i)
-	bin.bytes = append(bin.bytes, bBuf.Bytes()...)
-	bin.length += 4
-	return bin
-}
+
 
 
 
