@@ -12,9 +12,6 @@ func BinaryFromBase58(s string) Binary {
 	return Binary{bits, len(bits)}
 }
 
-func (bin *Binary) ToBase58() string {
-	return Base58Encode(bin.bytes)
-}
 
 
 

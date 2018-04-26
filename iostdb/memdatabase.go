@@ -82,3 +82,10 @@ type memBatch struct {
 	writes []kv
 	size   int
 }
+
+
+func (b *memBatch) Put(key []byte, value []byte) error {
+	b.writes = append(b.writes, kv{CopyBytes(key), CopyBytes(value)})
+	b.size += len(value)
+	return nil
+}
