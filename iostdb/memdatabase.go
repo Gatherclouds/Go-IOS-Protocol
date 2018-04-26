@@ -83,9 +83,15 @@ type memBatch struct {
 	size   int
 }
 
-
 func (b *memBatch) Put(key []byte, value []byte) error {
 	b.writes = append(b.writes, kv{CopyBytes(key), CopyBytes(value)})
 	b.size += len(value)
+	return nil
+}
+
+func (b *memBatch) Write() error {
+	for _, kv := range b.writes {
+		b.db.Put(kv.k, kv.v)
+	}
 	return nil
 }
