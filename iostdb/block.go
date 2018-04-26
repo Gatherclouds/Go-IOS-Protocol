@@ -20,12 +20,5 @@ func (d *Block) HeadHash() []byte {
 	return d.Head.Hash()
 }
 
-func (d *BlockHead) Encode() []byte {
-	bin, err := d.Marshal(nil)
-	if err != nil {
-		panic(err)
-	}
-	return bin
-}
 
 
