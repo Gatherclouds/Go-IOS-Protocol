@@ -30,7 +30,11 @@ func NewLogger(tag string) (*Logger, error) {
 	mu.Lock()
 	defer mu.Unlock()
 
-
+	file, err := os.OpenFile(Path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+	if err != nil {
+		return nil, err
+	}
+	instance = file
 	runtime.SetFinalizer(instance, func(obj *os.File) {
 		obj.Close()
 	})
