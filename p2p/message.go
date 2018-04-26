@@ -12,3 +12,13 @@ type Msg struct {
 	ReceivedAt time.Time
 }
 
+type MsgReader interface {
+	ReadMsg() (Msg, error)
+}
+type MsgWriter interface {
+	WriteMsg(Msg) error
+}
+type MsgReadWriter interface {
+	MsgReader
+	MsgWriter
+}
