@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"fmt"
 	"time"
+	"runtime/debug"
 )
 
 type Logger struct {
@@ -62,4 +63,16 @@ func (l *Logger) D(s string, attr ...interface{}) {
 
 func (l *Logger) I(s string, attr ...interface{}) {
 	l.log("I", s, attr...)
+}
+
+func (l *Logger) E(s string, attr ...interface{}) {
+	l.log("E", s, attr...)
+}
+
+func (l *Logger) Crash(s string, attr ...interface{}) {
+	l.logFile.Write([]byte("============CRASH\n"))
+	fs := fmt.Sprintf(s, attr...)
+	l.logFile.Write([]byte(fs))
+	l.logFile.Write([]byte("\n"))
+	l.logFile.Write(debug.Stack())
 }
