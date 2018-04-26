@@ -60,7 +60,3 @@ func (bc *BlockChainImpl) Init() error {
 	return nil
 }
 
-func (bc *BlockChainImpl) Close() error {
-	return bc.db.Close()
-
-}
