@@ -46,3 +46,10 @@ func NewLogger(tag string) (*Logger, error) {
 	}, nil
 
 }
+
+func (l *Logger) log(level, s string, attr ...interface{}) {
+	a := fmt.Sprintf(s, attr...)
+	str := fmt.Sprintf("%v %v/%v: %v", time.Now().Format("2006-01-02 15:04:05.000"), level, l.Tag, a)
+	l.logFile.Write([]byte(str))
+	l.logFile.Write([]byte("\n"))
+}
