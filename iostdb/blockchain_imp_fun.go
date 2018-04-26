@@ -45,18 +45,3 @@ func (bc *BlockChainImpl) Top() *Block {
 	return blk
 }
 
-func (bc *BlockChainImpl) Init() error {
-	var err error
-	bc.db, err = leveldb.OpenFile(DBPath, nil)
-	if err != nil {
-		return err
-	}
-
-	bc.redis, err = redis.Dial(Conn, DBAddr)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
