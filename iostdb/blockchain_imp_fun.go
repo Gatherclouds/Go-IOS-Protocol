@@ -37,11 +37,5 @@ func (bc *BlockChainImpl) Length() int {
 	return bc.length
 }
 
-func (bc *BlockChainImpl) Top() *Block {
-	blk, err := bc.Get(bc.length - 1)
-	if err != nil {
-		panic(err)
-	}
-	return blk
-}
+
 
