@@ -82,6 +82,10 @@ func (nn *NaiveNetwork) Send(req Request) {
 			continue
 		}
 		//var cnt int
-		
+		if _, err = conn.Write(buf[:]); err != nil {
+			fmt.Println("Error sending request body:", err.Error())
+			continue
+		}
+		//fmt.Println("writed", cnt)
 	}
 }
