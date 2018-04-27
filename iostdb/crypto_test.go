@@ -22,11 +22,6 @@ func TestSign(t *testing.T) {
 			pubKey = CalcPubKey(privKey)
 			So(ToHex(pubKey), ShouldEqual, pub)
 		})
-
-		Convey("Hash-160", func() {
-			hash := "9c1185a5c5e9fc54612808977ee8f548b2258d31"
-			So(ToHex(Hash160(CalcPubkey(privKey))), ShouldEqual, hash)
-		})
-
+		
 	})
 }
