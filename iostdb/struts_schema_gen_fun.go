@@ -1172,13 +1172,6 @@ func (d *Block) Marshal(buf []byte) ([]byte, error) {
 		copy(buf[i+4:], d.SuperHash)
 		i += l
 	}
-	{
-		nbuf, err := d.Head.Marshal(buf[i+4:])
-		if err != nil {
-			return nil, err
-		}
-		i += uint64(len(nbuf))
-	}
 
 	return buf[:i+4], nil
 }
