@@ -27,6 +27,6 @@ func TestSign(t *testing.T) {
 			hash := "9c1185a5c5e9fc54612808977ee8f548b2258d31"
 			So(ToHex(Hash160(CalcPubkey(privKey))), ShouldEqual, hash)
 		})
-		
+
 	})
 }
