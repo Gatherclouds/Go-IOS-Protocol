@@ -33,9 +33,6 @@ func (bc *BlockChainImpl) Push(block *Block) error {
 	return nil
 }
 
-func (bc *BlockChainImpl) Length() int {
-	return bc.length
-}
 
 
 
