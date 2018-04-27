@@ -1,8 +1,6 @@
 package iostdb
 
 import (
-	"fmt"
-
 	"github.com/gomodule/redigo/redis"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/opt"
