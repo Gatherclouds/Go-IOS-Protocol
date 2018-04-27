@@ -4,6 +4,10 @@ import (
 	"net"
 	"io/ioutil"
 	"os"
+	"fmt"
+	"bytes"
+	"encoding/binary"
+	"strconv"
 )
 
 type RequestHead struct {
@@ -52,3 +56,32 @@ func (nn *NaiveNetwork) Close(port uint16) error {
 	return nn.listen.Close()
 }
 
+func (nn *NaiveNetwork) Send(req Request) {
+	buf, err := req.Marshal(nil)
+	if err != nil {
+		fmt.Println("Error marshal body:", err.Error())
+	}
+
+	var length int32 = int32(len(buf))
+	int32buf := new(bytes.Buffer)
+
+	if err = binary.Write(int32buf, binary.BigEndian, length); err != nil {
+		fmt.Println(err)
+	}
+	for i := 1; i < 3; i++ {
+		addr, _ := nn.peerList.Get([]byte(strconv.Itoa(i)))
+		conn, err := net.Dial("tcp", string(addr))
+		fmt.Println(string(addr))
+		defer conn.Close()
+		if err != nil {
+			fmt.Println("Error dialing to ", addr, err.Error())
+			continue
+		}
+		if _, err = conn.Write(int32buf.Bytes()); err != nil {
+			fmt.Println("Error sending request head:", err.Error())
+			continue
+		}
+		//var cnt int
+		
+	}
+}
