@@ -22,6 +22,6 @@ func TestSign(t *testing.T) {
 			pubKey = CalcPubKey(privKey)
 			So(ToHex(pubKey), ShouldEqual, pub)
 		})
-		
+
 	})
 }
