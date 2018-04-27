@@ -1,15 +1,9 @@
 package p2p
 
 import (
-	"github.com/iost-official/prototype/common/mclock"
-	"github.com/iost-official/prototype/event"
-	"github.com/iost-official/prototype/p2p/discover"
-	"io"
-	"log"
-	"os"
-	"sort"
-	"sync"
 	"time"
+	"log"
+	"sync"
 )
 
 const (
@@ -19,4 +13,16 @@ const (
 	snappyProtocolVersion  = 5
 	pingInterval           = 15 * time.Second
 )
+
+type Peer struct {
+	rw       *conn
+	running  map[string]*protoRW
+	log      log.Logger
+	created  mclock.AbsTime
+	wg       sync.WaitGroup
+	protoErr chan error
+	closed   chan struct{}
+	disc     chan DiscReason // diconnect reason
+	events   *event.Feed     // events receives message send / receive events if set
+}
 
