@@ -22,16 +22,6 @@ func (bc *BlockChainImpl) Get(layer int) (*Block, error) {
 	return &block, nil
 }
 
-func (bc *BlockChainImpl) Push(block *Block) error {
-	err := bc.db.Put(block.HeadHash(), block.Encode(), &opt.WriteOptions{})
-	if err != nil {
-		return err
-	}
-
-	_, err = bc.redis.Do("RPUSH", IndexKey, block.HeadHash())
-	bc.length++
-	return nil
-}
 
 
 
