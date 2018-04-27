@@ -1,6 +1,10 @@
 package p2p
 
-import "net"
+import (
+	"net"
+	"io/ioutil"
+	"os"
+)
 
 type RequestHead struct {
 	Length uint32 // Request的长度信息
@@ -26,4 +30,18 @@ type NaiveNetwork struct {
 	peerList *iostdb.LDBDatabase
 	listen   net.Listener
 	done     bool
+}
+
+func NewNaiveNetwork() *NaiveNetwork {
+	dirname, _ := ioutil.TempDir(os.TempDir(), "p2p_test_")
+	db, _ := iostdb.NewLDBDatabase(dirname, 0, 0)
+	nn := &NaiveNetwork{
+		//peerList: []string{"1.1.1.1", "2.2.2.2"},
+		peerList: db,
+		listen:   nil,
+		done:     false,
+	}
+	nn.peerList.Put([]byte("1"), []byte("127.0.0.1:11037"))
+	nn.peerList.Put([]byte("2"), []byte("127.0.0.1:11038"))
+	return nn
 }
