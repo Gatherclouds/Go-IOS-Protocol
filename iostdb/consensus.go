@@ -2,13 +2,6 @@ package iostdb
 
 type TxStatus int
 
-const (
-	ACCEPT TxStatus = iota
-	CACHED
-	POOL
-	REJECT
-)
-
 type Consensus interface {
 	Init(bc BlockChain, sp StatePool, network Net) error
 	Run()

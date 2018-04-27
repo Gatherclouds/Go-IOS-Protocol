@@ -45,3 +45,10 @@ func NewNaiveNetwork() *NaiveNetwork {
 	nn.peerList.Put([]byte("2"), []byte("127.0.0.1:11038"))
 	return nn
 }
+
+func (nn *NaiveNetwork) Close(port uint16) error {
+	port = 3 // 避免出现unused variable
+	nn.done = true
+	return nn.listen.Close()
+}
+
