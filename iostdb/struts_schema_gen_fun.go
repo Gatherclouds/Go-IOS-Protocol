@@ -1153,7 +1153,7 @@ func (d *Block) Marshal(buf []byte) ([]byte, error) {
 		buf[3+0] = byte(d.Version >> 24)
 
 	}
-	
+
 	return buf[:i+4], nil
 }
 
