@@ -24,7 +24,7 @@ type Peer struct {
 	wg       sync.WaitGroup
 	protoErr chan error
 	closed   chan struct{}
-	disc     chan DiscReason // diconnect reason
+	disc     chan DiscReason // disconnect reason
 	events   *event.Feed     // events receives message send / receive events if set
 }
 
@@ -40,10 +40,10 @@ const (
 
 type protoRW struct {
 	Protocol
-	in     chan Msg        // receives read messages
+	in     chan Msg         // receives read messages
 	closed <-chan struct{} // receives when peer is shutting down
 	wstart <-chan struct{} // receives when write may start
-	werr   chan<- error    // for write results
+	werr   chan<- error     // for write results
 	offset uint64
 	w      MsgWriter
 }
