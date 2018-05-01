@@ -1,5 +1,6 @@
 package p2p
 
+import "fmt"
 
 /*
 Marked request types using by protocol
@@ -24,4 +25,12 @@ type Router interface {
 	Send(req core.Request)
 	Broadcast(req core.Request)
 	Download (req core.Request) chan []byte
+}
+
+func RouterFactory(target string) (Router, error) {
+	switch target {
+	case "base":
+		return &RouterImpl{}, nil
+	}
+	return nil, fmt.Errorf("target Router not found")
 }
