@@ -5,6 +5,7 @@ import (
 	"log"
 	"sync"
 	"io"
+	"sort"
 )
 
 const (
@@ -68,4 +69,34 @@ type protoHandshake struct {
 
 	//Rest []rlp.RawValue `rlp:"tail"`
 	//Recursive Length Prefix
+}
+
+func (p *Peer) Disconnect(reason DiscReason) {
+	select {
+	case p.disc <- reason:
+	case <-p.closed:
+	}
+}
+
+// matchProtocols creates structures for matching named subprotocols.
+func matchProtocols(protocols []Protocol, caps []Cap, rw MsgReadWriter) map[string]*protoRW {
+	sort.Sort(capsByNameAndVersion(caps))
+	offset := baseProtocolLength
+	result := make(map[string]*protoRW)
+Outer:
+	for _, cap := range caps {
+		for _, proto := range protocols {
+			if proto.Name == cap.Name && proto.Version == cap.Version {
+				// If an old protocol version matched, revert it
+				if old := result[cap.Name]; old != nil {
+					offset -= old.Length
+				}
+				// Assign the new match
+				result[cap.Name] = &protoRW{Protocol: proto, offset: offset, in: make(chan Msg), w: rw}
+				offset += proto.Length
+				continue Outer
+			}
+		}
+	}
+	return result
 }
