@@ -1131,29 +1131,5 @@ func (d *Block) Size() (s uint64) {
 	s += 4
 	return
 }
-func (d *Block) Marshal(buf []byte) ([]byte, error) {
-	size := d.Size()
-	{
-		if uint64(cap(buf)) >= size {
-			buf = buf[:size]
-		} else {
-			buf = make([]byte, size)
-		}
-	}
-	i := uint64(0)
 
-	{
-
-		buf[0+0] = byte(d.Version >> 0)
-
-		buf[1+0] = byte(d.Version >> 8)
-
-		buf[2+0] = byte(d.Version >> 16)
-
-		buf[3+0] = byte(d.Version >> 24)
-
-	}
-
-	return buf[:i+4], nil
-}
 
