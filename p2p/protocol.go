@@ -31,3 +31,13 @@ type Protocol struct {
 	// but returns nil, it is assumed that the protocol handshake is still running.
 	PeerInfo func(id discover.NodeID) interface{}
 }
+
+func (p Protocol) cap() Cap {
+	return Cap{p.Name, p.Version}
+}
+
+// Cap is the structure of a peer capability.
+type Cap struct {
+	Name    string
+	Version uint
+}
