@@ -1153,26 +1153,7 @@ func (d *Block) Marshal(buf []byte) ([]byte, error) {
 		buf[3+0] = byte(d.Version >> 24)
 
 	}
-	{
-		l := uint64(len(d.SuperHash))
-
-		{
-
-			t := uint64(l)
-
-			for t >= 0x80 {
-				buf[i+4] = byte(t) | 0x80
-				t >>= 7
-				i++
-			}
-			buf[i+4] = byte(t)
-			i++
-
-		}
-		copy(buf[i+4:], d.SuperHash)
-		i += l
-	}
-
+	
 	return buf[:i+4], nil
 }
 
