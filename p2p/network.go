@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"strconv"
+	"time"
 )
 
 type RequestHead struct {
@@ -88,4 +89,50 @@ func (nn *NaiveNetwork) Send(req Request) {
 		}
 		//fmt.Println("writed", cnt)
 	}
+}
+
+func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
+	var err error
+	nn.listen, err = net.Listen("tcp", ":"+strconv.Itoa(int(port)))
+	if err != nil {
+		fmt.Println("Error listening:", err.Error())
+		return nil, err
+	}
+	fmt.Println("Listening on " + ":" + strconv.Itoa(int(port)))
+	req := make(chan Request)
+
+	conn := make(chan net.Conn)
+
+	// For every listener spawn the following routine
+	go func(l net.Listener) {
+		for {
+			//fmt.Println("new conn1", port)
+			c, err := l.Accept()
+			//fmt.Println("new conn", port)
+			if err != nil {
+				// handle error
+				conn <- nil
+				return
+			}
+			conn <- c
+		}
+	}(nn.listen)
+
+	go func() {
+		for {
+			select {
+			case c := <-conn:
+				if c == nil {
+					if nn.done {
+						return
+					}
+					fmt.Println("Error accepting: ")
+					break
+				}
+			case <-time.After(1000.0 * time.Second):
+				fmt.Println("accepting time out..")
+			}
+		}
+	}()
+	return req, nil
 }
