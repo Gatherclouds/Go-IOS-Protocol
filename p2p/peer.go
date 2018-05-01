@@ -6,6 +6,7 @@ import (
 	"sync"
 	"io"
 	"sort"
+	"os"
 )
 
 const (
@@ -99,4 +100,20 @@ Outer:
 		}
 	}
 	return result
+}
+
+func newPeer(conn *conn, protocols []Protocol) *Peer {
+	protomap := matchProtocols(protocols, conn.caps, conn)
+	p := &Peer{
+		rw:       conn,
+		running:  protomap,
+		log:      *log.New(os.Stderr, "", 0), //TODO: 写专门的logger
+		created:  mclock.Now(),
+		wg:       sync.WaitGroup{},
+		protoErr: make(chan error, len(protomap)+1),
+		closed:   make(chan struct{}),
+		disc:     make(chan DiscReason),
+		events:   nil,
+	}
+	return p
 }
