@@ -45,3 +45,26 @@ type protoRW struct {
 	offset uint64
 	w      MsgWriter
 }
+
+func (rw *protoRW) ReadMsg() (Msg, error) {
+	select {
+	case msg := <-rw.in:
+		msg.Code -= rw.offset
+		return msg, nil
+	case <-rw.closed:
+		return Msg{}, io.EOF
+	}
+}
+
+type protoHandshake struct {
+	Version    uint64
+	Name       string
+	Caps       []Cap
+	ListenPort uint64
+	ID         discover.NodeID
+
+	// Ignore additional fields (for forward compatibility).
+
+	//Rest []rlp.RawValue `rlp:"tail"`
+	//Recursive Length Prefix
+}
