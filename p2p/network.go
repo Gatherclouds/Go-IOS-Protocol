@@ -57,40 +57,6 @@ func (nn *NaiveNetwork) Close(port uint16) error {
 	return nn.listen.Close()
 }
 
-func (nn *NaiveNetwork) Send(req Request) {
-	buf, err := req.Marshal(nil)
-	if err != nil {
-		fmt.Println("Error marshal body:", err.Error())
-	}
-
-	var length int32 = int32(len(buf))
-	int32buf := new(bytes.Buffer)
-
-	if err = binary.Write(int32buf, binary.BigEndian, length); err != nil {
-		fmt.Println(err)
-	}
-	for i := 1; i < 3; i++ {
-		addr, _ := nn.peerList.Get([]byte(strconv.Itoa(i)))
-		conn, err := net.Dial("tcp", string(addr))
-		fmt.Println(string(addr))
-		defer conn.Close()
-		if err != nil {
-			fmt.Println("Error dialing to ", addr, err.Error())
-			continue
-		}
-		if _, err = conn.Write(int32buf.Bytes()); err != nil {
-			fmt.Println("Error sending request head:", err.Error())
-			continue
-		}
-		//var cnt int
-		if _, err = conn.Write(buf[:]); err != nil {
-			fmt.Println("Error sending request body:", err.Error())
-			continue
-		}
-		//fmt.Println("writed", cnt)
-	}
-}
-
 func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 	var err error
 	nn.listen, err = net.Listen("tcp", ":"+strconv.Itoa(int(port)))
@@ -129,6 +95,30 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					fmt.Println("Error accepting: ")
 					break
 				}
+
+				go func(conn net.Conn) {
+					defer conn.Close()
+					// Make a buffer to hold incoming data.
+					buf := make([]byte, HEADLENGTH)
+					// Read the incoming connection into the buffer.
+					_, err := conn.Read(buf)
+					if err != nil {
+						fmt.Println("Error reading request head:", err.Error())
+					}
+					length := binary.BigEndian.Uint32(buf)
+					_buf := make([]byte, length)
+					_, err = conn.Read(_buf)
+
+					if err != nil {
+						fmt.Println("Error reading request body:", err.Error())
+					}
+					var received Request
+					received.Unmarshal(_buf)
+					//fmt.Printf("got %+v %+v\n", received, port)
+					req <- received
+					// Send a response back to person contacting us.
+					//conn.Write([]byte("Message received."))
+				}(c)
 			case <-time.After(1000.0 * time.Second):
 				fmt.Println("accepting time out..")
 			}
