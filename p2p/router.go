@@ -34,3 +34,15 @@ func RouterFactory(target string) (Router, error) {
 	}
 	return nil, fmt.Errorf("target Router not found")
 }
+
+type RouterImpl struct {
+	base core.Network
+
+	chIn  <-chan core.Request
+	chOut chan<- core.Request
+
+	filterList  []Filter
+	filterMap   map[int]chan core.Request
+	knownMember []string
+	ExitSignal  chan bool
+}
