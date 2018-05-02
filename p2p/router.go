@@ -46,3 +46,20 @@ type RouterImpl struct {
 	knownMember []string
 	ExitSignal  chan bool
 }
+
+func (r *RouterImpl) Init(base core.Network, port uint16) error {
+	var err error
+
+	r.base = base
+	r.filterList = make([]Filter, 0)
+	r.filterMap = make(map[int]chan core.Request)
+	r.knownMember = make([]string, 0)
+	r.ExitSignal = make(chan bool)
+
+	r.chIn, err = r.base.Listen(port)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
