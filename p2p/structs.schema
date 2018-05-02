@@ -23,9 +23,3 @@ struct TextPoolRaw {
     TextHash [][]byte
 }
 
-struct BlockHead {
-   Version int8
-   SuperHash []byte
-   TreeHash []byte
-   Time    int64
-}
