@@ -63,3 +63,15 @@ func (r *RouterImpl) Init(base core.Network, port uint16) error {
 
 	return nil
 }
+
+/*
+Get filtered request channel
+*/
+func (r *RouterImpl) FilteredChan(filter Filter) (chan core.Request, error) {
+	chReq := make(chan core.Request)
+
+	r.filterList = append(r.filterList, filter)
+	r.filterMap[len(r.filterList)-1] = chReq
+
+	return chReq, nil
+}
