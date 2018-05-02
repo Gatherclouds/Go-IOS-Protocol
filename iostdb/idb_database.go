@@ -3,6 +3,7 @@ package iostdb
 import (
 	"sync"
 	"fmt"
+	"errors"
 )
 
 type LDBDatabase struct {
