@@ -29,10 +29,3 @@ struct BlockHead {
    TreeHash []byte
    Time    int64
 }
-
-struct Block {
-   Version   int32
-   SuperHash []byte
-   Head      BlockHead
-   Content   []byte
-}
