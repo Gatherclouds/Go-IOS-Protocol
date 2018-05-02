@@ -1,25 +1,6 @@
 package iostdb
 
-func (d *State) Size() (s uint64) {
 
-	{
-		l := uint64(len(d.BirthTextHash))
-
-		{
-
-			t := l
-			for t >= 0x80 {
-				t >>= 7
-				s++
-			}
-			s++
-
-		}
-		s += l
-	}
-
-	return
-}
 func (d *State) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
