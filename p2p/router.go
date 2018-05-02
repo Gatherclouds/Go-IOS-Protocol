@@ -75,3 +75,18 @@ func (r *RouterImpl) FilteredChan(filter Filter) (chan core.Request, error) {
 
 	return chReq, nil
 }
+
+func (r *RouterImpl) receiveLoop() {
+	for true {
+		select {
+		case <-r.ExitSignal:
+			return
+		case req := <-r.chIn:
+			for i, f := range r.filterList {
+				if f.check(req) {
+					r.filterMap[i] <- req
+				}
+			}
+		}
+	}
+}
