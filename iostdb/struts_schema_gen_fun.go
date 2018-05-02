@@ -1093,43 +1093,5 @@ type Block struct {
 	Content   []byte
 }
 
-func (d *Block) Size() (s uint64) {
-
-	{
-		l := uint64(len(d.SuperHash))
-
-		{
-
-			t := l
-			for t >= 0x80 {
-				t >>= 7
-				s++
-			}
-			s++
-
-		}
-		s += l
-	}
-	{
-		s += d.Head.Size()
-	}
-	{
-		l := uint64(len(d.Content))
-
-		{
-
-			t := l
-			for t >= 0x80 {
-				t >>= 7
-				s++
-			}
-			s++
-
-		}
-		s += l
-	}
-	s += 4
-	return
-}
 
 
