@@ -1,6 +1,5 @@
 package iostdb
 
-
 func (d *State) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{

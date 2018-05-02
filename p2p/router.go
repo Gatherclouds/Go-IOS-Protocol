@@ -98,3 +98,7 @@ func (r *RouterImpl) Run() {
 func (r *RouterImpl) Stop() {
 	r.ExitSignal <- true
 }
+
+func (r *RouterImpl) Send(req core.Request) {
+	r.base.Send(req)
+}
