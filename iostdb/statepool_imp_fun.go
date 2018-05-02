@@ -40,13 +40,6 @@ func (sp *StatePoolImpl) Find(stateHash []byte) (State, error) {
 	return s, nil
 }
 
-func (sp *StatePoolImpl) Del(stateHash []byte) error {
-	_, err := sp.cli.Do("DEL", stateHash)
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
 
 
