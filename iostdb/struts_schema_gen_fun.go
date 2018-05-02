@@ -17,7 +17,7 @@ func (d *State) Size() (s uint64) {
 		}
 		s += l
 	}
-	
+
 	return
 }
 func (d *State) Marshal(buf []byte) ([]byte, error) {
