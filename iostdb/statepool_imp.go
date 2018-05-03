@@ -1,9 +1,5 @@
 package iostdb
 
-import (
-	"github.com/gomodule/redigo/redis"
-)
-
 type StatePoolImpl struct {
 	cli redis.Conn
 }

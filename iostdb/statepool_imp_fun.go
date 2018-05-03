@@ -16,16 +16,6 @@ func (sp *StatePoolImpl) Close() error {
 	return nil
 }
 
-func (sp *StatePoolImpl) Add(state State) error {
-	_, err := sp.cli.Do("HMSET", state.Hash(),
-		"value", state.Value,
-		"script", state.Script,
-		"tx_hash", state.BirthTxHash)
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
 
 
