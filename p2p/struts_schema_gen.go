@@ -20,6 +20,56 @@ type Request struct {
 	Body    []byte
 }
 
+func (d *Request) Size() (s uint64) {
+
+	{
+		l := uint64(len(d.From))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	{
+		l := uint64(len(d.To))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	{
+		l := uint64(len(d.Body))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	s += 12
+	return
+}
 func (d *State) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
