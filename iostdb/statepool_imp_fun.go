@@ -27,18 +27,6 @@ func (sp *StatePoolImpl) Add(state State) error {
 	return nil
 }
 
-func (sp *StatePoolImpl) Find(stateHash []byte) (State, error) {
-	var s State
-	reply, err := redis.Values(sp.cli.Do("HMGET", stateHash, "value", "script", "tx_hash"))
-	if err != nil {
-		return s, err
-	}
-	_, err = redis.Scan(reply, &s.Value, &s.Script, s.BirthTxHash)
-	if err != nil {
-		return s, err
-	}
-	return s, nil
-}
 
 
 
