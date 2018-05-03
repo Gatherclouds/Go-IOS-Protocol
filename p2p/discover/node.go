@@ -3,6 +3,7 @@ package discover
 import (
 	"net"
 	"time"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 type NodeID [NodeIDBits / 8]byte
@@ -23,4 +24,20 @@ type Node struct {
 
 	// Time when the node was added to the table.
 	addedAt time.Time
+}
+
+// NewNode creates a new node. It is mostly meant to be used for
+// testing purposes.
+func NewNode(id NodeID, ip net.IP, udpPort, tcpPort uint16) *Node {
+	if ipv4 := ip.To4(); ipv4 != nil {
+		ip = ipv4
+	}
+	return &Node{
+		IP:  ip,
+		UDP: udpPort,
+		TCP: tcpPort,
+		ID:  id,
+		//sha: crypto.Keccak256Hash(id[:]),
+		//TODO: implement Keccak256
+	}
 }
