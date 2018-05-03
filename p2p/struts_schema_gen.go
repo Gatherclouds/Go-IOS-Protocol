@@ -1,5 +1,25 @@
 package p2p
 
+import (
+	"unsafe"
+	"io"
+	"time"
+)
+
+var (
+	_ = unsafe.Sizeof(0)
+	_ = io.ReadFull
+	_ = time.Now()
+)
+
+type Request struct {
+	Time    int64  // 发送时的时间戳
+	From    string // From To是钱包地址的base58编码字符串（就是Member.ID，下同）
+	To      string
+	ReqType int32 // 此request的类型码，通过类型可以确定body的格式以方便解码body
+	Body    []byte
+}
+
 func (d *State) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
