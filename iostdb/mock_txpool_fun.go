@@ -113,15 +113,5 @@ func (mr *MockTxPoolMockRecorder) Hash() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Hash", reflect.TypeOf((*MockTxPool)(nil).Hash))
 }
 
-// Size mocks base method
-func (m *MockTxPool) Size() int {
-	ret := m.ctrl.Call(m, "Size")
-	ret0, _ := ret[0].(int)
-	return ret0
-}
 
-// Size indicates an expected call of Size
-func (mr *MockTxPoolMockRecorder) Size() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Size", reflect.TypeOf((*MockTxPool)(nil).Size))
-}
 
