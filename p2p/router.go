@@ -102,3 +102,16 @@ func (r *RouterImpl) Stop() {
 func (r *RouterImpl) Send(req core.Request) {
 	r.base.Send(req)
 }
+
+func (r *RouterImpl) Broadcast(req core.Request) {
+	for _, to := range r.knownMember {
+		req.To = to
+
+		go func() {
+			r.Send(req)
+		}()
+	}
+}
+func (r *RouterImpl) Download (req core.Request) chan []byte{
+	return nil // TODO 实现
+}
