@@ -1,9 +1,9 @@
 package p2p
 
 import (
-	"unsafe"
 	"io"
 	"time"
+	"unsafe"
 )
 
 var (
@@ -70,7 +70,6 @@ func (d *Request) Size() (s uint64) {
 	s += 12
 	return
 }
-
 func (d *Request) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
@@ -172,75 +171,85 @@ func (d *Request) Marshal(buf []byte) ([]byte, error) {
 	return buf[:i+12], nil
 }
 
-func (d *State) Marshal(buf []byte) ([]byte, error) {
-	size := d.Size()
-	{
-		if uint64(cap(buf)) >= size {
-			buf = buf[:size]
-		} else {
-			buf = make([]byte, size)
-		}
-	}
+func (d *Request) Unmarshal(buf []byte) (uint64, error) {
 	i := uint64(0)
 
 	{
-		l := uint64(len(d.BirthTextHash))
+
+		d.Time = 0 | (int64(buf[i+0+0]) << 0) | (int64(buf[i+1+0]) << 8) | (int64(buf[i+2+0]) << 16) | (int64(buf[i+3+0]) << 24) | (int64(buf[i+4+0]) << 32) | (int64(buf[i+5+0]) << 40) | (int64(buf[i+6+0]) << 48) | (int64(buf[i+7+0]) << 56)
+
+	}
+	{
+		l := uint64(0)
 
 		{
 
-			t := uint64(l)
-
-			for t >= 0x80 {
-				buf[i+0] = byte(t) | 0x80
-				t >>= 7
+			bs := uint8(7)
+			t := uint64(buf[i+8] & 0x7F)
+			for buf[i+8]&0x80 == 0x80 {
 				i++
+				t |= uint64(buf[i+8]&0x7F) << bs
+				bs += 7
 			}
-			buf[i+0] = byte(t)
 			i++
 
+			l = t
+
 		}
-		copy(buf[i+0:], d.BirthTextHash)
+		d.From = string(buf[i+8 : i+8+l])
+		i += l
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+8] & 0x7F)
+			for buf[i+8]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+8]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		d.To = string(buf[i+8 : i+8+l])
 		i += l
 	}
 	{
 
-		buf[i+0+0] = byte(d.Value >> 0)
-
-		buf[i+1+0] = byte(d.Value >> 8)
-
-		buf[i+2+0] = byte(d.Value >> 16)
-
-		buf[i+3+0] = byte(d.Value >> 24)
-
-		buf[i+4+0] = byte(d.Value >> 32)
-
-		buf[i+5+0] = byte(d.Value >> 40)
-
-		buf[i+6+0] = byte(d.Value >> 48)
-
-		buf[i+7+0] = byte(d.Value >> 56)
+		d.ReqType = 0 | (int32(buf[i+0+8]) << 0) | (int32(buf[i+1+8]) << 8) | (int32(buf[i+2+8]) << 16) | (int32(buf[i+3+8]) << 24)
 
 	}
 	{
-		l := uint64(len(d.Script))
+		l := uint64(0)
 
 		{
 
-			t := uint64(l)
-
-			for t >= 0x80 {
-				buf[i+8] = byte(t) | 0x80
-				t >>= 7
+			bs := uint8(7)
+			t := uint64(buf[i+12] & 0x7F)
+			for buf[i+12]&0x80 == 0x80 {
 				i++
+				t |= uint64(buf[i+12]&0x7F) << bs
+				bs += 7
 			}
-			buf[i+8] = byte(t)
 			i++
 
+			l = t
+
 		}
-		copy(buf[i+8:], d.Script)
+		if uint64(cap(d.Body)) >= l {
+			d.Body = d.Body[:l]
+		} else {
+			d.Body = make([]byte, l)
+		}
+		copy(d.Body, buf[i+12:])
 		i += l
 	}
-	return buf[:i+8], nil
+	return i + 12, nil
 }
 
 func (d *State) Unmarshal(buf []byte) (uint64, error) {
@@ -1157,78 +1166,6 @@ func (d *BlockHead) Marshal(buf []byte) ([]byte, error) {
 	return buf[:i+9], nil
 }
 
-func (d *BlockHead) Unmarshal(buf []byte) (uint64, error) {
-	i := uint64(0)
-
-	{
-
-		d.Version = 0 | (int8(buf[i+0+0]) << 0)
-
-	}
-	{
-		l := uint64(0)
-
-		{
-
-			bs := uint8(7)
-			t := uint64(buf[i+1] & 0x7F)
-			for buf[i+1]&0x80 == 0x80 {
-				i++
-				t |= uint64(buf[i+1]&0x7F) << bs
-				bs += 7
-			}
-			i++
-
-			l = t
-
-		}
-		if uint64(cap(d.SuperHash)) >= l {
-			d.SuperHash = d.SuperHash[:l]
-		} else {
-			d.SuperHash = make([]byte, l)
-		}
-		copy(d.SuperHash, buf[i+1:])
-		i += l
-	}
-	{
-		l := uint64(0)
-
-		{
-
-			bs := uint8(7)
-			t := uint64(buf[i+1] & 0x7F)
-			for buf[i+1]&0x80 == 0x80 {
-				i++
-				t |= uint64(buf[i+1]&0x7F) << bs
-				bs += 7
-			}
-			i++
-
-			l = t
-
-		}
-		if uint64(cap(d.TreeHash)) >= l {
-			d.TreeHash = d.TreeHash[:l]
-		} else {
-			d.TreeHash = make([]byte, l)
-		}
-		copy(d.TreeHash, buf[i+1:])
-		i += l
-	}
-	{
-
-		d.Time = 0 | (int64(buf[i+0+1]) << 0) | (int64(buf[i+1+1]) << 8) | (int64(buf[i+2+1]) << 16) | (int64(buf[i+3+1]) << 24) | (int64(buf[i+4+1]) << 32) | (int64(buf[i+5+1]) << 40) | (int64(buf[i+6+1]) << 48) | (int64(buf[i+7+1]) << 56)
-
-	}
-	return i + 9, nil
-}
-
-type Block struct {
-	Version   int32
-	SuperHash []byte
-	Head      BlockHead
-	Content   []byte
-}
 
 
 
