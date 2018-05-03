@@ -1,13 +1,6 @@
 package common
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
-)
-
-package common
-
-import (
 "crypto/sha256"
 "encoding/hex"
 
