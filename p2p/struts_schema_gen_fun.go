@@ -1,4 +1,4 @@
-package iostdb
+package p2p
 
 func (d *State) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
