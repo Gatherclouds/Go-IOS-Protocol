@@ -70,6 +70,108 @@ func (d *Request) Size() (s uint64) {
 	s += 12
 	return
 }
+
+func (d *Request) Marshal(buf []byte) ([]byte, error) {
+	size := d.Size()
+	{
+		if uint64(cap(buf)) >= size {
+			buf = buf[:size]
+		} else {
+			buf = make([]byte, size)
+		}
+	}
+	i := uint64(0)
+
+	{
+
+		buf[0+0] = byte(d.Time >> 0)
+
+		buf[1+0] = byte(d.Time >> 8)
+
+		buf[2+0] = byte(d.Time >> 16)
+
+		buf[3+0] = byte(d.Time >> 24)
+
+		buf[4+0] = byte(d.Time >> 32)
+
+		buf[5+0] = byte(d.Time >> 40)
+
+		buf[6+0] = byte(d.Time >> 48)
+
+		buf[7+0] = byte(d.Time >> 56)
+
+	}
+	{
+		l := uint64(len(d.From))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+8] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+8] = byte(t)
+			i++
+
+		}
+		copy(buf[i+8:], d.From)
+		i += l
+	}
+	{
+		l := uint64(len(d.To))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+8] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+8] = byte(t)
+			i++
+
+		}
+		copy(buf[i+8:], d.To)
+		i += l
+	}
+	{
+
+		buf[i+0+8] = byte(d.ReqType >> 0)
+
+		buf[i+1+8] = byte(d.ReqType >> 8)
+
+		buf[i+2+8] = byte(d.ReqType >> 16)
+
+		buf[i+3+8] = byte(d.ReqType >> 24)
+
+	}
+	{
+		l := uint64(len(d.Body))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+12] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+12] = byte(t)
+			i++
+
+		}
+		copy(buf[i+12:], d.Body)
+		i += l
+	}
+	return buf[:i+12], nil
+}
+
 func (d *State) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
