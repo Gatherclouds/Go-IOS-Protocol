@@ -18,8 +18,4 @@ struct Text {
    Time int64
 }
 
-struct TextPoolRaw {
-    Texts []Text
-    TextHash [][]byte
-}
 
