@@ -1,21 +1,9 @@
-struct State  {
-  BirthTextHash []byte
-  Value int64
-  Script string
-}
-
-struct TextInput {
-   TextHash []byte
-   UnlockScript string
-   StateHash []byte
-}
-
-struct Text {
-   Version int32
-   Recorder string
-   Inputs []TextInput
-   Outputs []State
-   Time int64
+struct Request {
+	Time    int64
+	From    string
+	To      string
+	ReqType int32
+	Body    []byte
 }
 
 
