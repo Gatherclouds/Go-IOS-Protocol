@@ -108,10 +108,6 @@ func (m *MockTxPool) Hash() []byte {
 	return ret0
 }
 
-// Hash indicates an expected call of Hash
-func (mr *MockTxPoolMockRecorder) Hash() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Hash", reflect.TypeOf((*MockTxPool)(nil).Hash))
-}
 
 
 
