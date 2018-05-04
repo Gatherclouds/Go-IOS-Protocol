@@ -18,3 +18,10 @@ type MockBlockChain struct {
 type MockBlockChainMockRecorder struct {
 	mock *MockBlockChain
 }
+
+// NewMockBlockChain creates a new mock instance
+func NewMockBlockChain(ctrl *gomock.Controller) *MockBlockChain {
+	mock := &MockBlockChain{ctrl: ctrl}
+	mock.recorder = &MockBlockChainMockRecorder{mock}
+	return mock
+}
