@@ -1,5 +1,10 @@
 package pow
 
+import (
+	"github.com/ethereum/go-ethereum/core"
+	"bytes"
+)
+
 type CacheStatus int
 
 const (
@@ -27,3 +32,40 @@ func newBct(block *core.Block, tree *BlockCacheTree) *BlockCacheTree {
 	bct.bc.Push(block)
 	return &bct
 }
+
+func (b *BlockCacheTree) add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) CacheStatus {
+
+	var code CacheStatus
+	for _, bct := range b.children {
+		code = bct.add(block, verifier)
+		if code == Extend {
+			if bct.depth == b.depth {
+				b.depth++
+				return Extend
+			} else {
+				return Fork
+			}
+		} else if code == Fork {
+			return Fork
+		} else if code == ErrorBlock {
+			return ErrorBlock
+		}
+	}
+
+	if bytes.Equal(b.bc.Top().Head.Hash(), block.Head.ParentHash) {
+		if !verifier(block, &b.bc) {
+			return ErrorBlock
+		}
+
+		if len(b.children) == 0 {
+			b.children = append(b.children, newBct(block, b))
+			b.depth++
+			return Extend
+		} else {
+			return Fork
+		}
+	}
+
+	return NotFound
+}
+
