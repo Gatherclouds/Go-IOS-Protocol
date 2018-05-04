@@ -170,3 +170,22 @@ func (f *Filter) check(req core.Request) bool {
 
 	return m && t
 }
+
+func memberContain(a string, c []core.Member) bool {
+	for _, m := range c {
+		if m.ID == a {
+			return true
+		}
+	}
+	return false
+}
+
+func reqTypeContain(a int, c []ReqType) bool {
+	for _, t := range c {
+		if int(t) == a {
+			return true
+		}
+	}
+	return false
+
+}
