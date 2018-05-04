@@ -25,3 +25,8 @@ func NewMockNetwork(ctrl *gomock.Controller) *MockNetwork {
 	mock.recorder = &MockNetworkMockRecorder{mock}
 	return mock
 }
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockNetwork) EXPECT() *MockNetworkMockRecorder {
+	return m.recorder
+}
