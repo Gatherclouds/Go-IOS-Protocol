@@ -25,3 +25,8 @@ func NewMockBlockChain(ctrl *gomock.Controller) *MockBlockChain {
 	mock.recorder = &MockBlockChainMockRecorder{mock}
 	return mock
 }
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockBlockChain) EXPECT() *MockBlockChainMockRecorder {
+	return m.recorder
+}

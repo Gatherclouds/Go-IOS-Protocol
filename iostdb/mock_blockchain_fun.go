@@ -82,8 +82,4 @@ func (m *MockBlockChain) Close() error {
 	return ret0
 }
 
-// Close indicates an expected call of Close
-func (mr *MockBlockChainMockRecorder) Close() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockBlockChain)(nil).Close))
-}
 
