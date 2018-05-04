@@ -130,3 +130,43 @@ type Filter struct {
 	RejectType []ReqType
 	AcceptType []ReqType
 }
+
+func (f *Filter) check(req core.Request) bool {
+	var memberCheck, typeCheck byte
+	if f.WhiteList == nil && f.BlackList == nil {
+		memberCheck = byte(0)
+	} else if f.WhiteList != nil {
+		memberCheck = byte(1)
+	} else {
+		memberCheck = byte(2)
+	}
+	if f.AcceptType == nil && f.RejectType == nil {
+		typeCheck = byte(0)
+	} else if f.AcceptType != nil {
+		typeCheck = byte(1)
+	} else {
+		typeCheck = byte(2)
+	}
+
+	var m, t bool
+
+	switch memberCheck {
+	case 0:
+		m = true
+	case 1:
+		m = memberContain(req.From, f.WhiteList)
+	case 2:
+		m = !memberContain(req.From, f.BlackList)
+	}
+
+	switch typeCheck {
+	case 0:
+		t = true
+	case 1:
+		t = reqTypeContain(req.ReqType, f.AcceptType)
+	case 2:
+		t = !reqTypeContain(req.ReqType, f.RejectType)
+	}
+
+	return m && t
+}
