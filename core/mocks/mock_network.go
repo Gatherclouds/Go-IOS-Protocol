@@ -2,12 +2,10 @@
 // Source: network.go
 
 // Package iosbase_mock is a generated GoMock package.
-package iostdb
+package core_mock
 
 import (
-	gomock "github.com/golang/mock/gomock"
-	. "github.com/iost-official/Go-IOS-Protocol/iosbase"
-	reflect "reflect"
+	"github.com/golang/mock/gomock"
 )
 
 // MockNetwork is a mock of Network interface
