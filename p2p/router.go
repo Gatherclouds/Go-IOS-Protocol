@@ -116,3 +116,17 @@ func (r *RouterImpl) Broadcast(req core.Request) {
 func (r *RouterImpl) Download (req core.Request) chan []byte{
 	return nil // TODO 实现
 }
+
+/*
+The filter used by Router
+Rulers :
+1. if both white list and black list are nil, this filter is all-pass
+2. if one of those is not nil, filter as it is
+3. if both of those list are not nil, filter as white list
+*/
+type Filter struct {
+	WhiteList  []core.Member
+	BlackList  []core.Member
+	RejectType []ReqType
+	AcceptType []ReqType
+}
