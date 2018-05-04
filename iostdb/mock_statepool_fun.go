@@ -14,13 +14,6 @@ func (m *MockStatePool) EXPECT() *MockStatePoolMockRecorder {
 	return m.recorder
 }
 
-// Init mocks base method
-func (m *MockStatePool) Init() error {
-	ret := m.ctrl.Call(m, "Init")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
 // Init indicates an expected call of Init
 func (mr *MockStatePoolMockRecorder) Init() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockStatePool)(nil).Init))
