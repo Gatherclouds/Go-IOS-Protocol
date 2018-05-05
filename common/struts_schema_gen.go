@@ -110,3 +110,65 @@ func (d *SignatureRaw) Marshal(buf []byte) ([]byte, error) {
 	}
 	return buf[:i+1], nil
 }
+
+func (d *SignatureRaw) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+
+		d.Algorithm = 0 | (int8(buf[i+0+0]) << 0)
+
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+1] & 0x7F)
+			for buf[i+1]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+1]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Sig)) >= l {
+			d.Sig = d.Sig[:l]
+		} else {
+			d.Sig = make([]byte, l)
+		}
+		copy(d.Sig, buf[i+1:])
+		i += l
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+1] & 0x7F)
+			for buf[i+1]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+1]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Pubkey)) >= l {
+			d.Pubkey = d.Pubkey[:l]
+		} else {
+			d.Pubkey = make([]byte, l)
+		}
+		copy(d.Pubkey, buf[i+1:])
+		i += l
+	}
+	return i + 1, nil
+}
+
