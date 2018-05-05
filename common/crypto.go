@@ -1,12 +1,12 @@
 package common
 
 import (
-"crypto/sha256"
-"encoding/hex"
+	"crypto/sha256"
+	"encoding/hex"
 
-"github.com/btcsuite/btcutil/base58"
-"github.com/ethereum/go-ethereum/crypto/secp256k1"
-"golang.org/x/crypto/ripemd160"
+	"github.com/btcsuite/btcutil/base58"
+	"github.com/ethereum/go-ethereum/crypto/secp256k1"
+	"golang.org/x/crypto/ripemd160"
 )
 
 func Sha256(raw []byte) []byte {
@@ -40,7 +40,7 @@ func ParseHex(s string) []byte {
 	return d
 }
 
-func Sign(info, privkey []byte) []byte {
+func SignInSecp256k1(info, privkey []byte) []byte {
 	sig, err := secp256k1.Sign(info, privkey)
 	if err != nil {
 		println(err)
@@ -49,11 +49,11 @@ func Sign(info, privkey []byte) []byte {
 	return sig[:64]
 }
 
-func VerifySignature(info, pubkey, sig []byte) bool {
+func VerifySignInSecp256k1(info, pubkey, sig []byte) bool {
 	return secp256k1.VerifySignature(pubkey, info, sig)
 }
 
-func CalcPubkey(privkey []byte) []byte {
+func CalcPubkeyInSecp256k1(privkey []byte) []byte {
 	myCurve := secp256k1.S256()
 	x, y := myCurve.ScalarBaseMult(privkey)
 	return secp256k1.CompressPubkey(x, y)
