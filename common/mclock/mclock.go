@@ -1,9 +1,5 @@
 package mclock
 
-import "time"
-
-package mclock
-
 import (
 "github.com/aristanetworks/goarista/monotime"
 "time"
