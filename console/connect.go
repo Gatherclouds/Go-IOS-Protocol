@@ -33,6 +33,29 @@ func Connect() Cmd {
 			return fmt.Sprint(err) + "\n"
 		}
 
+		Wg.Add(1)
+		go func(<-chan p2p.Request, ) {
+			defer Wg.Done()
+			for {
+				select{
+				case message := <-lis:
+					//fmt.Printf("\n%+v\n>", message)
+					encodedBlock := message.Body
+					block := transaction.DeserializeBlock(encodedBlock)
+					err1 := Db.Put(block.Hash, encodedBlock)
+					err2 := Db.Put([]byte("l"), block.Hash)
+					if err1 != nil || err2 != nil {
+						fmt.Printf("Write to database error! \nSync failed.\n>")
+					}else{
+						fmt.Printf("Sync successfully!\n>")
+					}
+				case <-Done:
+					fmt.Printf("Port %d is done\n", port)
+					return
+				}
+			}
+		}(lis)
+		return fmt.Sprintf("Connected with port %d successfully!\n", port)
 	}
 	return c
 }
