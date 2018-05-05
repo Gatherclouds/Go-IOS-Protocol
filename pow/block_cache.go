@@ -104,3 +104,18 @@ type BlockCacheImpl struct {
 	singleBlocks []*core.Block
 	maxDepth     int
 }
+
+func NewBlockCache(chain core.BlockChain, maxDepth int) BlockCacheImpl {
+	h := BlockCacheImpl{
+		bc: chain,
+		cachedRoot: &BlockCacheTree{
+			depth:    0,
+			bc:       NewCBC(chain),
+			children: make([]*BlockCacheTree, 0),
+			super:    nil,
+		},
+		singleBlocks: make([]*core.Block, 0),
+		maxDepth:     maxDepth,
+	}
+	return h
+}
