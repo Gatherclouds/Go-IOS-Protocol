@@ -83,10 +83,6 @@ func (m *MockTxPool) GetSlice() ([]iosbase.Tx, error) {
 	return ret0, ret1
 }
 
-// GetSlice indicates an expected call of GetSlice
-func (mr *MockTxPoolMockRecorder) GetSlice() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSlice", reflect.TypeOf((*MockTxPool)(nil).GetSlice))
-}
 
 // Has mocks base method
 func (m *MockTxPool) Has(arg0 []byte) (bool, error) {
@@ -96,10 +92,7 @@ func (m *MockTxPool) Has(arg0 []byte) (bool, error) {
 	return ret0, ret1
 }
 
-// Has indicates an expected call of Has
-func (mr *MockTxPoolMockRecorder) Has(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Has", reflect.TypeOf((*MockTxPool)(nil).Has), arg0)
-}
+
 
 
 
