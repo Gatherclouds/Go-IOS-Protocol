@@ -91,3 +91,16 @@ func (b *BlockCacheTree) iterate(fun func(bct *BlockCacheTree) bool) bool {
 	}
 	return false
 }
+
+type BlockCache interface {
+	Add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) error
+	FindBlockInCache(hash []byte) (*core.Block, error)
+	LongestChain() core.BlockChain
+}
+
+type BlockCacheImpl struct {
+	bc           core.BlockChain
+	cachedRoot   *BlockCacheTree
+	singleBlocks []*core.Block
+	maxDepth     int
+}
