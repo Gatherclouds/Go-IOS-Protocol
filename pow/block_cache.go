@@ -78,3 +78,16 @@ func (b *BlockCacheTree) pop() *BlockCacheTree {
 	}
 	return nil
 }
+
+func (b *BlockCacheTree) iterate(fun func(bct *BlockCacheTree) bool) bool {
+	if fun(b) {
+		return true
+	}
+	for _, bct := range b.children {
+		f := bct.iterate(fun)
+		if f {
+			return true
+		}
+	}
+	return false
+}
