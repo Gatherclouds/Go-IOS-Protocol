@@ -69,3 +69,12 @@ func (b *BlockCacheTree) add(block *core.Block, verifier func(blk *core.Block, c
 	return NotFound
 }
 
+func (b *BlockCacheTree) pop() *BlockCacheTree {
+
+	for _, bct := range b.children {
+		if bct.depth == b.depth-1 {
+			return bct
+		}
+	}
+	return nil
+}
