@@ -8,10 +8,6 @@ func (d *Block) Encode() []byte {
 	return bin
 }
 
-func (d *Block) Decode(bin []byte) error {
-	_, err := d.Unmarshal(bin)
-	return err
-}
 
 
 
