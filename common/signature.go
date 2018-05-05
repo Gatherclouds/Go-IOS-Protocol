@@ -27,3 +27,11 @@ func Sign(algo SignAlgorithm, info, privkey []byte) (Signature, error) {
 	return s, fmt.Errorf("algorithm not exist")
 }
 
+func VerifySignature(info []byte, s Signature) bool {
+	switch s.Algorithm {
+	case Secp256k1:
+		return VerifySignInSecp256k1(info, s.Pubkey, s.Sig)
+	}
+	return false
+}
+
