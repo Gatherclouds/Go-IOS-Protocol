@@ -57,3 +57,12 @@ func (c *Console) Run(name string, args []string) string {
 	return "Command not found\n"
 }
 
+func (c *Console) Stop() {
+	c.running = false
+}
+
+type Cmd struct {
+	Name  string
+	Usage string
+	Exec  func(host *Console, args []string) string
+}
