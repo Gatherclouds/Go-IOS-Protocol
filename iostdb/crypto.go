@@ -53,8 +53,4 @@ func VerifySignature(info, pubKey, sig []byte) bool {
 	return secp256k1.VerifySignature(pubKey, info, sig)
 }
 
-func CalcPubKey(privKey []byte) []byte {
-	myCurve := secp256k1.S256()
-	x, y := myCurve.ScalarBaseMult(privKey)
-	return secp256k1.CompressPubKey(x, y)
-}
+
