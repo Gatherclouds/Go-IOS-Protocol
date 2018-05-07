@@ -1,5 +1,7 @@
 package console
 
+import "strconv"
+
 func Send() Cmd {
 	return Cmd{
 		Name:  "send",

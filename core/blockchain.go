@@ -3,31 +3,22 @@ package core
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"github.com/iost-official/prototype/iostdb"
 )
 
-//go:generate mockgen -destination mocks/mock_blockchain.go -package core_mock -source blockchain.go -imports .=github.com/iost-official/prototype/core
+///go:generate mockgen -destination mocks/mock_blockchain.go -package core_mock github.com/iost-official/prototype/core BlockChain
 
 // Block chain
 type BlockChain interface {
-	Get(layer int) (*Block, error)
-	Push(block *Block) error
+	Push(block *Block) error // 加入block，检查block是否合法在consensus内实现以解耦合
 	Length() int
-	Top() *Block
+	Top() *Block // 语法糖
 
-	FindTx(txHash []byte) (Tx, error)
+	Iterator() BlockChainIterator
 }
 
-type BlockChainImpl struct {
-	db     *iostdb.LDBDatabase
-	redis  redis.Conn
-	length int
+type BlockChainIterator interface {
+	Next() *Block // 返回下一个块
 }
-
-const (
-	DBPath   = "savedata/"
-	IndexKey = "block_chain_index"
-)
 func (bc *BlockChainImpl) Get(layer int) (*Block, error) {
 
 	if layer < 0 || layer >= bc.length {
