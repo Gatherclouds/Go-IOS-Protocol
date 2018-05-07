@@ -5,8 +5,6 @@ import (
 	"encoding/hex"
 
 	"github.com/btcsuite/btcutil/base58"
-	"github.com/ethereum/go-ethereum/crypto/secp256k1"
-	"golang.org/x/crypto/ripemd160"
 )
 
 func Sha256(raw []byte) []byte {
@@ -40,14 +38,6 @@ func ParseHex(s string) []byte {
 	return d
 }
 
-func Sign(info, pubKey []byte) []byte {
-	sig, err := secp256k1.Sign(info, privKey)
-	if err != nil {
-		println(err)
-		return nil
-	}
-	return sig[:64]
-}
 
 
 
