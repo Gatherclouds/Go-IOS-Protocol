@@ -3,7 +3,6 @@ package iostdb
 import (
 	"crypto/sha256"
 	"encoding/hex"
-
 	"github.com/btcsuite/btcutil/base58"
 )
 
@@ -29,14 +28,6 @@ func ToHex(data []byte) string {
 	return hex.EncodeToString(data)
 }
 
-func ParseHex(s string) []byte {
-	d, err := hex.DecodeString(s)
-	if err != nil {
-		println(err)
-		return nil
-	}
-	return d
-}
 
 
 
