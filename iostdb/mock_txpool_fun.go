@@ -84,14 +84,6 @@ func (m *MockTxPool) GetSlice() ([]iosbase.Tx, error) {
 }
 
 
-// Has mocks base method
-func (m *MockTxPool) Has(arg0 []byte) (bool, error) {
-	ret := m.ctrl.Call(m, "Has", arg0)
-	ret0, _ := ret[0].(bool)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
 
 
 
