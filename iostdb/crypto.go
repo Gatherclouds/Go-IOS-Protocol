@@ -20,13 +20,6 @@ func Base58Encode(raw []byte) string {
 	return base58.Encode(raw)
 }
 
-func Base58Decode(s string) []byte {
-	return base58.Decode(s)
-}
-
-func ToHex(data []byte) string {
-	return hex.EncodeToString(data)
-}
 
 
 
