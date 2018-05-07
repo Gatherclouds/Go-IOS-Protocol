@@ -49,8 +49,5 @@ func Sign(info, pubKey []byte) []byte {
 	return sig[:64]
 }
 
-func VerifySignature(info, pubKey, sig []byte) bool {
-	return secp256k1.VerifySignature(pubKey, info, sig)
-}
 
 
