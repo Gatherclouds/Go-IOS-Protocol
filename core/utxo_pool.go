@@ -7,20 +7,18 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-//go:generate mockgen -destination mocks/mock_statepool.go -package core_mock -source utxo_pool.go -imports .=github.com/iost-official/prototype/core
-
-/*
-Current states of system ALERT: 正在施工，请不要调用
-*/
+// UTXO池，可以存储在内存，用map实现，以后可以移到数据库
 type UTXOPool interface {
-	Add(state UTXO) error
-	Find(stateHash []byte) (UTXO, error)
+	Add(state UTXO)
+	Find(stateHash []byte) (UTXO, error) // 以后可以增加按字段搜索的功能，下同
+	GetSlice() []UTXO                    // 来不及实现按字段搜索，就提供一个返回全部utxo的切片的接口，以后可以标记为deprecated，下同
 	Del(StateHash []byte) error
 	Transact(block *Block) error
-	Flush() error
-	Copy() UTXOPool
+	Flush()                                                                  // 保存当前池到数据库
+	Copy() UTXOPool                                                          // 获得当前池的拷贝
+	FindUTXO(address string) []UTXO                                          // 查询一个地址所有的UTXO
+	FindSpendableOutputs(address string, amount int) (int, map[string][]int) // 对于一个地址，找到最少amount的UTXO
 }
-
 
 func BuildStatePoolCore(chain BlockChain) *StatePoolCore {
 	var spc StatePoolCore
