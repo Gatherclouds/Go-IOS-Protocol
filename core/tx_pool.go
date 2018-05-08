@@ -2,12 +2,6 @@ package core
 
 import "fmt"
 
-type Serializable interface {
-	Encode() []byte
-	Decode([]byte) error
-	Hash() []byte
-}
-
 //go:generate mockgen -destination mocks/mock_tx_pool.go -package core_mock github.com/iost-official/prototype/core TxPool
 type TxPool interface {
 	Add(tx Tx) error
@@ -105,6 +99,3 @@ func (tp *TxPoolImpl) Decode(a []byte) error {
 func (tp *TxPoolImpl) Hash() []byte {
 	return common.Sha256(tp.Encode())
 }
-
-
-
