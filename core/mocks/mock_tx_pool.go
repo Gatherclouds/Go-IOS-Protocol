@@ -19,3 +19,9 @@ type MockTxPoolMockRecorder struct {
 	mock *MockTxPool
 }
 
+// NewMockTxPool creates a new mock instance
+func NewMockTxPool(ctrl *gomock.Controller) *MockTxPool {
+	mock := &MockTxPool{ctrl: ctrl}
+	mock.recorder = &MockTxPoolMockRecorder{mock}
+	return mock
+}
