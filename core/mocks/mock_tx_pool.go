@@ -13,3 +13,9 @@ type MockTxPool struct {
 	ctrl     *gomock.Controller
 	recorder *MockTxPoolMockRecorder
 }
+
+// MockTxPoolMockRecorder is the mock recorder for MockTxPool
+type MockTxPoolMockRecorder struct {
+	mock *MockTxPool
+}
+
