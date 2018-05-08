@@ -1,8 +1,7 @@
 package core
 
 import (
-	"fmt"
-	"github.com/gomodule/redigo/redis"
+	_ "github.com/gomodule/redigo/redis"
 )
 
 ///go:generate mockgen -destination mocks/mock_blockchain.go -package core_mock github.com/iost-official/prototype/core BlockChain
