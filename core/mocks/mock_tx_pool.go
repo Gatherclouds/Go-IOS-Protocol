@@ -30,3 +30,10 @@ func NewMockTxPool(ctrl *gomock.Controller) *MockTxPool {
 func (m *MockTxPool) EXPECT() *MockTxPoolMockRecorder {
 	return m.recorder
 }
+
+// Add mocks base method
+func (m *MockTxPool) Add(arg0 core.Tx) error {
+	ret := m.ctrl.Call(m, "Add", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
