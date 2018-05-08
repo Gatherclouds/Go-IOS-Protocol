@@ -1,6 +1,5 @@
 package core
 
-
 type TxStatus int
 
 const (
