@@ -42,3 +42,10 @@ func (m *MockBlockChain) Iterator() core.BlockChainIterator {
 func (mr *MockBlockChainMockRecorder) Iterator() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Iterator", reflect.TypeOf((*MockBlockChain)(nil).Iterator))
 }
+
+// Length mocks base method
+func (m *MockBlockChain) Length() int {
+	ret := m.ctrl.Call(m, "Length")
+	ret0, _ := ret[0].(int)
+	return ret0
+}
