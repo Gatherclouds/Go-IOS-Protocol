@@ -30,3 +30,10 @@ func NewMockBlockChain(ctrl *gomock.Controller) *MockBlockChain {
 func (m *MockBlockChain) EXPECT() *MockBlockChainMockRecorder {
 	return m.recorder
 }
+
+// Iterator mocks base method
+func (m *MockBlockChain) Iterator() core.BlockChainIterator {
+	ret := m.ctrl.Call(m, "Iterator")
+	ret0, _ := ret[0].(core.BlockChainIterator)
+	return ret0
+}
