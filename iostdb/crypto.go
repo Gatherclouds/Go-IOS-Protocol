@@ -2,7 +2,6 @@ package iostdb
 
 import (
 	"crypto/sha256"
-	"encoding/hex"
 	"github.com/btcsuite/btcutil/base58"
 )
 

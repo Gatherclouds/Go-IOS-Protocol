@@ -49,3 +49,8 @@ func (m *MockBlockChain) Length() int {
 	ret0, _ := ret[0].(int)
 	return ret0
 }
+
+// Length indicates an expected call of Length
+func (mr *MockBlockChainMockRecorder) Length() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Length", reflect.TypeOf((*MockBlockChain)(nil).Length))
+}
