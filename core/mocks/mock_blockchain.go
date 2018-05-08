@@ -37,3 +37,8 @@ func (m *MockBlockChain) Iterator() core.BlockChainIterator {
 	ret0, _ := ret[0].(core.BlockChainIterator)
 	return ret0
 }
+
+// Iterator indicates an expected call of Iterator
+func (mr *MockBlockChainMockRecorder) Iterator() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Iterator", reflect.TypeOf((*MockBlockChain)(nil).Iterator))
+}
