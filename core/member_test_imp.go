@@ -1,7 +1,5 @@
 package core
 
-import "fmt"
-
 type TxPoolImpl struct {
 	TxPoolRaw
 	txMap map[string]Tx
@@ -28,10 +26,3 @@ func (tp *TxPoolImpl) Del(tx Tx) error {
 	return nil
 }
 
-func (tp *TxPoolImpl) Find(txHash []byte) (Tx, error) {
-	tx, ok := tp.txMap[common.Base58Encode(txHash)]
-	if !ok {
-		return tx, fmt.Errorf("not found")
-	}
-	return tx, nil
-}

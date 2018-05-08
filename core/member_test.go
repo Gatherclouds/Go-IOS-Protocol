@@ -2,8 +2,6 @@ package core
 
 import (
 	"testing"
-
-	. "github.com/iost-official/prototype/common"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
