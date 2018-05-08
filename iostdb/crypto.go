@@ -2,7 +2,6 @@ package iostdb
 
 import (
 	"crypto/sha256"
-	"github.com/btcsuite/btcutil/base58"
 )
 
 func Sha256(raw []byte) []byte {
@@ -15,9 +14,6 @@ func Hash160(raw []byte) []byte {
 	return ripemd160.New().Sum(data[len(data):])
 }
 
-func Base58Encode(raw []byte) string {
-	return base58.Encode(raw)
-}
 
 
 

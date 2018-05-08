@@ -25,3 +25,8 @@ func NewMockTxPool(ctrl *gomock.Controller) *MockTxPool {
 	mock.recorder = &MockTxPoolMockRecorder{mock}
 	return mock
 }
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockTxPool) EXPECT() *MockTxPoolMockRecorder {
+	return m.recorder
+}
