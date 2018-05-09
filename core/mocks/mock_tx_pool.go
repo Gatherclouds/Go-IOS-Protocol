@@ -86,3 +86,8 @@ func (m *MockTxPool) Find(arg0 []byte) (core.Tx, error) {
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
+
+// Find indicates an expected call of Find
+func (mr *MockTxPoolMockRecorder) Find(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockTxPool)(nil).Find), arg0)
+}
