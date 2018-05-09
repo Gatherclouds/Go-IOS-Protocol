@@ -75,11 +75,5 @@ func (mr *MockBlockChainMockRecorder) Init() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockBlockChain)(nil).Init))
 }
 
-// Close mocks base method
-func (m *MockBlockChain) Close() error {
-	ret := m.ctrl.Call(m, "Close")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
 
 
