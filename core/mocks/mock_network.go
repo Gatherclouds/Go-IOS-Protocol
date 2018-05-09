@@ -50,3 +50,8 @@ func (m *MockNetwork) Listen(arg0 uint16) (<-chan core.Request, error) {
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
+
+// Listen indicates an expected call of Listen
+func (mr *MockNetworkMockRecorder) Listen(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Listen", reflect.TypeOf((*MockNetwork)(nil).Listen), arg0)
+}

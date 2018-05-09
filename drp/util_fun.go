@@ -105,7 +105,3 @@ func PointDiv(p *Point, s *Scalar) *Point {
 	return PointMul(p, sInv)
 }
 
-func (p *Point) ToDhSecret() DhSecret {
-	return DhSecret{p.x.Bytes()}
-}
-
