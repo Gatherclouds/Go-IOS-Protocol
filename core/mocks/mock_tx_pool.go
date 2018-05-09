@@ -49,3 +49,16 @@ func (m *MockTxPool) Decode(arg0 []byte) error {
 	ret0, _ := ret[0].(error)
 	return ret0
 }
+
+// Decode indicates an expected call of Decode
+func (mr *MockTxPoolMockRecorder) Decode(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decode", reflect.TypeOf((*MockTxPool)(nil).Decode), arg0)
+}
+
+// Del mocks base method
+func (m *MockTxPool) Del(arg0 core.Tx) error {
+	ret := m.ctrl.Call(m, "Del", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
