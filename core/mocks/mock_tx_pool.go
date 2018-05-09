@@ -42,3 +42,10 @@ func (m *MockTxPool) Add(arg0 core.Tx) error {
 func (mr *MockTxPoolMockRecorder) Add(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockTxPool)(nil).Add), arg0)
 }
+
+// Decode mocks base method
+func (m *MockTxPool) Decode(arg0 []byte) error {
+	ret := m.ctrl.Call(m, "Decode", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
