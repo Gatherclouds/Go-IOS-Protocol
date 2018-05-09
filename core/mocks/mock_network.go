@@ -60,3 +60,8 @@ func (mr *MockNetworkMockRecorder) Listen(arg0 interface{}) *gomock.Call {
 func (m *MockNetwork) Send(arg0 core.Request) {
 	m.ctrl.Call(m, "Send", arg0)
 }
+
+// Send indicates an expected call of Send
+func (mr *MockNetworkMockRecorder) Send(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Send", reflect.TypeOf((*MockNetwork)(nil).Send), arg0)
+}

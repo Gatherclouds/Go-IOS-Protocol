@@ -1,7 +1,7 @@
 package drp
 
 import (
-	fmt "fmt"
+	"fmt"
 	"encoding/hex"
 	"crypto/elliptic"
 	"crypto/rand"
@@ -94,10 +94,6 @@ func (p *Point) Add(a *Point, b *Point) *Point {
 	return r
 }
 
-func PointMul(p *Point, s *Scalar) *Point {
-	r := new(Point)
-	r.x, r.y = getCurve().ScalarMult(p.x, p.y, s.data)
-	return r
-}
+
 
 
