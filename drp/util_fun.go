@@ -100,8 +100,4 @@ func PointMul(p *Point, s *Scalar) *Point {
 	return r
 }
 
-func PointDiv(p *Point, s *Scalar) *Point {
-	sInv := new(Scalar).Inverse(s)
-	return PointMul(p, sInv)
-}
 
