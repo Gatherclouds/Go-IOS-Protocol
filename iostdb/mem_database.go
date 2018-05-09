@@ -34,6 +34,10 @@ func (db *MemDatabase) Put(key []byte, value []byte) error {
 	return nil
 }
 
+func (db *MemDatabase) PutHM(key []byte, args ...[]byte) error {
+	return errors.New("Unsupported")
+}
+
 func (db *MemDatabase) Get(key []byte) ([]byte, error) {
 	db.lock.RLock()
 	defer db.lock.RUnlock()
