@@ -30,3 +30,10 @@ func NewMockNetwork(ctrl *gomock.Controller) *MockNetwork {
 func (m *MockNetwork) EXPECT() *MockNetworkMockRecorder {
 	return m.recorder
 }
+
+// Close mocks base method
+func (m *MockNetwork) Close(arg0 uint16) error {
+	ret := m.ctrl.Call(m, "Close", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
