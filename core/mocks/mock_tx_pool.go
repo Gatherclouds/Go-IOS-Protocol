@@ -37,3 +37,8 @@ func (m *MockTxPool) Add(arg0 core.Tx) error {
 	ret0, _ := ret[0].(error)
 	return ret0
 }
+
+// Add indicates an expected call of Add
+func (mr *MockTxPoolMockRecorder) Add(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockTxPool)(nil).Add), arg0)
+}
