@@ -47,6 +47,10 @@ func (db *MemDatabase) Get(key []byte) ([]byte, error) {
 	return nil, errors.New("Not found")
 }
 
+func (db *MemDatabase) GetHM(key []byte, args ...[]byte) ([][]byte, error) {
+	return nil, errors.New("Unsupported")
+}
+
 func (db *MemDatabase) Has(key []byte) (bool, error) {
 	db.lock.RLock()
 	defer db.lock.RUnlock()
@@ -73,38 +77,38 @@ func (db *MemDatabase) Delete(key []byte) error {
 
 func (db *MemDatabase) Close() {}
 
-func (db *MemDatabase) NewBatch() Batch {
-	return &memBatch{db: db}
-}
-
-type kv struct {
-	k, v []byte
-}
-
-type memBatch struct {
-	db     *MemDatabase
-	writes []kv
-	size   int
-}
-
-func (b *memBatch) Put(key []byte, value []byte) error {
-	b.writes = append(b.writes, kv{CopyBytes(key), CopyBytes(value)})
-	b.size += len(value)
-	return nil
-}
-
-func (b *memBatch) Write() error {
-	for _, kv := range b.writes {
-		b.db.Put(kv.k, kv.v)
-	}
-	return nil
-}
-
-func (b *memBatch) ValueSize() int {
-	return b.size
-}
-
-func (b *memBatch) Reset() {
-	b.writes = b.writes[:0]
-	b.size = 0
-}
+//func (db *MemDatabase) NewBatch() Batch {
+//	return &memBatch{db: db}
+//}
+//
+//type kv struct {
+//	k, v []byte
+//}
+//
+//type memBatch struct {
+//	db     *MemDatabase
+//	writes []kv
+//	size   int
+//}
+//
+//func (b *memBatch) Put(key []byte, value []byte) error {
+//	b.writes = append(b.writes, kv{CopyBytes(key), CopyBytes(value)})
+//	b.size += len(value)
+//	return nil
+//}
+//
+//func (b *memBatch) Write() error {
+//	for _, kv := range b.writes {
+//		b.db.Put(kv.k, kv.v)
+//	}
+//	return nil
+//}
+//
+//func (b *memBatch) ValueSize() int {
+//	return b.size
+//}
+//
+//func (b *memBatch) Reset() {
+//	b.writes = b.writes[:0]
+//	b.size = 0
+//}
