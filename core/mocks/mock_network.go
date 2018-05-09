@@ -42,3 +42,11 @@ func (m *MockNetwork) Close(arg0 uint16) error {
 func (mr *MockNetworkMockRecorder) Close(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockNetwork)(nil).Close), arg0)
 }
+
+// Listen mocks base method
+func (m *MockNetwork) Listen(arg0 uint16) (<-chan core.Request, error) {
+	ret := m.ctrl.Call(m, "Listen", arg0)
+	ret0, _ := ret[0].(<-chan core.Request)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
