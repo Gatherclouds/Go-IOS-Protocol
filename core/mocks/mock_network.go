@@ -37,3 +37,8 @@ func (m *MockNetwork) Close(arg0 uint16) error {
 	ret0, _ := ret[0].(error)
 	return ret0
 }
+
+// Close indicates an expected call of Close
+func (mr *MockNetworkMockRecorder) Close(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockNetwork)(nil).Close), arg0)
+}
