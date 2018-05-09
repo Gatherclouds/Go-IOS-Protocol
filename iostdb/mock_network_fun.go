@@ -40,15 +40,4 @@ func (mr *MockNetworkMockRecorder) Listen(port interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Listen", reflect.TypeOf((*MockNetwork)(nil).Listen), port)
 }
 
-// Close mocks base method
-func (m *MockNetwork) Close(port uint16) error {
-	ret := m.ctrl.Call(m, "Close", port)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Close indicates an expected call of Close
-func (mr *MockNetworkMockRecorder) Close(port interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockNetwork)(nil).Close), port)
-}
 
