@@ -62,12 +62,6 @@ func (s *Scalar) fromSmallInt(i int) *Scalar {
 	return s.fromInt(bi)
 }
 
-func (s *Scalar) Add(a *Scalar, b *Scalar) *Scalar {
-	r := new(big.Int).Add(a.toInt(), b.toInt())
-	r2 := r.Mod(r, getCurveParams().N)
-	s.fromInt(r2)
-	return s
-}
 
 
 

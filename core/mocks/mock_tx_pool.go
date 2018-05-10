@@ -117,3 +117,10 @@ func (m *MockTxPool) Has(arg0 []byte) (bool, error) {
 func (mr *MockTxPoolMockRecorder) Has(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Has", reflect.TypeOf((*MockTxPool)(nil).Has), arg0)
 }
+
+// Hash mocks base method
+func (m *MockTxPool) Hash() []byte {
+	ret := m.ctrl.Call(m, "Hash")
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
