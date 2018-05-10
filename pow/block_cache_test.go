@@ -58,4 +58,15 @@ func TestBlockCache(t *testing.T) {
 	base := core_mock.NewMockBlockChain(ctl)
 	base.EXPECT().Top().AnyTimes().Return(&b0)
 
+	Convey("Test of Block Cache", t, func() {
+		Convey("Add:", func() {
+			Convey("normal:", func() {
+				bc := NewBlockCache(base, 4)
+				err := bc.Add(&b1, verifier)
+				So(err, ShouldBeNil)
+				So(bc.cachedRoot.depth, ShouldEqual, 1)
+
+			})
+		})
+	}
 }
