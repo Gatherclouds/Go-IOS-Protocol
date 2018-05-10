@@ -67,6 +67,20 @@ func TestBlockCache(t *testing.T) {
 				So(bc.cachedRoot.depth, ShouldEqual, 1)
 
 			})
+			
+			Convey("fork and error", func() {
+				bc := NewBlockCache(base, 4)
+				bc.Add(&b1, verifier)
+				bc.Add(&b2, verifier)
+				bc.Add(&b2a, verifier)
+				So(bc.cachedRoot.depth, ShouldEqual, 2)
+
+				verifier = func(blk *core.Block, chain core.BlockChain) bool {
+					return false
+				}
+				err := bc.Add(&b3, verifier)
+				So(err, ShouldNotBeNil)
+			})
 		})
 	}
 }
