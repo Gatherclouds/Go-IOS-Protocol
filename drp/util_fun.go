@@ -38,24 +38,6 @@ func (s Scalar) toInt() *big.Int {
 	return new(big.Int).SetBytes(s.data)
 }
 
-func (s *Scalar) fromInt(bi *big.Int) *Scalar {
-	order := getCurveParams().N
-	bitSize := getCurveParams().BitSize
-	if bi.Cmp(big.NewInt(0)) == -1 {
-		bi.Add(bi, order)
-	}
-	b := bi.Bytes()
-	blen := cap(b)
-	nbBytes := bitSize / 8
-	switch {
-	case blen == nbBytes:
-		s.data = b
-	case blen < nbBytes:
-		s.data = make([]byte, nbBytes)
-		copy(s.data[nbBytes-blen:], b)
-	}
-	return s
-}
 
 
 
