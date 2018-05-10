@@ -104,3 +104,11 @@ func (m *MockTxPool) GetSlice() ([]core.Tx, error) {
 func (mr *MockTxPoolMockRecorder) GetSlice() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSlice", reflect.TypeOf((*MockTxPool)(nil).GetSlice))
 }
+
+// Has mocks base method
+func (m *MockTxPool) Has(arg0 []byte) (bool, error) {
+	ret := m.ctrl.Call(m, "Has", arg0)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}

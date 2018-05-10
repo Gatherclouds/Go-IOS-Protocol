@@ -76,13 +76,6 @@ func (s *Scalar) Mul(a *Scalar, b *Scalar) *Scalar {
 	return s
 }
 
-func (s *Scalar) Inverse(a *Scalar) *Scalar {
-	bi := a.toInt()
-	inv := bi.ModInverse(bi, getCurveParams().N)
-	s.fromInt(inv)
-	return s
-}
-
 
 
 
