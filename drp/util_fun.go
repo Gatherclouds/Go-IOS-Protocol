@@ -57,11 +57,6 @@ func (s *Scalar) fromInt(bi *big.Int) *Scalar {
 	return s
 }
 
-func (s *Scalar) fromSmallInt(i int) *Scalar {
-	bi := big.NewInt(int64(i))
-	return s.fromInt(bi)
-}
-
 
 
 
