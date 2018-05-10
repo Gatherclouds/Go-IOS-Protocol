@@ -88,11 +88,6 @@ func (s *Scalar) toPoint() Point {
 	return (Point{x, y})
 }
 
-func (p *Point) Add(a *Point, b *Point) *Point {
-	r := new(Point)
-	r.x, r.y = getCurve().Add(a.x, a.y, b.x, b.y)
-	return r
-}
 
 
 
