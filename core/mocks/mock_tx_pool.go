@@ -112,3 +112,8 @@ func (m *MockTxPool) Has(arg0 []byte) (bool, error) {
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
+
+// Has indicates an expected call of Has
+func (mr *MockTxPoolMockRecorder) Has(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Has", reflect.TypeOf((*MockTxPool)(nil).Has), arg0)
+}
