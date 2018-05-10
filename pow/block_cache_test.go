@@ -67,7 +67,7 @@ func TestBlockCache(t *testing.T) {
 				So(bc.cachedRoot.depth, ShouldEqual, 1)
 
 			})
-			
+
 			Convey("fork and error", func() {
 				bc := NewBlockCache(base, 4)
 				bc.Add(&b1, verifier)
@@ -80,6 +80,24 @@ func TestBlockCache(t *testing.T) {
 				}
 				err := bc.Add(&b3, verifier)
 				So(err, ShouldNotBeNil)
+			})
+
+			Convey("auto push", func() {
+				var ans string
+				base.EXPECT().Push(gomock.Any()).AnyTimes().Do(func(block *core.Block) error {
+					ans = string(block.Content)
+					return nil
+				})
+				verifier = func(blk *core.Block, chain core.BlockChain) bool {
+					return true
+				}
+				bc := NewBlockCache(base, 3)
+				bc.Add(&b1, verifier)
+				bc.Add(&b2, verifier)
+				bc.Add(&b2a, verifier)
+				bc.Add(&b3, verifier)
+				bc.Add(&b4, verifier)
+				So(ans, ShouldEqual, "b1")
 			})
 		})
 	}
