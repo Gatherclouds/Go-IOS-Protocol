@@ -32,3 +32,9 @@ func (rdb *RedisDatabase) PutHM(key []byte, args ...[]byte) error {
 	_, err := rdb.cli.Do("HMSET", newArgs...)
 	return err
 }
+
+func (rdb *RedisDatabase) Get(key []byte) ([]byte, error) {
+	rtn, err := rdb.cli.Do("GET", interface{}(key))
+	return rtn.([]byte), err
+}
+

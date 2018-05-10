@@ -23,10 +23,6 @@ func getCurve() elliptic.Curve {
 	return elliptic.P256()
 }
 
-func getCurveParams() *elliptic.CurveParams {
-	return getCurve().Params()
-}
-
 
 
 
