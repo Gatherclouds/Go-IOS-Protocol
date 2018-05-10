@@ -23,3 +23,12 @@ func (rdb *RedisDatabase) Put(key []byte, value []byte) error {
 	return err
 }
 
+func (rdb *RedisDatabase) PutHM(key []byte, args ...[]byte) error {
+	newArgs := make([]interface{}, len(args)+1)
+	newArgs[0] = key
+	for i, v := range args {
+		newArgs[i+1] = v
+	}
+	_, err := rdb.cli.Do("HMSET", newArgs...)
+	return err
+}
