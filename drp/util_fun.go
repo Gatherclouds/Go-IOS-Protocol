@@ -83,10 +83,6 @@ func (s *Scalar) Inverse(a *Scalar) *Scalar {
 	return s
 }
 
-func (s *Scalar) toPoint() Point {
-	x, y := getCurve().ScalarBaseMult(s.data)
-	return (Point{x, y})
-}
 
 
 

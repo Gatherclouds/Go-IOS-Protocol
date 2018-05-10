@@ -99,3 +99,8 @@ func (m *MockTxPool) GetSlice() ([]core.Tx, error) {
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
+
+// GetSlice indicates an expected call of GetSlice
+func (mr *MockTxPoolMockRecorder) GetSlice() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSlice", reflect.TypeOf((*MockTxPool)(nil).GetSlice))
+}
