@@ -75,13 +75,6 @@ func (mr *MockTxPoolMockRecorder) Find(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockTxPool)(nil).Find), arg0)
 }
 
-// GetSlice mocks base method
-func (m *MockTxPool) GetSlice() ([]iosbase.Tx, error) {
-	ret := m.ctrl.Call(m, "GetSlice")
-	ret0, _ := ret[0].([]iosbase.Tx)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
 
 
 
