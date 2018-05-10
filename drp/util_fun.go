@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"encoding/hex"
 	"crypto/elliptic"
-	"crypto/rand"
-	"math/big"
 )
 
 func (s Scalar) String() string {
@@ -29,14 +27,7 @@ func getCurveParams() *elliptic.CurveParams {
 	return getCurve().Params()
 }
 
-func keypairGen() KeyPair {
-	priv, x, y, _ := elliptic.GenerateKey(getCurve(), rand.Reader)
-	return KeyPair{Scalar{priv}, Point{x, y}}
-}
 
-func (s Scalar) toInt() *big.Int {
-	return new(big.Int).SetBytes(s.data)
-}
 
 
 
