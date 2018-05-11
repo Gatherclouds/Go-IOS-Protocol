@@ -2,6 +2,7 @@ package iostdb
 
 import (
 	"github.com/gomodule/redigo/redis"
+	"errors"
 )
 
 const (
@@ -36,5 +37,26 @@ func (rdb *RedisDatabase) PutHM(key []byte, args ...[]byte) error {
 func (rdb *RedisDatabase) Get(key []byte) ([]byte, error) {
 	rtn, err := rdb.cli.Do("GET", interface{}(key))
 	return rtn.([]byte), err
+}
+
+func (rdb *RedisDatabase) GetHM(key []byte, args ...[]byte) ([][]byte, error) {
+	newArgs := make([]interface{}, len(args)+1)
+	newArgs[0] = key
+	for i, v := range args {
+		newArgs[i+1] = v
+	}
+	value, ok := redis.Values(rdb.cli.Do("HMGET", newArgs...))
+	if ok == nil {
+		params := make([][]byte, 0)
+		for _, v := range value {
+			if v == nil {
+				params = append(params, nil)
+			} else {
+				params = append(params, v.([]byte))
+			}
+		}
+		return params, nil
+	}
+	return nil, errors.New("Not found")
 }
 
