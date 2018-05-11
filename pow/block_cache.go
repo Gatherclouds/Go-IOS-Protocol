@@ -119,3 +119,25 @@ func NewBlockCache(chain core.BlockChain, maxDepth int) BlockCacheImpl {
 	}
 	return h
 }
+
+func (h *BlockCacheImpl) Add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) error {
+	code := h.cachedRoot.add(block, verifier)
+	switch code {
+	case Extend:
+		if h.cachedRoot.depth > h.maxDepth {
+			h.cachedRoot = h.cachedRoot.pop()
+			h.cachedRoot.super = nil
+			h.cachedRoot.bc.Flush()
+		}
+		fallthrough
+	case Fork:
+		for _, blk := range h.singleBlocks {
+			h.Add(blk, verifier)
+		}
+	case NotFound:
+		h.singleBlocks = append(h.singleBlocks, block)
+	case ErrorBlock:
+		return fmt.Errorf("error found")
+	}
+	return nil
+}
