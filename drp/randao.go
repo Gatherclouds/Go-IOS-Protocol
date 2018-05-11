@@ -1,8 +1,6 @@
 package drp
 
 import (
-	"bytes"
-	"errors"
 	"math/big"
 
 	"golang.org/x/crypto/sha3"

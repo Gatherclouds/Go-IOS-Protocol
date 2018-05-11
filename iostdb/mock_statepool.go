@@ -14,8 +14,4 @@ type MockStatePool struct {
 	recorder *MockStatePoolMockRecorder
 }
 
-// MockStatePoolMockRecorder is the mock recorder for MockStatePool
-type MockStatePoolMockRecorder struct {
-	mock *MockStatePool
-}
 

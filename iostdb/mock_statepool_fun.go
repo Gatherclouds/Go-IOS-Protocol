@@ -1,6 +1,9 @@
 package iostdb
 
-import "reflect"
+import (
+	"reflect"
+	"github.com/golang/mock/gomock"
+)
 
 // NewMockStatePool creates a new mock instance
 func NewMockStatePool(ctrl *gomock.Controller) *MockStatePool {
@@ -75,8 +78,4 @@ func (m *MockStatePool) Transact(block *Block) error {
 	return ret0
 }
 
-// Transact indicates an expected call of Transact
-func (mr *MockStatePoolMockRecorder) Transact(block interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Transact", reflect.TypeOf((*MockStatePool)(nil).Transact), block)
-}
 
