@@ -1,6 +1,9 @@
 package iostdb
 
-import "reflect"
+import (
+	"reflect"
+	"github.com/golang/mock/gomock"
+)
 
 // NewMockNetwork creates a new mock instance
 func NewMockNetwork(ctrl *gomock.Controller) *MockNetwork {
@@ -35,9 +38,5 @@ func (m *MockNetwork) Listen(port uint16) (chan Request, chan Response, error) {
 	return ret0, ret1, ret2
 }
 
-// Listen indicates an expected call of Listen
-func (mr *MockNetworkMockRecorder) Listen(port interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Listen", reflect.TypeOf((*MockNetwork)(nil).Listen), port)
-}
 
 
