@@ -60,3 +60,8 @@ func (rdb *RedisDatabase) GetHM(key []byte, args ...[]byte) ([][]byte, error) {
 	return nil, errors.New("Not found")
 }
 
+func (rdb *RedisDatabase) Has(key []byte) (bool, error) {
+	_, ok := rdb.cli.Do("EXISTS", key)
+	return ok == nil, nil
+}
+

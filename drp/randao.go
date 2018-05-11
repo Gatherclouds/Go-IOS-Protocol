@@ -2,8 +2,6 @@ package drp
 
 import (
 	"math/big"
-
-	"golang.org/x/crypto/sha3"
 )
 
 // globals: block, msg
