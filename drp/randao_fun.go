@@ -96,14 +96,6 @@ func getMyBounty(campaignID *big.Int) {
 	}
 }
 
-func calculateShare(campaign Campaign) *big.Int {
-	if campaign.numCommits > campaign.numReveals {
-		share := fines(campaign) / campaign.numReveals
-	} else {
-		share := campaign.bountyPot / campaign.numReveals
-	}
-}
-
 func fines(campaign Campaign) *big.Int {
 	return (campaign.numCommits - campaign.numReveals) * campaign.deposit
 }
