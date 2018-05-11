@@ -70,3 +70,11 @@ func (rdb *RedisDatabase) Delete(key []byte) error {
 	return err
 }
 
+func (rdb *RedisDatabase) Close() {
+	rdb.cli = nil
+}
+
+type UTXORedis struct {
+	db      *RedisDatabase
+	subKeys []interface{}
+}
