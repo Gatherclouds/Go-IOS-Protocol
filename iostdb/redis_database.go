@@ -65,3 +65,8 @@ func (rdb *RedisDatabase) Has(key []byte) (bool, error) {
 	return ok == nil, nil
 }
 
+func (rdb *RedisDatabase) Delete(key []byte) error {
+	_, err := rdb.cli.Do("DEL", key)
+	return err
+}
+
