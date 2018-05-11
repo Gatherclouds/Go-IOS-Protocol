@@ -30,6 +30,15 @@ func (c *CachedBlockChain) Push(block *core.Block) error {
 	c.cachedBlock = append(c.cachedBlock, block)
 	return nil
 }
+
 func (c *CachedBlockChain) Length() int {
 	return c.BlockChain.Length() + len(c.cachedBlock)
+}
+
+func (c *CachedBlockChain) Top() *core.Block {
+	l := len(c.cachedBlock)
+	if l == 0 {
+		return c.BlockChain.Top()
+	}
+	return c.cachedBlock[l-1]
 }
