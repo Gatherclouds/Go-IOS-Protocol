@@ -100,5 +100,5 @@ func TestBlockCache(t *testing.T) {
 				So(ans, ShouldEqual, "b1")
 			})
 		})
-	}
+	})
 }

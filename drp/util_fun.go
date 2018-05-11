@@ -19,9 +19,6 @@ func (dh DhSecret) String() string {
 	return hex.EncodeToString(dh.data)
 }
 
-func getCurve() elliptic.Curve {
-	return elliptic.P256()
-}
 
 
 
