@@ -3,6 +3,7 @@ package pow
 import (
 	"github.com/ethereum/go-ethereum/core"
 	"bytes"
+	"fmt"
 )
 
 type CacheStatus int
@@ -140,4 +141,22 @@ func (h *BlockCacheImpl) Add(block *core.Block, verifier func(blk *core.Block, c
 		return fmt.Errorf("error found")
 	}
 	return nil
+}
+
+func (h *BlockCacheImpl) FindBlockInCache(hash []byte) (*core.Block, error) {
+	var pb *core.Block
+	found := h.cachedRoot.iterate(func(bct *BlockCacheTree) bool {
+		if bytes.Equal(bct.bc.Top().HeadHash(), hash) {
+			pb = bct.bc.Top()
+			return true
+		} else {
+			return false
+		}
+	})
+
+	if found {
+		return pb, nil
+	} else {
+		return nil, fmt.Errorf("not found")
+	}
 }
