@@ -1,10 +1,6 @@
 package drp
 
 import (
-	"crypto/elliptic"
-	"crypto/rand"
-	"encoding/hex"
-	"fmt"
 	"math/big"
 )
 
@@ -21,8 +17,4 @@ type DhSecret struct {
 	data []byte
 }
 
-type KeyPair struct {
-	private Scalar
-	public  Point
-}
 
