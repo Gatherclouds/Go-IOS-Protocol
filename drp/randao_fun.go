@@ -4,6 +4,7 @@ import (
 	"math/big"
 	"errors"
 	"bytes"
+	"github.com/ethereum/go-ethereum/crypto/sha3"
 )
 
 var campaigns []Campaign
@@ -113,20 +114,6 @@ func returnReward(share *big.Int, campaign Campaign, participant Participant) {
 	if !msg.sender.send(share + campaign.deposit) {
 		participant.reward = 0
 		participant.rewarded = false
-	}
-}
-
-func refundBounty(campaignID *big.Int) {
-	campaign := campaigns[campaignID]
-	if block.number < campaign.blockNumber ||
-		(campaign.numCommits == campaign.numReveals && campaign.numCommits != 0) ||
-		campaign.consumers[msg.sender].address != msg.sender {
-		return errors.New("")
-	}
-	bountyPot := campaign.consumers[msg.sender].bountyPo
-	campaign.consumers[msg.sender].bountyPot = 0
-	if !msg.sender.send(bountyPot) {
-		campaign.consumers[msg.sender].bountyPot = bountyPot
 	}
 }
 
