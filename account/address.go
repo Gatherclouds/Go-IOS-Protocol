@@ -68,4 +68,14 @@ func GenerateAddress(passphrase string) (*Address, error) {
 	}, nil
 }
 
+func (addr *Address) Authentication(passphrase string) (bool, error) {
+	_, sk, err := newPrivateKey(passphrase)
+	if err != nil {
+		return false, fmt.Errorf("Error: bad passphrase.")
+	}
+
+	tmp_pk := sk.PublicKey()
+	return string((tmp_pk.Encode())[:]) == string((addr.pk.Encode())[:]), nil
+}
+
 
