@@ -100,12 +100,4 @@ func fines(campaign Campaign) *big.Int {
 	return (campaign.numCommits - campaign.numReveals) * campaign.deposit
 }
 
-func returnReward(share *big.Int, campaign Campaign, participant Participant) {
-	participant.reward = share
-	participant.rewarted = true
-	if !msg.sender.send(share + campaign.deposit) {
-		participant.reward = 0
-		participant.rewarded = false
-	}
-}
 
