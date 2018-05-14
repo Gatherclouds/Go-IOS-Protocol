@@ -1,6 +1,12 @@
 package account
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+	"bytes"
+	"encoding/binary"
+)
 
 type Account struct {
 	ID     string
@@ -27,4 +33,14 @@ func (member *Account) GetId() string {
 	return member.ID
 }
 
-
+func randomSeckey() []byte {
+	rand.Seed(time.Now().UnixNano())
+	bin := new(bytes.Buffer)
+	for i := 0; i < 4; i++ {
+		b := make([]byte, 8)
+		binary.BigEndian.PutUint64(b, rand.Uint64())
+		bin.Write(b)
+	}
+	seckey := bin.Bytes()
+	return seckey
+}
