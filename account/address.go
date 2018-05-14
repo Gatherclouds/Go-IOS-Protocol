@@ -4,6 +4,8 @@ import (
 	"github.com/LoCCS/bliss/params"
 	"github.com/LoCCS/bliss"
 	"github.com/LoCCS/bliss/sampler"
+	"fmt"
+	"hash"
 )
 
 const (
@@ -46,4 +48,24 @@ func newPrivateKey(str string) (*sampler.Entropy, *bliss.PrivateKey, error) {
 		return entropy, sk, nil
 	}
 }
+
+func GenerateAddress(passphrase string) (*Address, error) {
+	_, sk, err := newPrivateKey(passphrase)
+	if err != nil {
+		return nil, fmt.Errorf("Error: bad passphrase.")
+	}
+
+	pk := sk.PublicKey()
+	tmp_txt := ([]byte)((hash.Sha3_256(pk.Encode())).ToBase32Hex()) // or ToBase64URL
+	var txt [AddressLength]byte
+	for i := AddressLength - 1; i >= 0; i-- {
+		txt[i] = tmp_txt[i]
+	}
+
+	return &Address{
+		pk:  *pk,
+		txt: txt,
+	}, nil
+}
+
 
