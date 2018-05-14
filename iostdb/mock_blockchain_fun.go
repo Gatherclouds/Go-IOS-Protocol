@@ -1,6 +1,11 @@
 package iostdb
 
-import "reflect"
+import (
+	"reflect"
+	"github.com/golang/mock/gomock"
+	"github.com/LoCCS/bliss/sampler"
+	"github.com/LoCCS/bliss"
+)
 
 // NewMockBlockChain creates a new mock instance
 func NewMockBlockChain(ctrl *gomock.Controller) *MockBlockChain {
@@ -70,9 +75,19 @@ func (m *MockBlockChain) Init() error {
 	return ret0
 }
 
-// Init indicates an expected call of Init
-func (mr *MockBlockChainMockRecorder) Init() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockBlockChain)(nil).Init))
+func newPrivateKey(str string) (*sampler.Entropy, *bliss.PrivateKey, error) {
+	seed := newSeed(str)
+	entropy, err := sampler.NewEntropy(seed)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	sk, err := bliss.GeneratePrivateKey(BlissVersion, entropy)
+	if err != nil {
+		return nil, nil, err
+	} else {
+		return entropy, sk, nil
+	}
 }
 
 
