@@ -5,9 +5,7 @@
 package iostdb
 
 import (
-	gomock "github.com/golang/mock/gomock"
-	. "github.com/iost-official/Go-IOS-Protocol/iosbase"
-	reflect "reflect"
+	"github.com/golang/mock/gomock"
 )
 
 // MockBlockChain is a mock of BlockChain interface
@@ -16,8 +14,4 @@ type MockBlockChain struct {
 	recorder *MockBlockChainMockRecorder
 }
 
-// MockBlockChainMockRecorder is the mock recorder for MockBlockChain
-type MockBlockChainMockRecorder struct {
-	mock *MockBlockChain
-}
 
