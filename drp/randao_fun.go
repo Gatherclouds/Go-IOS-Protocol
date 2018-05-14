@@ -96,8 +96,6 @@ func getMyBounty(campaignID *big.Int) {
 	}
 }
 
-func fines(campaign Campaign) *big.Int {
-	return (campaign.numCommits - campaign.numReveals) * campaign.deposit
-}
+
 
 
