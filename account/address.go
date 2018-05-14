@@ -32,5 +32,18 @@ func newSeed(str string) []uint8 {
 	return seed
 }
 
+func newPrivateKey(str string) (*sampler.Entropy, *bliss.PrivateKey, error) {
+	seed := newSeed(str)
+	entropy, err := sampler.NewEntropy(seed)
+	if err != nil {
+		return nil, nil, err
+	}
 
+	sk, err := bliss.GeneratePrivateKey(BlissVersion, entropy)
+	if err != nil {
+		return nil, nil, err
+	} else {
+		return entropy, sk, nil
+	}
+}
 

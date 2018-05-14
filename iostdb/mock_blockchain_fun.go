@@ -68,27 +68,8 @@ func (mr *MockBlockChainMockRecorder) Top() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Top", reflect.TypeOf((*MockBlockChain)(nil).Top))
 }
 
-// Init mocks base method
-func (m *MockBlockChain) Init() error {
-	ret := m.ctrl.Call(m, "Init")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
 
-func newPrivateKey(str string) (*sampler.Entropy, *bliss.PrivateKey, error) {
-	seed := newSeed(str)
-	entropy, err := sampler.NewEntropy(seed)
-	if err != nil {
-		return nil, nil, err
-	}
 
-	sk, err := bliss.GeneratePrivateKey(BlissVersion, entropy)
-	if err != nil {
-		return nil, nil, err
-	} else {
-		return entropy, sk, nil
-	}
-}
 
 
 
