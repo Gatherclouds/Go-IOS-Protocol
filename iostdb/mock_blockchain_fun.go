@@ -5,6 +5,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/LoCCS/bliss/sampler"
 	"github.com/LoCCS/bliss"
+	"fmt"
 )
 
 // NewMockBlockChain creates a new mock instance
@@ -49,6 +50,20 @@ func (m *MockBlockChain) Length() int {
 	ret := m.ctrl.Call(m, "Length")
 	ret0, _ := ret[0].(int)
 	return ret0
+}
+
+func Sign(msg []byte, passphrase string) (*bliss.Signature, error) {
+	entropy, sk, err := newPrivateKey(passphrase)
+	if err != nil {
+		return nil, fmt.Errorf("Error: bad passphrase.")
+	}
+
+	signature, err := sk.SignAgainstSideChannel(msg, entropy)
+	if err != nil {
+		return nil, fmt.Errorf("Error: failed in signature.")
+	} else {
+		return signature, nil
+	}
 }
 
 

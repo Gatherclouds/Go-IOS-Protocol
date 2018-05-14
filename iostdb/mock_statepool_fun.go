@@ -71,11 +71,5 @@ func (mr *MockStatePoolMockRecorder) Del(StateHash interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Del", reflect.TypeOf((*MockStatePool)(nil).Del), StateHash)
 }
 
-// Transact mocks base method
-func (m *MockStatePool) Transact(block *Block) error {
-	ret := m.ctrl.Call(m, "Transact", block)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
 
 
