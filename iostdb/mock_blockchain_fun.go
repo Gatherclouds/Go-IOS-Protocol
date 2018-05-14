@@ -63,10 +63,6 @@ func (m *MockBlockChain) Top() *Block {
 	return ret0
 }
 
-// Top indicates an expected call of Top
-func (mr *MockBlockChainMockRecorder) Top() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Top", reflect.TypeOf((*MockBlockChain)(nil).Top))
-}
 
 
 
