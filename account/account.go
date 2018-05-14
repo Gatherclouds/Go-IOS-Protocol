@@ -44,3 +44,11 @@ func randomSeckey() []byte {
 	seckey := bin.Bytes()
 	return seckey
 }
+
+func makePubkey(seckey []byte) []byte {
+	return common.CalcPubkeyInSecp256k1(seckey)
+}
+
+func GetIdByPubkey(pubkey []byte) string {
+	return common.Base58Encode(pubkey)
+}

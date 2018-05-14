@@ -56,12 +56,6 @@ func (mr *MockBlockChainMockRecorder) Length() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Length", reflect.TypeOf((*MockBlockChain)(nil).Length))
 }
 
-// Top mocks base method
-func (m *MockBlockChain) Top() *Block {
-	ret := m.ctrl.Call(m, "Top")
-	ret0, _ := ret[0].(*Block)
-	return ret0
-}
 
 
 
