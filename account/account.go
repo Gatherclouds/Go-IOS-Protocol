@@ -22,3 +22,9 @@ func NewAccount(seckey []byte) (Account, error) {
 	m.ID = GetIdByPubkey(m.Pubkey)
 	return m, nil
 }
+
+func (member *Account) GetId() string {
+	return member.ID
+}
+
+
