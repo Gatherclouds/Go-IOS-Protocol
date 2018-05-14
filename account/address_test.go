@@ -14,3 +14,4 @@ func TestGeneration(t *testing.T) {
 		t.Errorf("Bad passphrase!!!")
 	}
 }
+
