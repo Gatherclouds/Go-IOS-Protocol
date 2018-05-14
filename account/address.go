@@ -3,6 +3,7 @@ package account
 import (
 	"github.com/LoCCS/bliss/params"
 	"github.com/LoCCS/bliss"
+	"github.com/LoCCS/bliss/sampler"
 )
 
 const (
@@ -16,5 +17,20 @@ type Address struct {
 }
 
 func (addr *Address) ToString() string { return string(addr.txt[:]) }
+
+func newSeed(str string) []uint8 {
+	str_len := uint32(len(str))
+	var seed_size uint32
+	if str_len < sampler.SHA_512_DIGEST_LENGTH {
+		seed_size = sampler.SHA_512_DIGEST_LENGTH
+	} else {
+		seed_size = str_len
+	}
+
+	seed := make([]uint8, seed_size)
+	copy(seed[:str_len], ([]uint8)(str))
+	return seed
+}
+
 
 
