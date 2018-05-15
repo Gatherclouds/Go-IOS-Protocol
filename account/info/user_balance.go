@@ -40,3 +40,17 @@ func (balance *UserBalance) Decode(str string) (uint64, error) {
 	}
 }
 
+func (balance *UserBalance) Read(ci *aes256.Cipher) (uint64, error) {
+	raw_txt, err := balance.ViewRawString(ci)
+	if err != nil {
+		return 0, fmt.Errorf("Error: invalid key.")
+	}
+
+	val, err := balance.Decode(raw_txt)
+	if err != nil {
+		return 0, fmt.Errorf("[Error: perhaps invalid key]\n" + err.Error())
+	} else {
+		return val, nil
+	}
+}
+
