@@ -92,3 +92,12 @@ func Sign(msg []byte, passphrase string) (*bliss.Signature, error) {
 	}
 }
 
+func (addr *Address) VerifySignature(msg []byte, sig *bliss.Signature) (bool, error) {
+	res, err := addr.pk.Verify(msg, sig)
+	if err != nil {
+		return false, fmt.Errorf("Error: failed in verifying signature.")
+	} else {
+		return res, nil
+	}
+}
+
