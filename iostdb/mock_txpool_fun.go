@@ -1,6 +1,9 @@
 package iostdb
 
-import "reflect"
+import (
+	"reflect"
+	"github.com/golang/mock/gomock"
+)
 
 // NewMockTxPool creates a new mock instance
 func NewMockTxPool(ctrl *gomock.Controller) *MockTxPool {
@@ -68,11 +71,6 @@ func (m *MockTxPool) Find(arg0 []byte) (iosbase.Tx, error) {
 	ret0, _ := ret[0].(iosbase.Tx)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
-}
-
-// Find indicates an expected call of Find
-func (mr *MockTxPoolMockRecorder) Find(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockTxPool)(nil).Find), arg0)
 }
 
 

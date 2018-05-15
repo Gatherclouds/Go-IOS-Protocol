@@ -59,12 +59,6 @@ func (mr *MockStatePoolMockRecorder) Find(stateHash interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockStatePool)(nil).Find), stateHash)
 }
 
-// Del mocks base method
-func (m *MockStatePool) Del(StateHash []byte) error {
-	ret := m.ctrl.Call(m, "Del", StateHash)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
 
 
 
