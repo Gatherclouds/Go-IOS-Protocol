@@ -28,17 +28,6 @@ func (m *MockBlockChain) Get(layer int) (*Block, error) {
 	return ret0, ret1
 }
 
-// Get indicates an expected call of Get
-func (mr *MockBlockChainMockRecorder) Get(layer interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockBlockChain)(nil).Get), layer)
-}
-
-// Push mocks base method
-func (m *MockBlockChain) Push(block *Block) error {
-	ret := m.ctrl.Call(m, "Push", block)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
 
 
 
