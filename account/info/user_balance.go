@@ -54,3 +54,14 @@ func (balance *UserBalance) Read(ci *aes256.Cipher) (uint64, error) {
 	}
 }
 
+func (balance *UserBalance) Write(val uint64, ci *aes256.Cipher) error {
+	raw_txt := ([]byte)(balance.Encode(val))
+	txt, err := ci.Encrypt(raw_txt)
+	if err != nil {
+		return fmt.Errorf("Error: invalid key.")
+	} else {
+		balance.Update(txt)
+		return nil
+	}
+}
+

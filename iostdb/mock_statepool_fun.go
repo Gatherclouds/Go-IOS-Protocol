@@ -54,10 +54,6 @@ func (m *MockStatePool) Find(stateHash []byte) (State, error) {
 	return ret0, ret1
 }
 
-// Find indicates an expected call of Find
-func (mr *MockStatePoolMockRecorder) Find(stateHash interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockStatePool)(nil).Find), stateHash)
-}
 
 
 
