@@ -1,4 +1,4 @@
-package pow
+package common
 
 import (
 	"testing"
