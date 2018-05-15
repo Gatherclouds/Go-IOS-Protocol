@@ -4,7 +4,12 @@ import (
 	"github.com/ethereum/go-ethereum/core"
 	"bytes"
 	"fmt"
+	"github.com/ethereum/go-ethereum/core/state"
 )
+
+//const (
+//	MaxCacheDepth = 6
+//)
 
 type CacheStatus int
 
@@ -16,15 +21,14 @@ const (
 )
 
 type BlockCacheTree struct {
-	depth    int
 	bc       CachedBlockChain
 	children []*BlockCacheTree
 	super    *BlockCacheTree
+	pool     state.Pool
 }
 
-func newBct(block *core.Block, tree *BlockCacheTree) *BlockCacheTree {
+func newBct(block *block.Block, tree *BlockCacheTree) *BlockCacheTree {
 	bct := BlockCacheTree{
-		depth:    0,
 		bc:       tree.bc.Copy(),
 		children: make([]*BlockCacheTree, 0),
 		super:    tree,
