@@ -40,10 +40,6 @@ func (m *MockBlockChain) Push(block *Block) error {
 	return ret0
 }
 
-// Push indicates an expected call of Push
-func (mr *MockBlockChainMockRecorder) Push(block interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Push", reflect.TypeOf((*MockBlockChain)(nil).Push), block)
-}
 
 
 
