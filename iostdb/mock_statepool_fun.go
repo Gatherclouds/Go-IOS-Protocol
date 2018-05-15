@@ -66,10 +66,6 @@ func (m *MockStatePool) Del(StateHash []byte) error {
 	return ret0
 }
 
-// Del indicates an expected call of Del
-func (mr *MockStatePoolMockRecorder) Del(StateHash interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Del", reflect.TypeOf((*MockStatePool)(nil).Del), StateHash)
-}
 
 
 

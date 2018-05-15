@@ -78,4 +78,17 @@ func (addr *Address) Authentication(passphrase string) (bool, error) {
 	return string((tmp_pk.Encode())[:]) == string((addr.pk.Encode())[:]), nil
 }
 
+func Sign(msg []byte, passphrase string) (*bliss.Signature, error) {
+	entropy, sk, err := newPrivateKey(passphrase)
+	if err != nil {
+		return nil, fmt.Errorf("Error: bad passphrase.")
+	}
+
+	signature, err := sk.SignAgainstSideChannel(msg, entropy)
+	if err != nil {
+		return nil, fmt.Errorf("Error: failed in signature.")
+	} else {
+		return signature, nil
+	}
+}
 
