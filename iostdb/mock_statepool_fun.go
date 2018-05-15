@@ -46,13 +46,6 @@ func (mr *MockStatePoolMockRecorder) Add(state interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockStatePool)(nil).Add), state)
 }
 
-// Find mocks base method
-func (m *MockStatePool) Find(stateHash []byte) (State, error) {
-	ret := m.ctrl.Call(m, "Find", stateHash)
-	ret0, _ := ret[0].(State)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
 
 
 
