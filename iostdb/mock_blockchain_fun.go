@@ -45,12 +45,6 @@ func (mr *MockBlockChainMockRecorder) Push(block interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Push", reflect.TypeOf((*MockBlockChain)(nil).Push), block)
 }
 
-// Length mocks base method
-func (m *MockBlockChain) Length() int {
-	ret := m.ctrl.Call(m, "Length")
-	ret0, _ := ret[0].(int)
-	return ret0
-}
 
 
 
