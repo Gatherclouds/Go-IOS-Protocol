@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"encoding/base32"
 	"fmt"
+	"github.com/mkmueller/aes256"
 )
 
 type UserBalance struct {
