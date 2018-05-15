@@ -34,12 +34,6 @@ func (mr *MockStatePoolMockRecorder) Close() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockStatePool)(nil).Close))
 }
 
-// Add mocks base method
-func (m *MockStatePool) Add(state State) error {
-	ret := m.ctrl.Call(m, "Add", state)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
 
 
 

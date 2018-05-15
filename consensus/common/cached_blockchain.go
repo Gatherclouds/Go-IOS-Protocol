@@ -2,7 +2,6 @@ package common
 
 import (
 	"github.com/ethereum/go-ethereum/core"
-	"fmt"
 )
 
 type CachedBlockChain struct {

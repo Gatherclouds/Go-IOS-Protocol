@@ -1,7 +1,5 @@
 package core
 
-import "github.com/iost-official/Go-IOS-Protocol/common"
-
 func (d *Block) Encode() []byte {
 	bin, err := d.Marshal(nil)
 	if err != nil {
