@@ -38,40 +38,31 @@ func newBct(block *block.Block, tree *BlockCacheTree) *BlockCacheTree {
 	return &bct
 }
 
-func (b *BlockCacheTree) add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) CacheStatus {
-
-	var code CacheStatus
+func (b *BlockCacheTree) add(block *block.Block, verifier func(blk *block.Block, pool state.Pool) (state.Pool, error)) (CacheStatus, *BlockCacheTree) {
 	for _, bct := range b.children {
-		code = bct.add(block, verifier)
-		if code == Extend {
-			if bct.depth == b.depth {
-				b.depth++
-				return Extend
-			} else {
-				return Fork
-			}
-		} else if code == Fork {
-			return Fork
-		} else if code == ErrorBlock {
-			return ErrorBlock
+		code, newTree := bct.add(block, verifier)
+		if code != NotFound {
+			return code, newTree
 		}
 	}
 
 	if bytes.Equal(b.bc.Top().Head.Hash(), block.Head.ParentHash) {
-		if !verifier(block, &b.bc) {
-			return ErrorBlock
+		newPool, err := verifier(block, b.pool)
+		if err != nil {
+			return ErrorBlock, nil
 		}
 
-		if len(b.children) == 0 {
-			b.children = append(b.children, newBct(block, b))
-			b.depth++
-			return Extend
+		bct := newBct(block, b)
+		bct.pool = newPool
+		b.children = append(b.children, bct)
+		if len(b.children) == 1 {
+			return Extend, bct
 		} else {
-			return Fork
+			return Fork, bct
 		}
 	}
 
-	return NotFound
+	return NotFound, nil
 }
 
 func (b *BlockCacheTree) pop() *BlockCacheTree {

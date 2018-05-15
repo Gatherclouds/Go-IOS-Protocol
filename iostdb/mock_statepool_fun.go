@@ -41,10 +41,6 @@ func (m *MockStatePool) Add(state State) error {
 	return ret0
 }
 
-// Add indicates an expected call of Add
-func (mr *MockStatePoolMockRecorder) Add(state interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockStatePool)(nil).Add), state)
-}
 
 
 
