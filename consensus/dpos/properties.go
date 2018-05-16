@@ -1,5 +1,7 @@
 package dpos
 
+import "errors"
+
 type globalStaticProperty struct {
 	Account
 	NumberOfWitnesses  int
@@ -16,4 +18,21 @@ func newGlobalStaticProperty(acc Account, witnessList []string) globalStaticProp
 	}
 	return prop
 }
+
+func (prop *globalStaticProperty) addPendingWitness(id string) error {
+	for _, wit := range prop.WitnessList {
+		if id == wit {
+			return errors.New("already in witness list")
+		}
+	}
+	for _, wit := range prop.PendingWitnessList {
+		if id == wit {
+			return errors.New("already in pending list")
+		}
+	}
+	prop.PendingWitnessList = append(prop.PendingWitnessList, id)
+	return nil
+}
+
+
 
