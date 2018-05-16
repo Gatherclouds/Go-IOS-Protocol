@@ -111,16 +111,6 @@ func (b *BlockCacheTree) updateLength() {
 	}
 }
 
-func (b *BlockCacheTree) pop() *BlockCacheTree {
-
-	for _, bct := range b.children {
-		if bct.depth == b.depth-1 {
-			return bct
-		}
-	}
-	return nil
-}
-
 func (b *BlockCacheTree) iterate(fun func(bct *BlockCacheTree) bool) bool {
 	if fun(b) {
 		return true
