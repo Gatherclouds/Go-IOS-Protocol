@@ -125,9 +125,12 @@ func (b *BlockCacheTree) iterate(fun func(bct *BlockCacheTree) bool) bool {
 }
 
 type BlockCache interface {
-	Add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) error
-	FindBlockInCache(hash []byte) (*core.Block, error)
-	LongestChain() core.BlockChain
+	AddGenesis(block *block.Block) error
+	Add(block *block.Block, verifier func(blk *block.Block, pool state.Pool) (state.Pool, error)) error
+	FindBlockInCache(hash []byte) (*block.Block, error)
+	LongestChain() block.Chain
+	ConfirmedLength() uint64
+	MaxHeight() uint64
 }
 
 type BlockCacheImpl struct {
