@@ -78,6 +78,20 @@ func (b *BlockCacheTree) findSingles(block *block.Block) (bool, *BlockCacheTree)
 	return false, nil
 }
 
+func (b *BlockCacheTree) addSubTree(root *BlockCacheTree, verifier func(blk *block.Block, pool state.Pool) (state.Pool, error)) {
+	block := root.bc.block
+	newPool, err := verifier(block, b.pool)
+	if err != nil {
+		return
+	}
+
+	newTree := newBct(block, b)
+	newTree.pool = newPool
+	b.children = append(b.children, newTree)
+	for _, bct := range root.children {
+		newTree.addSubTree(bct, verifier)
+	}
+}
 
 func (b *BlockCacheTree) pop() *BlockCacheTree {
 
