@@ -29,10 +29,6 @@ func (m *MockStatePool) Close() error {
 	return ret0
 }
 
-// Close indicates an expected call of Close
-func (mr *MockStatePoolMockRecorder) Close() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockStatePool)(nil).Close))
-}
 
 
 
