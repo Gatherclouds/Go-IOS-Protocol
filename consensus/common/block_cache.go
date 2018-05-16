@@ -134,25 +134,31 @@ type BlockCache interface {
 }
 
 type BlockCacheImpl struct {
-	bc           core.BlockChain
-	cachedRoot   *BlockCacheTree
-	singleBlocks []*core.Block
-	maxDepth     int
+	bc              block.Chain
+	cachedRoot      *BlockCacheTree
+	singleBlockRoot *BlockCacheTree
+	maxDepth        int
 }
 
-func NewBlockCache(chain core.BlockChain, maxDepth int) BlockCacheImpl {
+func NewBlockCache(chain block.Chain, pool state.Pool, maxDepth int) *BlockCacheImpl {
 	h := BlockCacheImpl{
 		bc: chain,
 		cachedRoot: &BlockCacheTree{
-			depth:    0,
 			bc:       NewCBC(chain),
 			children: make([]*BlockCacheTree, 0),
 			super:    nil,
+			pool:     pool,
 		},
-		singleBlocks: make([]*core.Block, 0),
-		maxDepth:     maxDepth,
+		singleBlockRoot: &BlockCacheTree{
+			bc: CachedBlockChain{
+				block: nil,
+			},
+			children: make([]*BlockCacheTree, 0),
+			super:    nil,
+		},
+		maxDepth: maxDepth,
 	}
-	return h
+	return &h
 }
 
 func (h *BlockCacheImpl) Add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) error {
