@@ -65,6 +65,20 @@ func (b *BlockCacheTree) add(block *block.Block, verifier func(blk *block.Block,
 	return NotFound, nil
 }
 
+func (b *BlockCacheTree) findSingles(block *block.Block) (bool, *BlockCacheTree) {
+	for _, bct := range b.children {
+		found, ret := bct.findSingles(block)
+		if found {
+			return found, ret
+		}
+	}
+	if b.bc.block != nil && bytes.Equal(b.bc.block.Head.Hash(), block.Head.ParentHash) {
+		return true, b
+	}
+	return false, nil
+}
+
+
 func (b *BlockCacheTree) pop() *BlockCacheTree {
 
 	for _, bct := range b.children {
