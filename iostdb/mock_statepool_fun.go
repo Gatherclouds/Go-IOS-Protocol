@@ -61,6 +61,12 @@ func NewDPoS(acc Account, bc block.Chain, witnessList []string /*, network core.
 	return &p, nil
 }
 
+func (p *DPoS) initGlobalProperty(acc Account, witnessList []string) {
+	p.globalStaticProperty = newGlobalStaticProperty(acc, witnessList)
+	p.globalDynamicProperty = newGlobalDynamicProperty()
+}
+
+
 
 
 
