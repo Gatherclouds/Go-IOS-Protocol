@@ -93,6 +93,24 @@ func (b *BlockCacheTree) addSubTree(root *BlockCacheTree, verifier func(blk *blo
 	}
 }
 
+func (b *BlockCacheTree) popLongest() *BlockCacheTree {
+	for _, bct := range b.children {
+		if bct.bc.depth == b.bc.depth-1 {
+			return bct
+		}
+	}
+	return nil
+}
+
+func (b *BlockCacheTree) updateLength() {
+	for _, bct := range b.children {
+		if bct.bc.parent == &b.bc {
+			bct.bc.cachedLength = b.bc.cachedLength + 1
+		}
+		bct.updateLength()
+	}
+}
+
 func (b *BlockCacheTree) pop() *BlockCacheTree {
 
 	for _, bct := range b.children {
