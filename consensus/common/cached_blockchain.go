@@ -75,8 +75,8 @@ func (c *CachedBlockChain) Push(block *block.Block) error {
 	return nil
 }
 
-func (c *CachedBlockChain) Length() int {
-	return c.BlockChain.Length() + len(c.cachedBlock)
+func (c *CachedBlockChain) Length() uint64 {
+	return c.Chain.Length() + uint64(c.cachedLength)
 }
 
 func (c *CachedBlockChain) Top() *core.Block {

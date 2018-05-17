@@ -53,12 +53,6 @@ func (mr *MockTxPoolMockRecorder) Del(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Del", reflect.TypeOf((*MockTxPool)(nil).Del), arg0)
 }
 
-// Encode mocks base method
-func (m *MockTxPool) Encode() []byte {
-	ret := m.ctrl.Call(m, "Encode")
-	ret0, _ := ret[0].([]byte)
-	return ret0
-}
 
 
 
