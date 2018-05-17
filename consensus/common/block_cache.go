@@ -223,6 +223,27 @@ func (h *BlockCacheImpl) Add(block *block.Block, verifier func(blk *block.Block,
 	return nil
 }
 
+func (h *BlockCacheImpl) needFlush(version int64) (bool, *BlockCacheTree) {
+	// TODO: 在底层parameter定义的地方定义各种version的const，可以在块生成、验证、此处用
+	switch version {
+	case 0:
+		// DPoS：确认某块的witness数大于maxDepth
+		for _, bct := range h.cachedRoot.children {
+			if bct.bc.confirmed > h.maxDepth {
+				return true, bct
+			}
+		}
+		return false, nil
+	case 1:
+		// PoW：最长链长度大于maxDepth
+		if h.cachedRoot.bc.depth > h.maxDepth {
+			return true, h.cachedRoot.popLongest()
+		}
+		return false, nil
+	}
+	return false, nil
+}
+
 func (h *BlockCacheImpl) FindBlockInCache(hash []byte) (*core.Block, error) {
 	var pb *core.Block
 	found := h.cachedRoot.iterate(func(bct *BlockCacheTree) bool {
