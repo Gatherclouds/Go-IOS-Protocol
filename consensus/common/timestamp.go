@@ -19,5 +19,15 @@ func GetCurrentTimestamp() Timestamp {
 	return GetTimestamp(t.Unix())
 }
 
+// 根据一个Unix时间点（秒为单位）返回一个时间戳
+func GetTimestamp(timeSec int64) Timestamp {
+	return Timestamp{(timeSec - Epoch) / SlotLength}
+}
 
+func (t *Timestamp) AddDay(intervalDay int) {
+	t.Slot = t.Slot + int64(intervalDay)*SecondsInDay/SlotLength
+}
 
+func (t *Timestamp) AddHour(intervalHour int) {
+	t.Slot = t.Slot + int64(intervalHour)*SecondsInHour/SlotLength
+}
