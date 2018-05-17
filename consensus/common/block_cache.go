@@ -173,22 +173,50 @@ func (h *BlockCacheImpl) AddGenesis(block *block.Block) error {
 	return nil
 }
 
-func (h *BlockCacheImpl) Add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) error {
-	code := h.cachedRoot.add(block, verifier)
+func (h *BlockCacheImpl) Add(block *block.Block, verifier func(blk *block.Block, pool state.Pool) (state.Pool, error)) error {
+	code, newTree := h.cachedRoot.add(block, verifier)
 	switch code {
 	case Extend:
-		if h.cachedRoot.depth > h.maxDepth {
-			h.cachedRoot = h.cachedRoot.pop()
-			h.cachedRoot.super = nil
-			h.cachedRoot.bc.Flush()
-		}
 		fallthrough
 	case Fork:
-		for _, blk := range h.singleBlocks {
-			h.Add(blk, verifier)
+		// 尝试把single blocks上链
+		newChildren := make([]*BlockCacheTree, 0)
+		for _, bct := range h.singleBlockRoot.children {
+			if bytes.Equal(bct.bc.block.Head.ParentHash, block.Head.Hash()) {
+				newTree.addSubTree(bct, verifier)
+			} else {
+				newChildren = append(newChildren, bct)
+			}
+		}
+		h.singleBlockRoot.children = newChildren
+		// 两种情况都可能满足flush
+		for {
+			// 可能进行多次flush
+			need, newRoot := h.needFlush(block.Head.Version)
+			if need {
+				h.cachedRoot = newRoot
+				h.cachedRoot.bc.Flush()
+				h.cachedRoot.pool.Flush()
+				h.cachedRoot.super = nil
+				h.cachedRoot.updateLength()
+			} else {
+				break
+			}
 		}
 	case NotFound:
-		h.singleBlocks = append(h.singleBlocks, block)
+		// Add to single block tree
+		found, bct := h.singleBlockRoot.findSingles(block)
+		if !found {
+			bct = h.singleBlockRoot
+		}
+		newTree := &BlockCacheTree{
+			bc: CachedBlockChain{
+				block: block,
+			},
+			super:    bct,
+			children: make([]*BlockCacheTree, 0),
+		}
+		bct.children = append(bct.children, newTree)
 	case ErrorBlock:
 		return fmt.Errorf("error found")
 	}
