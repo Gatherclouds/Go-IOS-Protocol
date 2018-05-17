@@ -102,3 +102,126 @@ func TestBlockCache(t *testing.T) {
 		})
 	})
 }
+
+func TestBlockCacheDPoS(t *testing.T) {
+	ctl := gomock.NewController(t)
+	pool := core_mock.NewMockPool(ctl)
+
+	b0 := block.Block{
+		Head: block.BlockHead{
+			Version:    0,
+			ParentHash: []byte("nothing"),
+			Witness:    "w0",
+		},
+		Content: []tx.Tx{tx.NewTx(0, nil)},
+	}
+
+	b1 := block.Block{
+		Head: block.BlockHead{
+			Version:    0,
+			ParentHash: b0.HeadHash(),
+			Witness:    "w1",
+		},
+		Content: []tx.Tx{tx.NewTx(1, nil)},
+	}
+
+	b2 := block.Block{
+		Head: block.BlockHead{
+			Version:    0,
+			ParentHash: b1.HeadHash(),
+			Witness:    "w2",
+		},
+		Content: []tx.Tx{tx.NewTx(2, nil)},
+	}
+
+	b2a := block.Block{
+		Head: block.BlockHead{
+			Version:    0,
+			ParentHash: b1.HeadHash(),
+			Witness:    "w3",
+		},
+		Content: []tx.Tx{tx.NewTx(-2, nil)},
+	}
+
+	b3 := block.Block{
+		Head: block.BlockHead{
+			Version:    0,
+			ParentHash: b2.HeadHash(),
+			Witness:    "w1",
+		},
+		Content: []tx.Tx{tx.NewTx(3, nil)},
+	}
+
+	b4 := block.Block{
+		Head: block.BlockHead{
+			Version:    0,
+			ParentHash: b2a.HeadHash(),
+			Witness:    "w2",
+		},
+		Content: []tx.Tx{tx.NewTx(4, nil)},
+	}
+
+	verifier := func(blk *block.Block, pool state.Pool) (state.Pool, error) {
+		return nil, nil
+	}
+
+	base := core_mock.NewMockChain(ctl)
+	base.EXPECT().Top().AnyTimes().Return(&b0)
+
+	Convey("Test of Block Cache (DPoS)", t, func() {
+		Convey("Add:", func() {
+			var ans int64
+			base.EXPECT().Push(gomock.Any()).Do(func(block *block.Block) error {
+				ans = block.Content[0].Nonce
+				return nil
+			})
+			Convey("auto push", func() {
+				ans = 0
+				bc := NewBlockCache(base, pool, 2)
+				bc.Add(&b1, verifier)
+				bc.Add(&b2, verifier)
+				bc.Add(&b2a, verifier)
+				bc.Add(&b3, verifier)
+				bc.Add(&b4, verifier)
+				So(ans, ShouldEqual, 1)
+			})
+
+			Convey("deal with singles", func() {
+				ans = 0
+				bc := NewBlockCache(base, pool, 2)
+				bc.Add(&b2, verifier)
+				bc.Add(&b2a, verifier)
+				bc.Add(&b3, verifier)
+				bc.Add(&b4, verifier)
+				So(len(bc.singleBlockRoot.children), ShouldEqual, 2)
+				bc.Add(&b1, verifier)
+				So(len(bc.singleBlockRoot.children), ShouldEqual, 0)
+				So(ans, ShouldEqual, 1)
+			})
+		})
+
+		Convey("Longest chain", func() {
+			Convey("no forked", func() {
+				bc := NewBlockCache(base, pool, 10)
+				bc.Add(&b1, verifier)
+				bc.Add(&b2, verifier)
+				ans := bc.LongestChain().Top().Content[0].Nonce
+				So(ans, ShouldEqual, 2)
+			})
+
+			Convey("forked", func() {
+				var bc BlockCache = NewBlockCache(base, pool, 10)
+
+				bc.Add(&b1, verifier)
+				bc.Add(&b2a, verifier)
+				bc.Add(&b2, verifier)
+				ans := bc.LongestChain().Top().Content[0].Nonce
+				So(ans, ShouldEqual, -2)
+				bc.Add(&b3, verifier)
+				ans = bc.LongestChain().Top().Content[0].Nonce
+				So(ans, ShouldEqual, 3)
+			})
+		})
+
+	})
+}
