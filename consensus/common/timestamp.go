@@ -1,5 +1,7 @@
 package common
 
+import "time"
+
 const (
 	SlotLength    = 3 //一个slot设为3秒
 	SecondsInHour = 3600
@@ -10,4 +12,12 @@ const (
 type Timestamp struct {
 	Slot int64
 }
+
+// 返回当前时间对应的时间戳
+func GetCurrentTimestamp() Timestamp {
+	t := time.Now()
+	return GetTimestamp(t.Unix())
+}
+
+
 
