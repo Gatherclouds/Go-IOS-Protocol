@@ -31,3 +31,11 @@ func (t *Timestamp) AddDay(intervalDay int) {
 func (t *Timestamp) AddHour(intervalHour int) {
 	t.Slot = t.Slot + int64(intervalHour)*SecondsInHour/SlotLength
 }
+
+func (t *Timestamp) AddSecond(interval int) {
+	t.Slot = t.Slot + int64(interval)/SlotLength
+}
+
+func (t *Timestamp) Add(intervalSlot int) {
+	t.Slot = t.Slot + int64(intervalSlot)
+}
