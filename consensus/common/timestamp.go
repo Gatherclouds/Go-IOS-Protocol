@@ -48,3 +48,19 @@ func IntervalSecond(t1 Timestamp, t2 Timestamp) int64 {
 	return IntervalSecondBySlot(t1.Slot, t2.Slot)
 }
 
+func IntervalSecondBySlot(slot1 int64, slot2 int64) int64 {
+	if slot1 < slot2 {
+		return (slot2 - slot1) * SlotLength
+	} else {
+		return (slot1 - slot2) * SlotLength
+	}
+}
+
+func (t1 *Timestamp) After(t2 Timestamp) bool {
+	if t1.Slot <= t2.Slot {
+		return true
+	} else {
+		return false
+	}
+}
+
