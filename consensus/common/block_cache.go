@@ -161,6 +161,18 @@ func NewBlockCache(chain block.Chain, pool state.Pool, maxDepth int) *BlockCache
 	return &h
 }
 
+func (h *BlockCacheImpl) ConfirmedLength() uint64 {
+	return 1
+}
+
+func (h *BlockCacheImpl) MaxHeight() uint64 {
+	return 1
+}
+func (h *BlockCacheImpl) AddGenesis(block *block.Block) error {
+	h.bc.Push(block)
+	return nil
+}
+
 func (h *BlockCacheImpl) Add(block *core.Block, verifier func(blk *core.Block, chain core.BlockChain) bool) error {
 	code := h.cachedRoot.add(block, verifier)
 	switch code {
