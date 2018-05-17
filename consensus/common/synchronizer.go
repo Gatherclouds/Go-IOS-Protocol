@@ -18,3 +18,33 @@ type SyncImpl struct {
 	blkSyncChain chan message.Message
 }
 
+func NewSynchronizer(bc BlockCache, router Router) *SyncImpl {
+	sync := &SyncImpl{
+		blockCache: bc,
+		router:     router,
+	}
+	var err error
+	sync.heightChan, err = sync.router.FilteredChan(Filter{
+		WhiteList:  []message.Message{},
+		BlackList:  []message.Message{},
+		RejectType: []ReqType{},
+		AcceptType: []ReqType{
+			ReqBlockHeight,
+		}})
+	if err != nil {
+		return nil
+	}
+
+	sync.blkSyncChain, err = sync.router.FilteredChan(Filter{
+		WhiteList:  []message.Message{},
+		BlackList:  []message.Message{},
+		RejectType: []ReqType{},
+		AcceptType: []ReqType{
+			ReqDownloadBlock,
+		}})
+	if err != nil {
+		return nil
+	}
+	return sync
+}
+
