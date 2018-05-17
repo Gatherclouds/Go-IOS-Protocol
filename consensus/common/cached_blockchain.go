@@ -1,18 +1,25 @@
 package common
 
-import (
-	"github.com/ethereum/go-ethereum/core"
-)
+import "github.com/ethereum/go-ethereum/core"
 
 type CachedBlockChain struct {
-	core.BlockChain
-	cachedBlock []*core.Block
+	block.Chain
+	block        *block.Block
+	cachedLength int
+	parent       *CachedBlockChain
+	depth        int
+	// DPoS中使用，记录该节点被最多几个witness确认
+	confirmed int
 }
 
-func NewCBC(chain core.BlockChain) CachedBlockChain {
+func NewCBC(chain block.Chain) CachedBlockChain {
 	return CachedBlockChain{
-		BlockChain:  chain,
-		cachedBlock: make([]*core.Block, 0),
+		Chain:        chain,
+		block:        nil,
+		parent:       nil,
+		cachedLength: 0,
+		depth:        0,
+		confirmed:    0,
 	}
 }
 
