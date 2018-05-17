@@ -24,10 +24,6 @@ func (m *MockTxPool) Add(arg0 iosbase.Tx) error {
 	return ret0
 }
 
-// Add indicates an expected call of Add
-func (mr *MockTxPoolMockRecorder) Add(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockTxPool)(nil).Add), arg0)
-}
 
 
 
