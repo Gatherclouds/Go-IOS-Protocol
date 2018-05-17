@@ -36,12 +36,6 @@ func (m *MockTxPool) Decode(arg0 []byte) error {
 	return ret0
 }
 
-// Del mocks base method
-func (m *MockTxPool) Del(arg0 iosbase.Tx) error {
-	ret := m.ctrl.Call(m, "Del", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
 
 
 

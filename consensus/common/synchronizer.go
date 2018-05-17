@@ -48,3 +48,12 @@ func NewSynchronizer(bc BlockCache, router Router) *SyncImpl {
 	return sync
 }
 
+//开始监听同步任务
+func (sync *SyncImpl) StartListen() error {
+	go sync.heightLoop()
+	go sync.blockLoop()
+
+	return nil
+}
+
+
