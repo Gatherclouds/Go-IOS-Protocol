@@ -79,10 +79,20 @@ func (c *CachedBlockChain) Length() uint64 {
 	return c.Chain.Length() + uint64(c.cachedLength)
 }
 
-func (c *CachedBlockChain) Top() *core.Block {
-	l := len(c.cachedBlock)
-	if l == 0 {
-		return c.BlockChain.Top()
+func (c *CachedBlockChain) Top() *block.Block {
+	if c.cachedLength == 0 {
+		return c.Chain.Top()
 	}
-	return c.cachedBlock[l-1]
+	return c.block
 }
+
+func (c *CachedBlockChain) Copy() CachedBlockChain {
+	cbc := CachedBlockChain{
+		Chain:        c.Chain,
+		parent:       c,
+		cachedLength: c.cachedLength,
+		confirmed:    0,
+	}
+	return cbc
+}
+
