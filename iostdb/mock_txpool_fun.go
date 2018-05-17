@@ -48,10 +48,6 @@ func (m *MockTxPool) Del(arg0 iosbase.Tx) error {
 	return ret0
 }
 
-// Del indicates an expected call of Del
-func (mr *MockTxPoolMockRecorder) Del(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Del", reflect.TypeOf((*MockTxPool)(nil).Del), arg0)
-}
 
 
 
