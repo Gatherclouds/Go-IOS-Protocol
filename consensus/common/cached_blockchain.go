@@ -32,8 +32,46 @@ func NewCBC(chain block.Chain) CachedBlockChain {
 //	}
 //	return c.cachedBlock[layer-c.BlockChain.Length()], nil
 //}
-func (c *CachedBlockChain) Push(block *core.Block) error {
-	c.cachedBlock = append(c.cachedBlock, block)
+func (c *CachedBlockChain) Push(block *block.Block) error {
+	c.block = block
+	c.cachedLength++
+
+	// push的时候更新共识相关变量
+	switch block.Head.Version {
+	case 0:
+		// DPoS
+		c.confirmed = 1
+		witness := block.Head.Witness
+		confirmed := make(map[string]int)
+		confirmed[witness] = 1
+		cbc := c
+		for cbc.parent != nil {
+			witness = cbc.parent.Top().Head.Witness
+			if _, ok := confirmed[witness]; !ok {
+				confirmed[witness] = 0
+			}
+			confirmed[witness]++
+			if len(confirmed) > cbc.parent.confirmed {
+				// 如果当前分支有更多的确认，则更新父亲的confirmed
+				cbc.parent.confirmed = len(confirmed)
+			}
+			cbc = cbc.parent
+		}
+		fallthrough
+	case 1:
+		// PoW
+		c.depth = 0
+		cbc := c
+		depth := 0
+		for cbc.parent != nil {
+			depth++
+			if depth > cbc.parent.depth {
+				cbc.parent.depth = depth
+			}
+			cbc = cbc.parent
+		}
+	}
+
 	return nil
 }
 
