@@ -60,11 +60,6 @@ func (m *MockTxPool) Encode() []byte {
 	return ret0
 }
 
-// Encode indicates an expected call of Encode
-func (mr *MockTxPoolMockRecorder) Encode() *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Encode", reflect.TypeOf((*MockTxPool)(nil).Encode))
-}
-
 
 
 

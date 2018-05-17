@@ -244,8 +244,8 @@ func (h *BlockCacheImpl) needFlush(version int64) (bool, *BlockCacheTree) {
 	return false, nil
 }
 
-func (h *BlockCacheImpl) FindBlockInCache(hash []byte) (*core.Block, error) {
-	var pb *core.Block
+func (h *BlockCacheImpl) FindBlockInCache(hash []byte) (*block.Block, error) {
+	var pb *block.Block
 	found := h.cachedRoot.iterate(func(bct *BlockCacheTree) bool {
 		if bytes.Equal(bct.bc.Top().HeadHash(), hash) {
 			pb = bct.bc.Top()
