@@ -14,3 +14,15 @@ const (
 	Public
 )
 
+type Code string
+
+// VM 虚拟机interface，定义了虚拟机的接口
+//
+// 调用流程为prepare - start - call - stop
+type VM interface {
+	Prepare(contract Contract, monitor Monitor) error
+	Start() error
+	Stop()
+	Call(pool state.Pool, methodName string, args ...state.Value) ([]state.Value, state.Pool, error)
+	PC() uint64
+}
