@@ -38,3 +38,14 @@ func (c *ContractInfo) Encode() []byte {
 	}
 	return buf
 }
+
+func (c *ContractInfo) Decode(b []byte) error {
+	cir := contractInfoRaw{}
+	_, err := cir.Unmarshal(b)
+	if err != nil {
+		return err
+	}
+	cc := cir.toC()
+	c = &cc
+	return nil
+}
