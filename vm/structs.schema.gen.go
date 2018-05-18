@@ -19,3 +19,24 @@ type contractInfoRaw struct {
 	Price    float64
 }
 
+func (d *contractInfoRaw) Size() (s uint64) {
+
+	{
+		l := uint64(len(d.Language))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	s += 17
+	return
+}
+
