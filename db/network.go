@@ -1,4 +1,4 @@
-package iostdb
+package db
 
 type Request struct {
 	Time    int64

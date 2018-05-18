@@ -39,3 +39,13 @@ type Method interface {
 	InputCount() int
 	OutputCount() int
 }
+
+// Contract 智能合约interface，其中setPrefix，setSender, AddSigner是从tx构建contract的时候使用
+type Contract interface {
+	Info() ContractInfo
+	SetPrefix(prefix string)
+	SetSender(sender IOSTAccount)
+	AddSigner(signer IOSTAccount)
+	Api(apiName string) (Method, error)
+	common.Serializable
+}

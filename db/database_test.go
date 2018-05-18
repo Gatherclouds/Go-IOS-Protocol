@@ -1,4 +1,4 @@
-package iostdb
+package db
 import (
 	"bytes"
 	"io/ioutil"

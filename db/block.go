@@ -1,4 +1,4 @@
-package iostdb
+package db
 
 func (d *Block) Encode() []byte {
 	bin, err := d.Marshal(nil)

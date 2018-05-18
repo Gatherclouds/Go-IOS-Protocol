@@ -1,4 +1,4 @@
-package iostdb
+package db
 
 //go:generate mockgen -destination mocks/mock_statepool.go -package iosbase_mock -source statepool.go -imports .=github.com/iost-official/Go-IOS-Protocol/iosbase
 

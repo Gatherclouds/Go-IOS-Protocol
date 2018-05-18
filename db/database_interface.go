@@ -1,4 +1,4 @@
-package iostdb
+package db
 
 type Database interface {
 	Put(key []byte, value []byte) error

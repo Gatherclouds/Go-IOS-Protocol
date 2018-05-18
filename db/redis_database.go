@@ -1,4 +1,4 @@
-package iostdb
+package db
 
 import (
 	"github.com/gomodule/redigo/redis"
