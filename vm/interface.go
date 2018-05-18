@@ -32,3 +32,10 @@ type VM interface {
 	Call(pool state.Pool, methodName string, args ...state.Value) ([]state.Value, state.Pool, error)
 	PC() uint64
 }
+
+// Method 方法interface，用来作为接口调用
+type Method interface {
+	Name() string
+	InputCount() int
+	OutputCount() int
+}
