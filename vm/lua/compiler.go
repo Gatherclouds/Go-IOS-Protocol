@@ -60,7 +60,22 @@ func (p *DocCommentParser) parse() (*Contract, error) {
 
 		//code part: content[submatches[1]:][:endPos[1]
 		contract.apis = make(map[string]Method)
-		
+		if funcName == "main" {
+			hasMain = true
+			gasRe := regexp.MustCompile("@gas_limit (\\d+)")
+			priceRe := regexp.MustCompile("@gas_price ([+-]?([0-9]*[.])?[0-9]+)")
+
+			gas, _ := strconv.ParseInt(gasRe.FindStringSubmatch(content[submatches[0]:submatches[1]])[1], 10, 64)
+			price, _ := strconv.ParseFloat(priceRe.FindStringSubmatch(content[submatches[0]:submatches[1]])[1], 64)
+			contract.info.Language = "lua"
+			contract.info.GasLimit = gas
+			contract.info.Price = price
+			contract.main = method
+			//contract.code = content[submatches[1]:][:endPos[1]]
+		} else {
+
+			contract.apis[funcName] = method
+		}
 		buffer.WriteString(content[submatches[1]:][:endPos[1]])
 		buffer.WriteString("\n")
 
