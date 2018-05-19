@@ -49,3 +49,4 @@ func (c *ContractInfo) Decode(b []byte) error {
 	c = &cc
 	return nil
 }
+
