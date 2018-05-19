@@ -36,3 +36,8 @@ func (m *MockDatabase) Close() {
 	m.ctrl.Call(m, "Close")
 }
 
+// Close indicates an expected call of Close
+func (mr *MockDatabaseMockRecorder) Close() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockDatabase)(nil).Close))
+}
+
