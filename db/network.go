@@ -8,11 +8,4 @@ type Request struct {
 	Body    []byte
 }
 
-type Response struct {
-	Time        int64
-	From        string
-	To          string
-	Code        int
-	Description string
-}
 

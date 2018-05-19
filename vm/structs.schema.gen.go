@@ -117,3 +117,45 @@ func (d *contractInfoRaw) Marshal(buf []byte) ([]byte, error) {
 	}
 	return buf[:i+17], nil
 }
+
+func (d *contractInfoRaw) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+0] & 0x7F)
+			for buf[i+0]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+0]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		d.Language = string(buf[i+0 : i+0+l])
+		i += l
+	}
+	{
+
+		d.Version = 0 | (int8(buf[i+0+0]) << 0)
+
+	}
+	{
+
+		d.GasLimit = 0 | (int64(buf[i+0+1]) << 0) | (int64(buf[i+1+1]) << 8) | (int64(buf[i+2+1]) << 16) | (int64(buf[i+3+1]) << 24) | (int64(buf[i+4+1]) << 32) | (int64(buf[i+5+1]) << 40) | (int64(buf[i+6+1]) << 48) | (int64(buf[i+7+1]) << 56)
+
+	}
+	{
+
+		v := 0 | (uint64(buf[i+0+9]) << 0) | (uint64(buf[i+1+9]) << 8) | (uint64(buf[i+2+9]) << 16) | (uint64(buf[i+3+9]) << 24) | (uint64(buf[i+4+9]) << 32) | (uint64(buf[i+5+9]) << 40) | (uint64(buf[i+6+9]) << 48) | (uint64(buf[i+7+9]) << 56)
+		d.Price = *(*float64)(unsafe.Pointer(&v))
+
+	}
+	return i + 17, nil
+}
