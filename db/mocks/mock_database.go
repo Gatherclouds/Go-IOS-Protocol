@@ -31,4 +31,8 @@ func (m *MockDatabase) EXPECT() *MockDatabaseMockRecorder {
 	return m.recorder
 }
 
+// Close mocks base method
+func (m *MockDatabase) Close() {
+	m.ctrl.Call(m, "Close")
+}
 
