@@ -29,14 +29,6 @@ func (mr *MockNetworkMockRecorder) Send(req interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Send", reflect.TypeOf((*MockNetwork)(nil).Send), req)
 }
 
-// Listen mocks base method
-func (m *MockNetwork) Listen(port uint16) (chan Request, chan Response, error) {
-	ret := m.ctrl.Call(m, "Listen", port)
-	ret0, _ := ret[0].(chan Request)
-	ret1, _ := ret[1].(chan Response)
-	ret2, _ := ret[2].(error)
-	return ret0, ret1, ret2
-}
 
 
 
