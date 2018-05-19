@@ -1,4 +1,4 @@
-package core
+package tx
 
 // UTXO池，可以存储在内存，用map实现，以后可以移到数据库
 type UTXOPool interface {

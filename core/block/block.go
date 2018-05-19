@@ -1,4 +1,4 @@
-package core
+package block
 
 func (d *Block) Encode() []byte {
 	bin, err := d.Marshal(nil)

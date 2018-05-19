@@ -1,4 +1,4 @@
-package core
+package tx
 
 func (d *UTXO) Encode() []byte {
 	bin, err := d.Marshal(nil)

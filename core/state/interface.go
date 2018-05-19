@@ -1,4 +1,4 @@
-package core
+package state
 
 type Serializable interface {
 	Encode() []byte
