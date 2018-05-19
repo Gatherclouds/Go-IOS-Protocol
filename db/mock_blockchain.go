@@ -13,5 +13,3 @@ type MockBlockChain struct {
 	ctrl     *gomock.Controller
 	recorder *MockBlockChainMockRecorder
 }
-
-
