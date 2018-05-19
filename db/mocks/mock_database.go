@@ -26,4 +26,9 @@ func NewMockDatabase(ctrl *gomock.Controller) *MockDatabase {
 	return mock
 }
 
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockDatabase) EXPECT() *MockDatabaseMockRecorder {
+	return m.recorder
+}
+
 
