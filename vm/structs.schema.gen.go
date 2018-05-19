@@ -94,6 +94,26 @@ func (d *contractInfoRaw) Marshal(buf []byte) ([]byte, error) {
 		buf[i+7+1] = byte(d.GasLimit >> 56)
 
 	}
+	{
 
+		v := *(*uint64)(unsafe.Pointer(&(d.Price)))
+
+		buf[i+0+9] = byte(v >> 0)
+
+		buf[i+1+9] = byte(v >> 8)
+
+		buf[i+2+9] = byte(v >> 16)
+
+		buf[i+3+9] = byte(v >> 24)
+
+		buf[i+4+9] = byte(v >> 32)
+
+		buf[i+5+9] = byte(v >> 40)
+
+		buf[i+6+9] = byte(v >> 48)
+
+		buf[i+7+9] = byte(v >> 56)
+
+	}
 	return buf[:i+17], nil
 }
