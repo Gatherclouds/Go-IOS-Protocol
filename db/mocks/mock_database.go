@@ -19,3 +19,11 @@ type MockDatabaseMockRecorder struct {
 	mock *MockDatabase
 }
 
+// NewMockDatabase creates a new mock instance
+func NewMockDatabase(ctrl *gomock.Controller) *MockDatabase {
+	mock := &MockDatabase{ctrl: ctrl}
+	mock.recorder = &MockDatabaseMockRecorder{mock}
+	return mock
+}
+
+
