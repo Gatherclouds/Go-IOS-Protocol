@@ -43,6 +43,16 @@ func (p *DocCommentParser) parse() (*Contract, error) {
 	var buffer bytes.Buffer
 
 	for _, submatches := range re.FindAllStringSubmatchIndex(content, -1) {
+		/*
+		--- <functionName>  summary
+		-- some description
+		-- ...
+		-- ...
+		-- @gas_limit <gasLimit>
+		-- @gas_price <gasPrice>
+		-- @param_cnt <paramCnt>
+		-- @return_cnt <returnCnt>
+ 		*/
 
 		funcName := strings.Split(content[submatches[0]:submatches[1]], " ")[1]
 

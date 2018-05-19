@@ -41,3 +41,5 @@ func (mr *MockDatabaseMockRecorder) Close() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockDatabase)(nil).Close))
 }
 
+
+
