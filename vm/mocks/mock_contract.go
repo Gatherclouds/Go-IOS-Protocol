@@ -22,3 +22,8 @@ func NewMockContract(ctrl *gomock.Controller) *MockContract {
 	mock.recorder = &MockContractMockRecorder{mock}
 	return mock
 }
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockContract) EXPECT() *MockContractMockRecorder {
+	return m.recorder
+}
