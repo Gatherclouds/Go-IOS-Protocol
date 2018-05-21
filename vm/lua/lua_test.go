@@ -4,6 +4,7 @@ import (
 	"testing"
 	"github.com/golang/mock/gomock"
 	. "github.com/smartystreets/goconvey/convey"
+	"fmt"
 )
 
 func TestLuaVM(t *testing.T) {
@@ -42,6 +43,29 @@ end`,
 			So(v.EncodeString(), ShouldEqual, "sworld")
 
 		})
+
+		Convey("Transfer", func() {
+			mockCtl := gomock.NewController(t)
+			pool := core_mock.NewMockPool(mockCtl)
+
+			var va, vb state.Value
+			var eeee error
+
+			pool.EXPECT().GetHM(gomock.Any(), gomock.Any()).AnyTimes().Return(state.MakeVFloat(10000), nil)
+
+			pool.EXPECT().PutHM(gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes().Do(func(key, field state.Key, value state.Value) error {
+				if key == "iost" {
+					if field == "a" {
+						va = value
+						return nil
+					} else if field == "b" {
+						vb = value
+						return nil
+					}
+				}
+				eeee = fmt.Errorf("bad")
+				return nil
+			})
 
 	})
 
