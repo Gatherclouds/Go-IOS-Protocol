@@ -20,3 +20,18 @@ type VM struct {
 	callerPC uint64
 }
 
+func (l *VM) Start() error {
+	for _, api := range l.APIs {
+		l.L.SetGlobal(api.name, l.L.NewFunction(api.function))
+	}
+
+	if err := l.L.DoString(l.Contract.code); err != nil {
+		return err
+	}
+
+	return nil
+}
+func (l *VM) Stop() {
+	l.L.Close()
+}
+
