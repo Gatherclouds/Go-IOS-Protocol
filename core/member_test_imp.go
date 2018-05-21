@@ -16,13 +16,4 @@ func NewTxPool() TxPool {
 	return &txp
 }
 
-func (tp *TxPoolImpl) Add(tx Tx) error {
-	tp.txMap[common.Base58Encode(tx.Hash())] = tx
-	return nil
-}
-
-func (tp *TxPoolImpl) Del(tx Tx) error {
-	delete(tp.txMap, common.Base58Encode(tx.Hash()))
-	return nil
-}
 
