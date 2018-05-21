@@ -41,10 +41,4 @@ func randomSeckey() []byte {
 	return seckey
 }
 
-func makePubkey(seckey []byte) []byte {
-	return common.CalcPubkey(seckey)
-}
 
-func GetIdByPubkey(pubkey []byte) string {
-	return common.Base58Encode(pubkey)
-}
