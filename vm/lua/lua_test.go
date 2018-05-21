@@ -92,6 +92,37 @@ end`,
 			So(vb.EncodeString(), ShouldEqual, "f1.005000000000000e+04")
 
 		})
+		Convey("Out of gas", func() {
+			mockCtl := gomock.NewController(t)
+			pool := core_mock.NewMockPool(mockCtl)
+
+			var k state.Key
+			var v state.Value
+
+			pool.EXPECT().Put(gomock.Any(), gomock.Any()).AnyTimes().Do(func(key state.Key, value state.Value) error {
+				k = key
+				v = value
+				return nil
+			})
+			pool.EXPECT().Copy().AnyTimes().Return(pool)
+			main := NewMethod("main", 0, 1)
+			lc := Contract{
+				info: vm.ContractInfo{Prefix: "test", GasLimit: 7},
+				code: `function main()
+	Put("hello", "world")
+	return "success"
+end`,
+				main: main,
+			}
+
+			lvm := VM{}
+			lvm.Prepare(&lc, nil)
+			lvm.Start()
+			_, _, err := lvm.Call(pool, "main")
+			lvm.Stop()
+			So(err, ShouldNotBeNil)
+
+		})
 
 
 	})
