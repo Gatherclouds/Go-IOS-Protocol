@@ -27,3 +27,8 @@ func NewMockContract(ctrl *gomock.Controller) *MockContract {
 func (m *MockContract) EXPECT() *MockContractMockRecorder {
 	return m.recorder
 }
+
+// AddSigner mocks base method
+func (m *MockContract) AddSigner(arg0 []byte) {
+	m.ctrl.Call(m, "AddSigner", arg0)
+}
