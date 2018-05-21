@@ -15,3 +15,10 @@ type MockContract struct {
 type MockContractMockRecorder struct {
 	mock *MockContract
 }
+
+// NewMockContract creates a new mock instance
+func NewMockContract(ctrl *gomock.Controller) *MockContract {
+	mock := &MockContract{ctrl: ctrl}
+	mock.recorder = &MockContractMockRecorder{mock}
+	return mock
+}
