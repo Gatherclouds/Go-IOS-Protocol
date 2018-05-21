@@ -45,3 +45,19 @@ func (c *Contract) Encode() []byte {
 	}
 	return b
 }
+
+func (c *Contract) Decode(b []byte) error {
+	var cr contractRaw
+	_, err := cr.Unmarshal(b)
+	var ci vm.ContractInfo
+	err = ci.Decode(cr.info)
+	if err != nil {
+		return err
+	}
+	c.info = ci
+	c.code = string(cr.code)
+	return err
+}
+func (c *Contract) Hash() []byte {
+	return common.Sha256(c.Encode())
+}
