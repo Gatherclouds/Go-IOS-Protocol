@@ -67,6 +67,33 @@ end`,
 				return nil
 			})
 
+			pool.EXPECT().Copy().AnyTimes().Return(pool)
+			main := NewMethod("main", 0, 1)
+			lc := Contract{
+				info: vm.ContractInfo{Prefix: "test", GasLimit: 11, Sender: vm.IOSTAccount("a")},
+
+				code: `function main()
+	return Transfer("a", "b", 50)
+end`,
+				main: main,
+			}
+
+			lvm := VM{}
+			lvm.Prepare(&lc, nil)
+			lvm.Start()
+			rtn, _, err := lvm.Call(pool, "main")
+			lvm.Stop()
+			So(err, ShouldBeNil)
+			So(rtn[0].EncodeString(), ShouldEqual, "true")
+			So(eeee, ShouldBeNil)
+			So(va, ShouldNotBeNil)
+			So(vb, ShouldNotBeNil)
+			So(va.EncodeString(), ShouldEqual, "f9.950000000000000e+03")
+			So(vb.EncodeString(), ShouldEqual, "f1.005000000000000e+04")
+
+		})
+
+
 	})
 
 }
