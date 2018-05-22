@@ -28,6 +28,14 @@ func (m *MockContract) EXPECT() *MockContractMockRecorder {
 	return m.recorder
 }
 
+// API mocks base method
+func (m *MockContract) API(arg0 string) (vm.Method, error) {
+	ret := m.ctrl.Call(m, "API", arg0)
+	ret0, _ := ret[0].(vm.Method)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
 // AddSigner mocks base method
 func (m *MockContract) AddSigner(arg0 []byte) {
 	m.ctrl.Call(m, "AddSigner", arg0)
