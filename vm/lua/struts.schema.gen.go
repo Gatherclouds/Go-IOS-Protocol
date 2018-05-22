@@ -64,7 +64,13 @@ func (d *contractRaw) Size() (s uint64) {
 
 		}
 
-		
+		for k0 := range d.methods {
+
+			{
+				s += d.methods[k0].Size()
+			}
+
+		}
 
 	}
 	return
