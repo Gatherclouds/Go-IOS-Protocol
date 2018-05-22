@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/iost-official/prototype/common"
 	"math/rand"
 	"time"
 )
