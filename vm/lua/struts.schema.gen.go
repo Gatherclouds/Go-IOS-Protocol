@@ -141,7 +141,17 @@ func (d *contractRaw) Marshal(buf []byte) ([]byte, error) {
 			i++
 
 		}
-		
+		for k0 := range d.methods {
+
+			{
+				nbuf, err := d.methods[k0].Marshal(buf[i+0:])
+				if err != nil {
+					return nil, err
+				}
+				i += uint64(len(nbuf))
+			}
+
+		}
 	}
 	return buf[:i+0], nil
 }
