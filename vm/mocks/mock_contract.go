@@ -46,3 +46,8 @@ func (mr *MockContractMockRecorder) API(arg0 interface{}) *gomock.Call {
 func (m *MockContract) AddSigner(arg0 []byte) {
 	m.ctrl.Call(m, "AddSigner", arg0)
 }
+
+// AddSigner indicates an expected call of AddSigner
+func (mr *MockContractMockRecorder) AddSigner(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddSigner", reflect.TypeOf((*MockContract)(nil).AddSigner), arg0)
+}

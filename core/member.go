@@ -19,10 +19,7 @@ func NewMember(seckey []byte) (Member, error) {
 	if seckey == nil {
 		seckey = randomSeckey()
 	}
-	if len(seckey) != 32 {
-		return Member{}, fmt.Errorf("seckey length error")
-	}
-
+	
 	m.Seckey = seckey
 	m.Pubkey = makePubkey(seckey)
 	m.ID = GetIdByPubkey(m.Pubkey)
