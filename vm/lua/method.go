@@ -15,3 +15,13 @@ func NewMethod(name string, inputCount, rtnCount int) Method {
 	return m
 }
 
+func (m *Method) Name() string {
+	return m.name
+}
+func (m *Method) InputCount() int {
+	return m.inputCount
+}
+func (m *Method) OutputCount() int {
+	return m.outputCount
+}
+
