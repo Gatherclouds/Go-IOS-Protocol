@@ -51,3 +51,14 @@ func Core2Lua(value state.Value) lua.LValue {
 	}
 	panic(fmt.Errorf("not support convertion: %v", reflect.TypeOf(value).String()))
 }
+
+func Bool2Lua(b bool) lua.LValue {
+	var rtnl lua.LValue
+	if b {
+		rtnl = lua.LTrue
+	} else {
+		rtnl = lua.LFalse
+	}
+	return rtnl
+
+}
