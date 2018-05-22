@@ -11,3 +11,30 @@ type vmMonitor struct {
 	vms map[string]vmHolder
 }
 
+func newVMMonitor() vmMonitor {
+	return vmMonitor{
+		vms: make(map[string]vmHolder),
+	}
+}
+
+func (m *vmMonitor) StartVM(contract vm.Contract) vm.VM {
+	if _, ok := m.vms[contract.Info().Prefix]; ok {
+		return nil
+	}
+
+	switch contract.(type) {
+	case *lua.Contract:
+		var lvm lua.VM
+		err := lvm.Prepare(contract.(*lua.Contract), m)
+		if err != nil {
+			panic(err)
+		}
+		err = lvm.Start()
+		if err != nil {
+			panic(err)
+		}
+		m.vms[contract.Info().Prefix] = vmHolder{&lvm, contract}
+		return &lvm
+	}
+	return nil
+}
