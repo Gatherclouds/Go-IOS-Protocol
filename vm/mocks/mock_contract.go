@@ -51,3 +51,10 @@ func (m *MockContract) AddSigner(arg0 []byte) {
 func (mr *MockContractMockRecorder) AddSigner(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddSigner", reflect.TypeOf((*MockContract)(nil).AddSigner), arg0)
 }
+
+// Code mocks base method
+func (m *MockContract) Code() string {
+	ret := m.ctrl.Call(m, "Code")
+	ret0, _ := ret[0].(string)
+	return ret0
+}

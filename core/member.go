@@ -19,7 +19,7 @@ func NewMember(seckey []byte) (Member, error) {
 	if seckey == nil {
 		seckey = randomSeckey()
 	}
-	
+
 	m.Seckey = seckey
 	m.Pubkey = makePubkey(seckey)
 	m.ID = GetIdByPubkey(m.Pubkey)
