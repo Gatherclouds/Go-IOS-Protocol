@@ -38,3 +38,16 @@ func (m *vmMonitor) StartVM(contract vm.Contract) vm.VM {
 	}
 	return nil
 }
+
+func (m *vmMonitor) RestartVM(contract vm.Contract) vm.VM {
+	if _, ok := m.vms[contract.Info().Prefix]; ok {
+		m.StopVM(contract)
+	}
+	return m.StartVM(contract)
+}
+
+func (m *vmMonitor) StopVM(contract vm.Contract) {
+	m.vms[contract.Info().Prefix].Stop()
+	delete(m.vms, string(contract.Hash()))
+}
+
