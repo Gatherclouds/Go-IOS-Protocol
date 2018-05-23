@@ -75,3 +75,10 @@ func (m *MockContract) Decode(arg0 []byte) error {
 func (mr *MockContractMockRecorder) Decode(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decode", reflect.TypeOf((*MockContract)(nil).Decode), arg0)
 }
+
+// Encode mocks base method
+func (m *MockContract) Encode() []byte {
+	ret := m.ctrl.Call(m, "Encode")
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
