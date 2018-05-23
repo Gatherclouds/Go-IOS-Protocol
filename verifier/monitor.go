@@ -88,3 +88,13 @@ func (m *vmMonitor) Call(pool state.Pool, contractPrefix, methodName string, arg
 	return rtn, pool, gas, err
 }
 
+// FindContract  find contract from tx database
+func FindContract(contractPrefix string) (vm.Contract, error) {
+	code2 := `function sayHi(name)
+	return "hi " .. name
+end`
+	sayHi := lua.NewMethod("sayHi", 1, 1)
+	lc2 := lua.NewContract(vm.ContractInfo{Prefix: "con2", GasLimit: 1000, Price: 1, Publisher: vm.IOSTAccount("ahaha")},
+		code2, sayHi, sayHi)
+	return &lc2, nil
+}
