@@ -51,3 +51,26 @@ func (m *vmMonitor) StopVM(contract vm.Contract) {
 	delete(m.vms, string(contract.Hash()))
 }
 
+func (m *vmMonitor) Stop() {
+	for _, vv := range m.vms {
+		vv.Stop()
+	}
+	m.vms = make(map[string]vmHolder)
+}
+
+func (m *vmMonitor) GetMethod(contractPrefix, methodName string) (vm.Method, error) {
+	var contract vm.Contract
+	var err error
+	vmh, ok := m.vms[contractPrefix]
+	if !ok {
+		contract, err = FindContract(contractPrefix)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		contract = vmh.contract
+	}
+	return contract.API(methodName)
+}
+
+
