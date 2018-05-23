@@ -70,3 +70,8 @@ func (m *MockContract) Decode(arg0 []byte) error {
 	ret0, _ := ret[0].(error)
 	return ret0
 }
+
+// Decode indicates an expected call of Decode
+func (mr *MockContractMockRecorder) Decode(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decode", reflect.TypeOf((*MockContract)(nil).Decode), arg0)
+}
