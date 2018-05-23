@@ -82,3 +82,9 @@ func (m *MockContract) Encode() []byte {
 	ret0, _ := ret[0].([]byte)
 	return ret0
 }
+
+// Encode indicates an expected call of Encode
+func (mr *MockContractMockRecorder) Encode() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Encode", reflect.TypeOf((*MockContract)(nil).Encode))
+}
+
