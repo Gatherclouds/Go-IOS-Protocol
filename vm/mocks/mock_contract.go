@@ -88,3 +88,9 @@ func (mr *MockContractMockRecorder) Encode() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Encode", reflect.TypeOf((*MockContract)(nil).Encode))
 }
 
+// Hash mocks base method
+func (m *MockContract) Hash() []byte {
+	ret := m.ctrl.Call(m, "Hash")
+	ret0, _ := ret[0].([]byte)
+	return ret0
+}
