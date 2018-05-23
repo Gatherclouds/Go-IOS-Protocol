@@ -63,3 +63,10 @@ func (m *MockContract) Code() string {
 func (mr *MockContractMockRecorder) Code() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Code", reflect.TypeOf((*MockContract)(nil).Code))
 }
+
+// Decode mocks base method
+func (m *MockContract) Decode(arg0 []byte) error {
+	ret := m.ctrl.Call(m, "Decode", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
