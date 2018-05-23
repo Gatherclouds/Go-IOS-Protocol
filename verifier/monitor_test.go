@@ -37,5 +37,18 @@ end`
 			Pool:      pool,
 			vmMonitor: newVMMonitor(),
 		}
+
+		verifier.StartVM(&lc1)
+		verifier.StartVM(&lc2)
+		rtn, _, gas, err := verifier.Call(pool, "con2", "sayHi", state.MakeVString("bob"))
+		So(err, ShouldBeNil)
+		So(gas, ShouldEqual, 4)
+		So(rtn[0].EncodeString(), ShouldEqual, "shi bob")
+		rtn, _, gas, err = verifier.Call(pool, "con1", "main")
+		So(err, ShouldBeNil)
+		So(gas, ShouldEqual, 9)
+		So(rtn[0].EncodeString(), ShouldEqual, "shi bob")
+
 	})
 }
+
