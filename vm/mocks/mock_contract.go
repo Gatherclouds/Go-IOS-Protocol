@@ -58,3 +58,8 @@ func (m *MockContract) Code() string {
 	ret0, _ := ret[0].(string)
 	return ret0
 }
+
+// Code indicates an expected call of Code
+func (mr *MockContractMockRecorder) Code() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Code", reflect.TypeOf((*MockContract)(nil).Code))
+}
