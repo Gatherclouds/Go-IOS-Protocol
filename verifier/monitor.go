@@ -73,4 +73,18 @@ func (m *vmMonitor) GetMethod(contractPrefix, methodName string) (vm.Method, err
 	return contract.API(methodName)
 }
 
+func (m *vmMonitor) Call(pool state.Pool, contractPrefix, methodName string, args ...state.Value) ([]state.Value, state.Pool, uint64, error) { // todo 权限检查
+	holder, ok := m.vms[contractPrefix]
+	if !ok {
+		contract, err := FindContract(contractPrefix)
+		if err != nil {
+			return nil, nil, 0, err
+		}
+		m.StartVM(contract)
+		holder = m.vms[contractPrefix]
+	}
+	rtn, pool, err := holder.Call(pool, methodName, args...)
+	gas := holder.PC()
+	return rtn, pool, gas, err
+}
 
