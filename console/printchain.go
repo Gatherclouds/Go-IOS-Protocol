@@ -7,16 +7,6 @@ func Printchain() Cmd {
 		Name:  "printchain",
 		Usage: `printchain - Print all the blocks of the blockchain`,
 		Exec: func(host *Console, args []string) string {
-			bc, to_print := transaction.NewBlockchain("", Db)
-
-			if bc == nil {
-				return to_print
-			}
-
-			//defer bc.Db.Close()
-
-			bci := bc.Iterator()
-
 			for {
 				block := bci.Next()
 

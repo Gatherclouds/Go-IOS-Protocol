@@ -106,3 +106,8 @@ func (m *MockContract) Info() vm.ContractInfo {
 	ret0, _ := ret[0].(vm.ContractInfo)
 	return ret0
 }
+
+// Info indicates an expected call of Info
+func (mr *MockContractMockRecorder) Info() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Info", reflect.TypeOf((*MockContract)(nil).Info))
+}
