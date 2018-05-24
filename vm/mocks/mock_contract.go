@@ -111,3 +111,9 @@ func (m *MockContract) Info() vm.ContractInfo {
 func (mr *MockContractMockRecorder) Info() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Info", reflect.TypeOf((*MockContract)(nil).Info))
 }
+
+// SetPrefix mocks base method
+func (m *MockContract) SetPrefix(arg0 string) {
+	m.ctrl.Call(m, "SetPrefix", arg0)
+}
+
