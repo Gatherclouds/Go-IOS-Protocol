@@ -23,15 +23,6 @@ func Connect() Cmd {
 
 		dirname, _ := ioutil.TempDir(os.TempDir(), min_framework.DbFile)
 		Db, err = iostdb.NewLDBDatabase(dirname, 0, 0)
-		if err != nil {
-			return "Can't open database"
-		}
-
-		Nn = p2p.NewNaiveNetwork()
-		lis, err := Nn.Listen(uint16(port))
-		if err != nil {
-			return fmt.Sprint(err) + "\n"
-		}
 
 		Wg.Add(1)
 		go func(<-chan p2p.Request, ) {

@@ -94,3 +94,8 @@ func (m *MockContract) Hash() []byte {
 	ret0, _ := ret[0].([]byte)
 	return ret0
 }
+
+// Hash indicates an expected call of Hash
+func (mr *MockContractMockRecorder) Hash() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Hash", reflect.TypeOf((*MockContract)(nil).Hash))
+}
