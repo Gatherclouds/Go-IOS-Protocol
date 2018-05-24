@@ -117,3 +117,7 @@ func (m *MockContract) SetPrefix(arg0 string) {
 	m.ctrl.Call(m, "SetPrefix", arg0)
 }
 
+// SetPrefix indicates an expected call of SetPrefix
+func (mr *MockContractMockRecorder) SetPrefix(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetPrefix", reflect.TypeOf((*MockContract)(nil).SetPrefix), arg0)
+}
