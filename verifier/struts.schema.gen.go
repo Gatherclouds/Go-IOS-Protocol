@@ -56,34 +56,46 @@ func (d *VerifyLogRaw) Size() (s uint64) {
 	return
 }
 
-func (d *VerifyLogRaw) Marshal(buf []byte) ([]byte, error) {
-	size := d.Size()
-	{
-		if uint64(cap(buf)) >= size {
-			buf = buf[:size]
-		} else {
-			buf = make([]byte, size)
-		}
-	}
-	i := uint64(0)
+func (d *VerifyLogRaw) Size() (s uint64) {
 
 	{
 		l := uint64(len(d.List))
 
 		{
 
-			t := uint64(l)
-
+			t := l
 			for t >= 0x80 {
-				buf[i+0] = byte(t) | 0x80
 				t >>= 7
-				i++
+				s++
 			}
-			buf[i+0] = byte(t)
-			i++
+			s++
 
 		}
-		
+
+		for k0 := range d.List {
+
+			{
+				l := uint64(len(d.List[k0]))
+
+				{
+
+					t := l
+					for t >= 0x80 {
+						t >>= 7
+						s++
+					}
+					s++
+
+				}
+
+				s += 4 * l
+
+			}
+
+		}
+
 	}
-	return buf[:i+0], nil
+	return
 }
+
+
