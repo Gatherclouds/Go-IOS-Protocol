@@ -99,3 +99,10 @@ func (m *MockContract) Hash() []byte {
 func (mr *MockContractMockRecorder) Hash() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Hash", reflect.TypeOf((*MockContract)(nil).Hash))
 }
+
+// Info mocks base method
+func (m *MockContract) Info() vm.ContractInfo {
+	ret := m.ctrl.Call(m, "Info")
+	ret0, _ := ret[0].(vm.ContractInfo)
+	return ret0
+}
