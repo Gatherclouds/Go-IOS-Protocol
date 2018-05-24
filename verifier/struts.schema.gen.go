@@ -143,7 +143,23 @@ func (d *VerifyLogRaw) Marshal(buf []byte) ([]byte, error) {
 					i++
 
 				}
-				
+				for k1 := range d.List[k0] {
+
+					{
+
+						buf[i+0+0] = byte(d.List[k0][k1] >> 0)
+
+						buf[i+1+0] = byte(d.List[k0][k1] >> 8)
+
+						buf[i+2+0] = byte(d.List[k0][k1] >> 16)
+
+						buf[i+3+0] = byte(d.List[k0][k1] >> 24)
+
+					}
+
+					i += 4
+
+				}
 			}
 
 		}
