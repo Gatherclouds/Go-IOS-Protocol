@@ -126,3 +126,8 @@ func (mr *MockContractMockRecorder) SetPrefix(arg0 interface{}) *gomock.Call {
 func (m *MockContract) SetSender(arg0 vm.IOSTAccount) {
 	m.ctrl.Call(m, "SetSender", arg0)
 }
+
+// SetSender indicates an expected call of SetSender
+func (mr *MockContractMockRecorder) SetSender(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetSender", reflect.TypeOf((*MockContract)(nil).SetSender), arg0)
+}
