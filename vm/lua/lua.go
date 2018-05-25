@@ -108,16 +108,91 @@ func (l *VM) Prepare(contract vm.Contract, monitor vm.Monitor) error {
 
 	l.APIs = make([]api, 0)
 
-	
+	var Put = api{
+		name: "Put",
+		function: func(L *lua.LState) int {
+			k := L.ToString(1)
+			key := state.Key(l.Contract.Info().Prefix + k)
+			v := L.Get(2)
+			host.Put(l.cachePool, key, Lua2Core(v))
+			L.Push(lua.LTrue)
+			return 1
+		},
+	}
 	l.APIs = append(l.APIs, Put)
 
+	var Log = api{
+		name: "Log",
+		function: func(L *lua.LState) int {
+			k := L.ToString(1)
+			host.Log(k, l.Contract.info.Prefix)
+			return 0
+		},
+	}
+	l.APIs = append(l.APIs, Log)
 
+	var Get = api{
+		name: "Get",
+		function: func(L *lua.LState) int {
+			k := L.ToString(1)
+			v, err := host.Get(l.cachePool, state.Key(k))
+			if err != nil {
+				L.Push(lua.LNil)
+				return 1
+			}
+			L.Push(Core2Lua(v))
+			return 1
+		},
+	}
 	l.APIs = append(l.APIs, Get)
 
-
+	var Transfer = api{
+		name: "Transfer",
+		function: func(L *lua.LState) int {
+			src := L.ToString(1)
+			if CheckPrivilege(l.Contract.info, src) <= 0 {
+				L.Push(lua.LFalse)
+				return 1
+			}
+			des := L.ToString(2)
+			value := L.ToNumber(3)
+			rtn := host.Transfer(l.cachePool, src, des, float64(value))
+			L.Push(Bool2Lua(rtn))
+			return 1
+		},
+	}
 	l.APIs = append(l.APIs, Transfer)
 
+	var Call = api{
+		name: "Call",
+		function: func(L *lua.LState) int {
+			blockName := L.ToString(1)
+			methodName := L.ToString(2)
+			method, err := l.monitor.GetMethod(blockName, methodName)
 
+			if err != nil {
+				L.Push(lua.LString("api not found")) // todo 明确到底是什么错再返回
+				return 1
+			}
+
+			args := make([]state.Value, 0)
+
+			for i := 1; i <= method.InputCount(); i++ {
+				args = append(args, Lua2Core(L.Get(i+2)))
+			}
+
+			rtn, pool, gas, err := l.monitor.Call(l.cachePool, blockName, methodName, args...)
+			l.callerPC += gas
+			if err != nil {
+				L.Push(lua.LString(err.Error()))
+			}
+			l.cachePool = pool
+			for _, v := range rtn {
+				L.Push(Core2Lua(v))
+			}
+			return len(rtn)
+		},
+	}
 	l.APIs = append(l.APIs, Call)
 
 	return nil
