@@ -8,6 +8,14 @@ import (
 	"strconv"
 )
 
+var (
+	// ErrNoMain 代码中未包含main函数
+	ErrNoMain = errors.New("parse failed: no main function")
+	// ErrIllegalCode 代码中包含\\0字符
+	ErrIllegalCode = errors.New("parse failed: Text contains character \\0")
+)
+
+// DocCommentParser 装入text之后调用parse即可得到contract
 type DocCommentParser struct {
 	text string // always ends with \0, which doesn't appear elsewhere
 
