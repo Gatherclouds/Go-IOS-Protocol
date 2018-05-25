@@ -69,7 +69,7 @@ func (c *Contract) Encode() []byte {
 
 func (c *Contract) Decode(b []byte) error {
 	var cr contractRaw
-	_, err := cr.Unmarshal(b)
+	_, err := cr.Unmarshal(b[1:])
 	var ci vm.ContractInfo
 	err = ci.Decode(cr.info)
 	if err != nil {
@@ -77,8 +77,22 @@ func (c *Contract) Decode(b []byte) error {
 	}
 	c.info = ci
 	c.code = string(cr.code)
+	c.main = Method{
+		cr.methods[0].name,
+		int(cr.methods[0].ic),
+		int(cr.methods[0].oc),
+	}
+	for i := 1; i < len(cr.methods); i++ {
+		c.apis[cr.methods[i].name] = Method{
+			cr.methods[i].name,
+			int(cr.methods[i].ic),
+			int(cr.methods[i].oc),
+		}
+	}
+
 	return err
 }
+
 func (c *Contract) Hash() []byte {
 	return common.Sha256(c.Encode())
 }

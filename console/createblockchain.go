@@ -11,10 +11,6 @@ func Createblockchain() Cmd {
 		}
 		bc, to_print := transaction.CreateBlockchain(args[0], Db, Nn)
 
-		if bc == nil {
-			return to_print
-		}
-
 		//defer bc.Db.Close()
 
 		to_print += "Done!\n"
