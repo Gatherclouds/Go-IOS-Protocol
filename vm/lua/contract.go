@@ -2,6 +2,7 @@ package lua
 
 import "fmt"
 
+// Contract lua智能合约的实现
 type Contract struct {
 	info vm.ContractInfo
 	code string
@@ -33,6 +34,11 @@ func (c *Contract) Api(apiName string) (vm.Method, error) {
 	}
 	return &rtn, nil
 }
+
+func (c *Contract) Code() string {
+	return c.code
+}
+
 func (c *Contract) Encode() []byte {
 	cr := contractRaw{
 		info: c.info.Encode(),
