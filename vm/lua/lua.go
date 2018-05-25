@@ -94,3 +94,31 @@ func CheckPrivilege(info vm.ContractInfo, name string) int {
 	}
 	return 0
 }
+
+func (l *VM) Prepare(contract vm.Contract, monitor vm.Monitor) error {
+	var ok bool
+	l.Contract, ok = contract.(*Contract)
+	if !ok {
+		return fmt.Errorf("prepare contract %v : contract type error", contract.Info().Prefix)
+	}
+
+	l.L = lua.NewState()
+	l.L.PCLimit = uint64(contract.Info().GasLimit)
+	l.monitor = monitor
+
+	l.APIs = make([]api, 0)
+
+	
+	l.APIs = append(l.APIs, Put)
+
+
+	l.APIs = append(l.APIs, Get)
+
+
+	l.APIs = append(l.APIs, Transfer)
+
+
+	l.APIs = append(l.APIs, Call)
+
+	return nil
+}
