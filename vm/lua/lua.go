@@ -44,6 +44,24 @@ func (l *VM) Call(pool state.Pool, methodName string, args ...state.Value) ([]st
 	}
 
 	method := method0.(*Method)
+	
+	if len(args) == 0 {
+    		err = l.L.CallByParam(lua.P{
+    			Fn:      l.L.GetGlobal(method.name),
+    			NRet:    method.outputCount,
+    			Protect: true,
+    		})
+    	} else {
+    		largs := make([]lua.LValue, 0)
+    		for _, arg := range args {
+    			largs = append(largs, Core2Lua(arg))
+    		}
+    		err = l.L.CallByParam(lua.P{
+    			Fn:      l.L.GetGlobal(method.name),
+    			NRet:    method.outputCount,
+    			Protect: true,
+    		}, largs...)
+    	}
 
 	if err != nil {
 		return nil, nil, err
