@@ -32,11 +32,6 @@ func (c *Console) Listen(prompt string) {
 	}
 }
 
-
-func (c *Console) Stop() {
-	c.running = false
-}
-
 type Cmd struct {
 	Name  string
 	Usage string

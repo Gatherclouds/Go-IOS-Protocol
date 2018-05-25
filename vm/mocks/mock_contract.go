@@ -121,3 +121,8 @@ func (m *MockContract) SetPrefix(arg0 string) {
 func (mr *MockContractMockRecorder) SetPrefix(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetPrefix", reflect.TypeOf((*MockContract)(nil).SetPrefix), arg0)
 }
+
+// SetSender mocks base method
+func (m *MockContract) SetSender(arg0 vm.IOSTAccount) {
+	m.ctrl.Call(m, "SetSender", arg0)
+}
