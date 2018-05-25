@@ -32,17 +32,6 @@ func (c *Console) Listen(prompt string) {
 	}
 }
 
-func (c *Console) Run(name string, args []string) string {
-	name = strings.ToLower(name)
-
-	for _, cmd := range c.cmds {
-		if cmd.Name != name {
-			continue
-		}
-		return cmd.Exec(c, args)
-	}
-	return "Command not found\n"
-}
 
 func (c *Console) Stop() {
 	c.running = false

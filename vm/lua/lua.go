@@ -7,16 +7,14 @@ type api struct {
 	function func(L *lua.LState) int
 }
 
+// VM lua 虚拟机的实现
 type VM struct {
 	APIs []api
 	L    *lua.LState
 
 	cachePool state.Pool
-
 	monitor vm.Monitor
-
 	Contract *Contract
-
 	callerPC uint64
 }
 
@@ -35,3 +33,28 @@ func (l *VM) Stop() {
 	l.L.Close()
 }
 
+func (l *VM) Call(pool state.Pool, methodName string, args ...state.Value) ([]state.Value, state.Pool, error) {
+	if pool != nil {
+		l.cachePool = pool.Copy()
+	}
+
+	method0, err := l.Contract.API(methodName)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	method := method0.(*Method)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	rtnValue := make([]state.Value, 0, method.outputCount)
+	for i := 0; i < method.outputCount; i++ {
+		ret := l.L.Get(-1) // returned value
+		l.L.Pop(1)
+		rtnValue = append(rtnValue, Lua2Core(ret))
+	}
+
+	return rtnValue, l.cachePool, nil
+}
