@@ -44,12 +44,27 @@ func (c *Contract) Encode() []byte {
 		info: c.info.Encode(),
 		code: []byte(c.code),
 	}
+	mr := methodRaw{
+		name: c.main.name,
+		ic:   int32(c.main.inputCount),
+		oc:   int32(c.main.outputCount),
+	}
+	cr.methods = []methodRaw{mr}
+	for _, val := range c.apis {
+		mr = methodRaw{
+			name: val.name,
+			ic:   int32(val.inputCount),
+			oc:   int32(val.outputCount),
+		}
+		cr.methods = append(cr.methods, mr)
+	}
+
 	b, err := cr.Marshal(nil)
 	if err != nil {
 		panic(err)
 		return nil
 	}
-	return b
+	return append([]byte{0}, b...)
 }
 
 func (c *Contract) Decode(b []byte) error {
