@@ -44,7 +44,7 @@ func (l *VM) Call(pool state.Pool, methodName string, args ...state.Value) ([]st
 	}
 
 	method := method0.(*Method)
-	
+
 	if len(args) == 0 {
     		err = l.L.CallByParam(lua.P{
     			Fn:      l.L.GetGlobal(method.name),
@@ -75,4 +75,22 @@ func (l *VM) Call(pool state.Pool, methodName string, args ...state.Value) ([]st
 	}
 
 	return rtnValue, l.cachePool, nil
+}
+
+func (l *VM) PC() uint64 {
+	rtn := l.L.PCount + l.callerPC
+	l.L.PCount = 0
+	return rtn
+}
+
+func CheckPrivilege(info vm.ContractInfo, name string) int {
+	if vm.IOSTAccount(name) == info.Publisher {
+		return 2
+	}
+	for _, signer := range info.Signers {
+		if vm.IOSTAccount(name) == signer {
+			return 1
+		}
+	}
+	return 0
 }
