@@ -54,5 +54,34 @@ func (cv *CacheVerifier) VerifyContract(contract vm.Contract, contain bool) (sta
 		return nil, fmt.Errorf("balance not enough")
 	}
 
+	cv.StartVM(contract)
+	pool, gas, err := cv.Verify(contract)
+	if err != nil {
+		cv.StopVM(contract)
+		return nil, err
+	}
+	cv.StopVM(contract)
+
+	if gas > uint64(contract.Info().GasLimit) {
+		balanceOfSender -= float64(contract.Info().GasLimit) * contract.Info().Price
+		val1 := state.MakeVFloat(balanceOfSender)
+		cv.Pool.PutHM("iost", state.Key(sender), val1)
+		return nil, fmt.Errorf("gas exceeded")
+	}
+
+	balanceOfSender -= float64(gas) * contract.Info().Price
+	if balanceOfSender < 0 {
+		balanceOfSender = 0
+		val1 := state.MakeVFloat(balanceOfSender)
+		cv.Pool.PutHM("iost", state.Key(sender), val1)
+		return nil, fmt.Errorf("can not afford gas")
+	}
+	val1 := state.MakeVFloat(balanceOfSender)
+	cv.Pool.PutHM("iost", state.Key(sender), val1)
+
+	if contain {
+		cv.SetPool(pool)
+	}
+
 	return pool, nil
 }
