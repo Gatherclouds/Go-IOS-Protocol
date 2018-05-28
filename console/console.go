@@ -32,8 +32,3 @@ func (c *Console) Listen(prompt string) {
 	}
 }
 
-type Cmd struct {
-	Name  string
-	Usage string
-	Exec  func(host *Console, args []string) string
-}
