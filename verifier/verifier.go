@@ -1,5 +1,7 @@
 package verifier
 
+import "github.com/ethereum/go-ethereum/core/vm"
+
 const (
 	MaxBlockGas uint64 = 1000000
 )
@@ -12,3 +14,11 @@ type Verifier struct {
 	vmMonitor
 }
 
+func (v *Verifier) Verify(contract vm.Contract) (state.Pool, uint64, error) {
+	_, pool, gas, err := v.Call(v.Pool, contract.Info().Prefix, "main")
+	return pool, gas, err
+}
+
+func (v *Verifier) SetPool(pool state.Pool) {
+	v.Pool = pool
+}
