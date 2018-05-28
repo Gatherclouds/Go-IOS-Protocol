@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"encoding/base32"
 	"fmt"
+	"github.com/mkmueller/aes256"
 )
 
 type UserNonce struct {
@@ -40,3 +41,16 @@ func (nonce *UserNonce) Decode(str string) (int, error) {
 	}
 }
 
+func (nonce *UserNonce) Read(ci *aes256.Cipher) (int, error) {
+	raw_txt, err := nonce.ViewRawString(ci)
+	if err != nil {
+		return 0, fmt.Errorf("Error: invalid key.")
+	}
+
+	val, err := nonce.Decode(raw_txt)
+	if err != nil {
+		return 0, fmt.Errorf("[Error: perhaps invalid key]\n" + err.Error())
+	} else {
+		return val, nil
+	}
+}
