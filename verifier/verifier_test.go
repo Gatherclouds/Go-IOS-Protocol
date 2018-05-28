@@ -73,6 +73,31 @@ func TestCacheVerifier(t *testing.T) {
 	Put("hello", a)
 	return "success"
 end`
+			lc := lua.NewContract(vm.ContractInfo{Prefix: "test", GasLimit: 100, Price: 1, Publisher: vm.IOSTAccount("ahaha")}, code, main)
+
+			cv := NewCacheVerifier(pool)
+			_, err := cv.VerifyContract(&lc, true)
+			So(err, ShouldBeNil)
+			So(string(k), ShouldEqual, "testhello")
+			So(v.EncodeString(), ShouldEqual, "f3.140000000000000e+00")
+			So(string(k2), ShouldEqual, "iost")
+			So(string(f2), ShouldEqual, "ahaha")
+			vv := v2.(*state.VFloat)
+			So(vv.ToFloat64(), ShouldEqual, float64(10000-10))
+		})
+		Convey("Verify free contract", func() {
+			mockCtl := gomock.NewController(t)
+			pool := core_mock.NewMockPool(mockCtl)
+
+			var k state.Key
+			var v state.Value
+
+			pool.EXPECT().Put(gomock.Any(), gomock.Any()).AnyTimes().Do(func(key state.Key, value state.Value) error {
+				k = key
+				v = value
+				return nil
+			})
+
 
 		})
 	})
