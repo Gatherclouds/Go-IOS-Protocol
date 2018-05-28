@@ -32,6 +32,7 @@ type CacheVerifier struct {
 	Verifier
 }
 
+// 验证contract，返回pool是包含了该contract的pool。如果contain为true则进行合并
 // 取得tx中的Contract的方法： tx.Contract
 func (cv *CacheVerifier) VerifyContract(contract vm.Contract, contain bool) (state.Pool, error) {
 	sender := contract.Info().Publisher
@@ -84,4 +85,20 @@ func (cv *CacheVerifier) VerifyContract(contract vm.Contract, contain bool) (sta
 	}
 
 	return pool, nil
+}
+
+func NewCacheVerifier(pool state.Pool) CacheVerifier {
+	cv := CacheVerifier{
+		Verifier: Verifier{
+			vmMonitor: newVMMonitor(),
+		},
+	}
+	if pool != nil {
+		cv.Pool = pool.Copy()
+	}
+	return cv
+}
+
+func (cv *CacheVerifier) Close() {
+	cv.Verifier.Stop()
 }
