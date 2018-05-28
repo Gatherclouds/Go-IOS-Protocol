@@ -1,6 +1,10 @@
 package verifier
 
-import "github.com/ethereum/go-ethereum/core/vm"
+import (
+	"github.com/ethereum/go-ethereum/core/vm"
+	"fmt"
+	"reflect"
+)
 
 const (
 	MaxBlockGas uint64 = 1000000
@@ -26,4 +30,29 @@ func (v *Verifier) SetPool(pool state.Pool) {
 // 验证新tx的工具类
 type CacheVerifier struct {
 	Verifier
+}
+
+// 取得tx中的Contract的方法： tx.Contract
+func (cv *CacheVerifier) VerifyContract(contract vm.Contract, contain bool) (state.Pool, error) {
+	sender := contract.Info().Publisher
+	var balanceOfSender float64
+	val0, err := cv.Pool.GetHM("iost", state.Key(sender))
+	if err != nil {
+		return nil, err
+	}
+	val, ok := val0.(*state.VFloat)
+	if val0 == state.VNil {
+		val = state.MakeVFloat(0)
+	} else if !ok {
+
+		return nil, fmt.Errorf("pool type error: should VFloat, acture %v; in iost.%v",
+			reflect.TypeOf(val0).String(), string(sender))
+	}
+	balanceOfSender = val.ToFloat64()
+
+	if balanceOfSender < float64(contract.Info().GasLimit)*contract.Info().Price {
+		return nil, fmt.Errorf("balance not enough")
+	}
+
+	return pool, nil
 }
