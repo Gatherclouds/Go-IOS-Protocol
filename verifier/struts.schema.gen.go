@@ -51,53 +51,12 @@ func (d *VerifyLogRaw) Size() (s uint64) {
 				s += 4 * l
 
 			}
-		}
-	}
-	return
-}
-
-func (d *VerifyLogRaw) Size() (s uint64) {
-
-	{
-		l := uint64(len(d.List))
-
-		{
-
-			t := l
-			for t >= 0x80 {
-				t >>= 7
-				s++
-			}
-			s++
-
-		}
-
-		for k0 := range d.List {
-
-			{
-				l := uint64(len(d.List[k0]))
-
-				{
-
-					t := l
-					for t >= 0x80 {
-						t >>= 7
-						s++
-					}
-					s++
-
-				}
-
-				s += 4 * l
-
-			}
 
 		}
 
 	}
 	return
 }
-
 func (d *VerifyLogRaw) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
@@ -165,4 +124,71 @@ func (d *VerifyLogRaw) Marshal(buf []byte) ([]byte, error) {
 		}
 	}
 	return buf[:i+0], nil
+}
+
+func (d *VerifyLogRaw) Unmarshal(buf []byte) (uint64, error) {
+	i := uint64(0)
+
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+0] & 0x7F)
+			for buf[i+0]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+0]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.List)) >= l {
+			d.List = d.List[:l]
+		} else {
+			d.List = make([][]int32, l)
+		}
+		for k0 := range d.List {
+
+			{
+				l := uint64(0)
+
+				{
+
+					bs := uint8(7)
+					t := uint64(buf[i+0] & 0x7F)
+					for buf[i+0]&0x80 == 0x80 {
+						i++
+						t |= uint64(buf[i+0]&0x7F) << bs
+						bs += 7
+					}
+					i++
+
+					l = t
+
+				}
+				if uint64(cap(d.List[k0])) >= l {
+					d.List[k0] = d.List[k0][:l]
+				} else {
+					d.List[k0] = make([]int32, l)
+				}
+				for k1 := range d.List[k0] {
+
+					{
+
+						d.List[k0][k1] = 0 | (int32(buf[i+0+0]) << 0) | (int32(buf[i+1+0]) << 8) | (int32(buf[i+2+0]) << 16) | (int32(buf[i+3+0]) << 24)
+
+					}
+
+					i += 4
+
+				}
+			}
+
+		}
+	}
+	return i + 0, nil
 }
