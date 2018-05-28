@@ -22,3 +22,8 @@ func (v *Verifier) Verify(contract vm.Contract) (state.Pool, uint64, error) {
 func (v *Verifier) SetPool(pool state.Pool) {
 	v.Pool = pool
 }
+
+// 验证新tx的工具类
+type CacheVerifier struct {
+	Verifier
+}
