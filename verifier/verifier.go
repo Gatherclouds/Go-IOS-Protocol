@@ -102,3 +102,9 @@ func NewCacheVerifier(pool state.Pool) CacheVerifier {
 func (cv *CacheVerifier) Close() {
 	cv.Verifier.Stop()
 }
+
+// 验证block的工具类
+type BlockVerifier struct {
+	CacheVerifier
+	oldPool state.Pool
+}
