@@ -108,3 +108,22 @@ type BlockVerifier struct {
 	CacheVerifier
 	oldPool state.Pool
 }
+
+// 验证block，返回pool是包含了该block的pool。如果contain为true则进行合并
+func (bv *BlockVerifier) VerifyBlock(b *block.Block, contain bool) (state.Pool, error) {
+	bv.oldPool = bv.Pool
+	for i := 0; i < b.LenTx(); i++ {
+		c := b.GetTx(i).Contract
+		_, err := bv.VerifyContract(c, true)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+	if contain {
+		return bv.Pool, nil
+	}
+	newPool := bv.Pool
+	bv.Pool = bv.oldPool
+	return newPool, nil
+}
