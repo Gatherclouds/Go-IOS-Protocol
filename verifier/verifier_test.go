@@ -157,6 +157,38 @@ func TestBlockVerifier(t *testing.T) {
 	Put("hello", a)
 	return a
 end`
-		
+		lc1 := lua.NewContract(vm.ContractInfo{Prefix: "test", GasLimit: 100, Price: 1, Publisher: vm.IOSTAccount("ahaha")}, code, main)
+
+		code2 := `function main()
+	return Call("con2", "sayHi", "bob")
+end`
+
+
+		main2 := lua.NewMethod("main", 0, 1)
+
+		lc2 := lua.NewContract(vm.ContractInfo{Prefix: "test2", GasLimit: 1000, Price: 1, Publisher: vm.IOSTAccount("ahaha")},
+			code2, main2)
+
+		tx1 := tx.NewTx(1, &lc1)
+		tx1, _ = tx.SignTx(tx1, a1)
+		tx2 := tx.NewTx(2, &lc2)
+		tx2, _ = tx.SignTx(tx2, a2)
+
+		blk := block.Block{
+			Content: []tx.Tx{tx1, tx2},
+		}
+
+		bv := NewBlockVerifier(nil)
+		bv.SetPool(pool)
+		pool2, err := bv.VerifyBlock(&blk, false)
+		So(err, ShouldBeNil)
+		So(pool2, ShouldNotBeNil)
+		vt, err := pool2.Get("testhello")
+		So(err, ShouldBeNil)
+		So(vt, ShouldNotBeNil)
+		So(vt.EncodeString(), ShouldEqual, "f3.140000000000000e+00")
+		bal, _ := pool2.GetHM(state.Key("iost"), state.Key("ahaha"))
+		So(bal.(*state.VFloat).ToFloat64(), ShouldEqual, 9981)
+
 	})
 }
