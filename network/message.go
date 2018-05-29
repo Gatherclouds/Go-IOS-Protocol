@@ -22,3 +22,12 @@ type MsgReader interface {
 	ReadMsg() (Msg, error)
 }
 
+type MsgWriter interface {
+	// WriteMsg sends a message. It will block until the message's
+	// Payload has been consumed by the other end.
+	//
+	// Note that messages can be sent only once because their
+	// payload reader is drained.
+	WriteMsg(Msg) error
+}
+
