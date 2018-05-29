@@ -2,23 +2,17 @@ package verifier
 
 import (
 	"testing"
-
 	"errors"
-
 	"fmt"
-
 	"github.com/golang/mock/gomock"
-	"github.com/iost-official/prototype/account"
-	"github.com/iost-official/prototype/core/block"
-	"github.com/iost-official/prototype/core/mocks"
-	"github.com/iost-official/prototype/core/state"
-	"github.com/iost-official/prototype/core/tx"
-	"github.com/iost-official/prototype/db"
-	"github.com/iost-official/prototype/db/mocks"
-	"github.com/iost-official/prototype/vm"
-	"github.com/iost-official/prototype/vm/lua"
 	. "github.com/smartystreets/goconvey/convey"
-	"github.com/iost-official/prototype/vm/mocks"
+	"github.com/ethereum/go-ethereum/core/state"
+	"Go-IOS-Protocol/vm/lua"
+	"Go-IOS-Protocol/vm"
+	"Go-IOS-Protocol/account"
+	"Go-IOS-Protocol/db/mocks"
+	"Go-IOS-Protocol/core/tx"
+	"Go-IOS-Protocol/core/mocks"
 )
 
 func TestGenesisVerify(t *testing.T) {
