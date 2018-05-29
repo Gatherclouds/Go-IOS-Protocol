@@ -4,9 +4,6 @@ func (this *PriceObj) max(base AssetIdType, quote AssetIdType) PriceObj {
 	return make(asset(MAX_SUPPLY, base)) / make(asset(1, quote))
 }
 
-func (this *PriceObj) min(base AssetIdType, quote AssetIdType) PriceObj {
-	return make(asset(1, base)) / make(asset(MAX_SUPPLY, quote))
-}
 
 func (this *PriceObj) call_price(debt AssetObj, cola AssetObj, cola_ratio int) PriceObj {
 	this.swan(debt.amount.value, cola.amount.value)
