@@ -3,6 +3,8 @@ package verifier
 import (
 	"testing"
 	"github.com/golang/mock/gomock"
+	"errors"
+	"github.com/ethereum/go-ethereum/core/state"
 )
 
 func TestGenesisVerify(t *testing.T) {
@@ -132,3 +134,29 @@ end`
 	})
 }
 
+func TestBlockVerifier(t *testing.T) {
+	Convey("Test of BlockVerifier", t, func() {
+
+		a1, _ := account.NewAccount(nil)
+		a2, _ := account.NewAccount(nil)
+
+		ctl := gomock.NewController(t)
+		mockDB := db_mock.NewMockDatabase(ctl)
+		mockDB.EXPECT().GetHM(gomock.Any(), gomock.Any()).AnyTimes().Return(nil, errors.New("not found"))
+		mockDB.EXPECT().Get(gomock.Any()).AnyTimes().Return(nil, errors.New("not found"))
+
+		db := state.NewDatabase(mockDB)
+
+		pool := state.NewPool(db)
+		pool.PutHM(state.Key("iost"), state.Key("ahaha"), state.MakeVFloat(10000))
+		pool.Put(state.Key("a"), state.MakeVFloat(3.14))
+
+		main := lua.NewMethod("main", 0, 1)
+		code := `function main()
+	a = Get("a")
+	Put("hello", a)
+	return a
+end`
+		
+	})
+}
