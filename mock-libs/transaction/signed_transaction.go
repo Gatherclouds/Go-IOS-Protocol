@@ -26,10 +26,6 @@ func (this *SignedTransaction) get_required_signatures(chain_id ChainIdType, ava
 		s.check_authority_by_authority(&auth, 0)
 	}
 
-	for owenr := range required_owner {
-		s.check_authority(get_owner(owner))
-	}
-
 	for active := range required_active {
 		s.check_authority(active)
 	}

@@ -33,12 +33,7 @@ func (this *AssetObj) amount_from_string(amount string) AssetType {
 
 	answer = 0
 	sprecision = make(sprecision(this.precision))
-
-	l := amount[negative:decimal_pos]
-	if len(l) != 0 {
-		answer += sprecision * this.stoll(lhs)
-	}
-	if decimal {
+	
 		max_rhs := sprecision.value
 
 		rhs := amount[decimal_pos+1:]
