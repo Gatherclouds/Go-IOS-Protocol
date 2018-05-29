@@ -2,9 +2,23 @@ package verifier
 
 import (
 	"testing"
-	"github.com/golang/mock/gomock"
+
 	"errors"
-	"github.com/ethereum/go-ethereum/core/state"
+
+	"fmt"
+
+	"github.com/golang/mock/gomock"
+	"github.com/iost-official/prototype/account"
+	"github.com/iost-official/prototype/core/block"
+	"github.com/iost-official/prototype/core/mocks"
+	"github.com/iost-official/prototype/core/state"
+	"github.com/iost-official/prototype/core/tx"
+	"github.com/iost-official/prototype/db"
+	"github.com/iost-official/prototype/db/mocks"
+	"github.com/iost-official/prototype/vm"
+	"github.com/iost-official/prototype/vm/lua"
+	. "github.com/smartystreets/goconvey/convey"
+	"github.com/iost-official/prototype/vm/mocks"
 )
 
 func TestGenesisVerify(t *testing.T) {
@@ -191,4 +205,32 @@ end`
 		So(bal.(*state.VFloat).ToFloat64(), ShouldEqual, 9981)
 
 	})
+}
+
+func BenchmarkCacheVerifier_TransferOnly(b *testing.B) {
+	main := lua.NewMethod("main", 0, 1)
+	code := `function main()
+	Transfer("a", "b", 50)
+end`
+	lc := lua.NewContract(vm.ContractInfo{Prefix: "test", GasLimit: 100, Price: 1, Publisher: vm.IOSTAccount("a")}, code, main)
+
+	dbx, err := db.DatabaseFactor("redis")
+	if err != nil {
+		panic(err.Error())
+	}
+	sdb := state.NewDatabase(dbx)
+	pool := state.NewPool(sdb)
+	pool.PutHM(state.Key("iost"), state.Key("a"), state.MakeVFloat(1000000))
+	pool.PutHM(state.Key("iost"), state.Key("b"), state.MakeVFloat(1000000))
+
+	cv := NewCacheVerifier(pool)
+	for i := 0; i < b.N; i++ {
+		_, err = cv.VerifyContract(&lc, false)
+		if err != nil {
+			panic(err)
+		}
+	}
+	fmt.Println(pool.GetHM("iost", "a"))
+	fmt.Println(pool.GetHM("iost", "b"))
+
 }
