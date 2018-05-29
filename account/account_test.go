@@ -2,7 +2,9 @@ package account
 
 import (
 	"testing"
+	. "Go-IOS-Protocol/common"
 	. "github.com/smartystreets/goconvey/convey"
+	"bytes"
 )
 
 func TestMember(t *testing.T) {
@@ -18,6 +20,11 @@ func TestMember(t *testing.T) {
 			info := []byte("hello world")
 			sig := SignInSecp256k1(Sha256(info), m.Seckey)
 			So(VerifySignInSecp256k1(Sha256(info), m.Pubkey, sig), ShouldBeTrue)
+
+			sig2, _ := Sign(Secp256k1, Sha256(info), m.Seckey)
+			So(bytes.Equal(sig2.Pubkey, m.Pubkey), ShouldBeTrue)
+
 		})
 	})
 }
+
