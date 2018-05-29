@@ -10,3 +10,10 @@ const (
 	NodeLiveThresholdSeconds = 20
 	MaxDownloadRetry         = 2
 )
+
+type Response struct {
+	From        string
+	To          string
+	Code        int    // like http status code
+	Description string // code status description
+}
