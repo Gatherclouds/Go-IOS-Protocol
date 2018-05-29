@@ -1,5 +1,11 @@
 package network
 
+import (
+	"Go-IOS-Protocol/core/message"
+	"Go-IOS-Protocol/db"
+	"net"
+)
+
 type RequestHead struct {
 	Length uint32 // length of Request
 }
@@ -27,3 +33,11 @@ type Network interface {
 	Download(start, end uint64) error
 	CancelDownload(start, end uint64) error
 }
+
+type NaiveNetwork struct {
+	db     *db.LDBDatabase //database of known nodes
+	listen net.Listener
+	conn   net.Conn
+	done   bool
+}
+
