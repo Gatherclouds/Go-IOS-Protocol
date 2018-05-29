@@ -54,3 +54,14 @@ func (nonce *UserNonce) Read(ci *aes256.Cipher) (int, error) {
 		return val, nil
 	}
 }
+
+func (nonce *UserNonce) Write(val int, ci *aes256.Cipher) error {
+	raw_txt := ([]byte)(nonce.Encode(val))
+	txt, err := ci.Encrypt(raw_txt)
+	if err != nil {
+		return fmt.Errorf("Error: invalid key.")
+	} else {
+		nonce.Update(txt)
+		return nil
+	}
+}

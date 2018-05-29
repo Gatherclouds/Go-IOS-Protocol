@@ -6,13 +6,15 @@ import (
 	"fmt"
 	"github.com/golang/mock/gomock"
 	. "github.com/smartystreets/goconvey/convey"
-	"github.com/ethereum/go-ethereum/core/state"
+	"Go-IOS-Protocol/core/block"
+	"Go-IOS-Protocol/db"
 	"Go-IOS-Protocol/vm/lua"
 	"Go-IOS-Protocol/vm"
 	"Go-IOS-Protocol/account"
 	"Go-IOS-Protocol/db/mocks"
 	"Go-IOS-Protocol/core/tx"
 	"Go-IOS-Protocol/core/mocks"
+	"Go-IOS-Protocol/core/state"
 )
 
 func TestGenesisVerify(t *testing.T) {
