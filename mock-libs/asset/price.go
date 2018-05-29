@@ -1,9 +1,5 @@
 package asset
 
-func (this *PriceObj) is_null() bool {
-	return this == nil
-}
-
 func (this *PriceObj) is_for(asset_id AssetIdType) bool {
 	if !this.settlement_price.is_null() {
 		return settlement_price.base.asset_id == asset_id

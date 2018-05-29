@@ -17,3 +17,13 @@ type Response struct {
 	Code        int    // like http status code
 	Description string // code status description
 }
+
+//Network api
+type Network interface {
+	Broadcast(req message.Message)
+	Send(req message.Message)
+	Listen(port uint16) (<-chan message.Message, error)
+	Close(port uint16) error
+	Download(start, end uint64) error
+	CancelDownload(start, end uint64) error
+}
