@@ -8,20 +8,6 @@ func (this *ProposalCreate) c_calculate_fee(k FeeType) ShareType {
 	return k.fee + this.calculate_data_fee(crypto.size(this), k.price_per_kbyte)
 }
 
-func (this *ProposalUpdate) u_validate() {
-	if this.fee.amount < 0 {
-		panic("fee < 0")
-	}
-	if this.empty() {
-		panic("cannot propose empty object")
-	}
-	for a := range this.approvals_to_add {
-		if this.find_all(a) == nil {
-			panic("cannot propose nil object")
-		}
-	}
-}
-
 func (this *ProposalUpdate) u_calculate_fee(k FeeType) ShareType {
 	return k.fee + this.calculate_data_fee(crypto.size(this), k.price_per_kbyte)
 }

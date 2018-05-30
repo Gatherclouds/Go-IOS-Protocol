@@ -4,6 +4,7 @@ import (
 	"net"
 	"time"
 	"Go-IOS-Protocol/common"
+	"errors"
 )
 
 type NodeID string
@@ -40,4 +41,21 @@ func NewNode(id NodeID, ip net.IP, udpPort, tcpPort uint16) *Node {
 // Incomplete returns true for nodes with no IP address.
 func (n *Node) Incomplete() bool {
 	return n.IP == nil
+}
+
+// checks whether n is a valid complete node.
+func (n *Node) validateComplete() error {
+	if n.Incomplete() {
+		return errors.New("incomplete node")
+	}
+	if n.UDP == 0 {
+		return errors.New("missing UDP port")
+	}
+	if n.TCP == 0 {
+		return errors.New("missing TCP port")
+	}
+	if n.IP.IsMulticast() || n.IP.IsUnspecified() {
+		return errors.New("invalid IP (multicast/unspecified)")
+	}
+	return nil
 }
