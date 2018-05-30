@@ -5,6 +5,7 @@ import (
 	"Go-IOS-Protocol/common/mclock"
 	"log"
 	"os"
+	"Go-IOS-Protocol/p2p/discover"
 )
 
 type Peer struct {
@@ -31,4 +32,17 @@ func newPeer(conn net.Conn, local, remote string) *Peer {
 		created: mclock.Now(),
 		closed:  make(chan struct{}),
 	}
+}
+
+func (ps *peerSet) Get(node *discover.Node) *Peer {
+	ps.lock.RLock()
+	defer ps.lock.RUnlock()
+	if ps.peers == nil {
+		return nil
+	}
+	peer, ok := ps.peers[node.String()]
+	if !ok {
+		return nil
+	}
+	return peer
 }
