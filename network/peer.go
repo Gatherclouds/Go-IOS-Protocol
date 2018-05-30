@@ -58,3 +58,14 @@ func (ps *peerSet) SetAddr(addr string, p *Peer) {
 	ps.peers[addr] = p
 	return
 }
+
+func (ps *peerSet) Set(node *discover.Node, p *Peer) {
+	ps.lock.Lock()
+	defer ps.lock.Unlock()
+	p.remote = node.String()
+	if ps.peers == nil {
+		ps.peers = make(map[string]*Peer)
+	}
+	ps.peers[node.String()] = p
+	return
+}
