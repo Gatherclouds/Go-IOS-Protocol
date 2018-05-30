@@ -10,12 +10,6 @@ func make_left_canon(v DigestType) DigestType {
 	return cleft
 }
 
-func make_right_canon(v DigestType) DigestType {
-	cright := v
-	cright.hash[0] |= 0x80
-	return cright
-}
-
 func is_right_canon(v DigestType) bool {
 	return !!(v.hash[0] & 0x80)
 }

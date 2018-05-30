@@ -5,7 +5,8 @@ import (
 	"Go-IOS-Protocol/common/mclock"
 	"log"
 	"os"
-	"Go-IOS-Protocol/p2p/discover"
+
+	"Go-IOS-Protocol/network/discover"
 )
 
 type Peer struct {
@@ -45,4 +46,15 @@ func (ps *peerSet) Get(node *discover.Node) *Peer {
 		return nil
 	}
 	return peer
+}
+
+func (ps *peerSet) SetAddr(addr string, p *Peer) {
+	ps.lock.Lock()
+	defer ps.lock.Unlock()
+	p.remote = addr
+	if ps.peers == nil {
+		ps.peers = make(map[string]*Peer)
+	}
+	ps.peers[addr] = p
+	return
 }
