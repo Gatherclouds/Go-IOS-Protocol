@@ -4,6 +4,7 @@ import (
 	"net"
 	"Go-IOS-Protocol/common/mclock"
 	"log"
+	"os"
 )
 
 type Peer struct {
@@ -21,3 +22,13 @@ func (p *Peer) Disconnect() {
 	}
 }
 
+func newPeer(conn net.Conn, local, remote string) *Peer {
+	return &Peer{
+		conn:    conn,
+		local:   local,
+		remote:  remote,
+		log:     *log.New(os.Stderr, "", 0), //TODO: 写专门的logger
+		created: mclock.Now(),
+		closed:  make(chan struct{}),
+	}
+}
