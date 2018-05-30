@@ -1,6 +1,10 @@
 package network
 
-import "net"
+import (
+	"net"
+	"Go-IOS-Protocol/common/mclock"
+	"log"
+)
 
 type Peer struct {
 	conn    net.Conn
@@ -9,5 +13,11 @@ type Peer struct {
 	remote  string
 	created mclock.AbsTime
 	closed  chan struct{}
+}
+
+func (p *Peer) Disconnect() {
+	if p != nil && p.conn != nil {
+		p.conn.Close()
+	}
 }
 

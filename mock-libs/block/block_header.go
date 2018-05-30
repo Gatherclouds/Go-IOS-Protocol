@@ -22,10 +22,6 @@ func (this *BlockHeader) calc_merkle_root() ChecksumType {
 	}
 
 	var ids []DigestType
-	for i := range len(this.transactions) {
-		ids.append(this.transactions.merkle_digest())
-	}
-	n := len(ids)
 
 	for n > 1 {
 		m := n - (n & 1)
