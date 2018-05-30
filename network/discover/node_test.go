@@ -3,6 +3,8 @@ package discover
 import (
 	"testing"
 	"strings"
+	. "github.com/smartystreets/goconvey/convey"
+	"Go-IOS-Protocol/params"
 )
 
 func TestGenNodeId(t *testing.T) {
