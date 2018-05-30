@@ -69,3 +69,18 @@ func (ps *peerSet) Set(node *discover.Node, p *Peer) {
 	ps.peers[node.String()] = p
 	return
 }
+
+func (ps *peerSet) RemoveByNodeStr(nodeStr string) {
+	node, _ := discover.ParseNode(nodeStr)
+	ps.Remove(node)
+}
+
+func (ps *peerSet) Remove(node *discover.Node) {
+	ps.lock.Lock()
+	defer ps.lock.Unlock()
+	ps.peers[node.String()].Disconnect()
+	delete(ps.peers, node.String())
+	return
+}
+
+//todo ping - pong check is conn  alive, remove it when it's dead
