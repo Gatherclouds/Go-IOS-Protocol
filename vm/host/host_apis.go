@@ -1,5 +1,10 @@
 package host
 
+import (
+	"Go-IOS-Protocol/core/state"
+	"Go-IOS-Protocol/log"
+)
+
 var l log.Logger
 
 func Put(pool state.Pool, key state.Key, value state.Value) bool {
