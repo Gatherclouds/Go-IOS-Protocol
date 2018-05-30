@@ -4,6 +4,9 @@ import (
 	"Go-IOS-Protocol/core/message"
 	"Go-IOS-Protocol/db"
 	"net"
+	"io/ioutil"
+	"os"
+	"strconv"
 )
 
 type RequestHead struct {
@@ -39,5 +42,26 @@ type NaiveNetwork struct {
 	listen net.Listener
 	conn   net.Conn
 	done   bool
+}
+
+//NewNaiveNetwork create n peers
+func NewNaiveNetwork(n int) (*NaiveNetwork, error) {
+	dirname, err := ioutil.TempDir(os.TempDir(), "p2p_test_")
+	if err != nil {
+		return nil, err
+	}
+	db, err := db.NewLDBDatabase(dirname, 0, 0)
+	if err != nil {
+		return nil, err
+	}
+	nn := &NaiveNetwork{
+		db:     db,
+		listen: nil,
+		done:   false,
+	}
+	for i := 1; i <= n; i++ {
+		nn.db.Put([]byte(string(i)), []byte("0.0.0.0:"+strconv.Itoa(11036+i)))
+	}
+	return nn, nil
 }
 
