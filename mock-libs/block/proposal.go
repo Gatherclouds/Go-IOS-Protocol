@@ -4,15 +4,6 @@ import (
 	"crypto"
 )
 
-func (this *ProposalCreate) c_validate() {
-	if this.proposed.empty() {
-		panic("cannot propose empty object")
-	}
-	for op := range this.porposed {
-		this.validate(op.op)
-	}
-}
-
 func (this *ProposalCreate) c_calculate_fee(k FeeType) ShareType {
 	return k.fee + this.calculate_data_fee(crypto.size(this), k.price_per_kbyte)
 }
