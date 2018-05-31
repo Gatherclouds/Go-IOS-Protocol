@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"fmt"
 	"sync"
+	"encoding/binary"
+	"time"
 )
 
 type RequestHead struct {
@@ -111,6 +113,33 @@ func (nn *NaiveNetwork) Send(req message.Message) {
 		fmt.Errorf("sending request body encounter err : %v\n", err.Error())
 	}
 	return
+}
+
+func (nn *NaiveNetwork) Listen(port uint16) (<-chan message.Message, error) {
+	var err error
+	nn.listen, err = net.Listen("tcp", ":"+strconv.Itoa(int(port)))
+	if err != nil {
+		return nil, fmt.Errorf("Error listening: %v", err.Error())
+	}
+	fmt.Println("Listening on " + ":" + strconv.Itoa(int(port)))
+	req := make(chan message.Message, 100)
+
+	conn := make(chan net.Conn, 10)
+
+	// For every listener spawn the following routine
+	go func(l net.Listener) {
+		for {
+			c, err := l.Accept()
+			if err != nil {
+				// handle error
+				conn <- nil
+				return
+			}
+			conn <- c
+		}
+	}(nn.listen)
+	
+	return req, nil
 }
 
 
