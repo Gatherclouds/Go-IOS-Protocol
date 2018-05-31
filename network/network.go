@@ -16,6 +16,7 @@ import (
 	"bytes"
 	"errors"
 	"strings"
+	"Go-IOS-Protocol/common"
 )
 
 type RequestHead struct {
@@ -414,4 +415,21 @@ func (bn *BaseNetwork) putNode(addrs string) {
 	}
 	bn.findNeighbours()
 	return
+}
+
+//nodeCheckLoop inspection Last registration time of node
+func (bn *BaseNetwork) nodeCheckLoop() {
+	for {
+		now := time.Now().Unix()
+		iter := bn.nodeTable.NewIterator()
+		for iter.Next() {
+			if (now - common.BytesToInt64(iter.Value())) > NodeLiveThresholdSeconds {
+				bn.log.D("[net] delete node %v, cuz its last register time is %v", string(iter.Key()), common.BytesToInt64(iter.Value()))
+				bn.nodeTable.Delete(iter.Key())
+				bn.peers.RemoveByNodeStr(string(iter.Key()))
+				bn.delNeighbour(string(iter.Key()))
+			}
+		}
+		time.Sleep(CheckKnownNodeInterval * time.Second)
+	}
 }

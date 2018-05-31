@@ -8,10 +8,6 @@ func (this *ProposalCreate) c_calculate_fee(k FeeType) ShareType {
 	return k.fee + this.calculate_data_fee(crypto.size(this), k.price_per_kbyte)
 }
 
-func (this *ProposalUpdate) u_calculate_fee(k FeeType) ShareType {
-	return k.fee + this.calculate_data_fee(crypto.size(this), k.price_per_kbyte)
-}
-
 func (this *ProposalUpdate) get_authorities(o []AuthorityType) {
 	var auth AuthorityType
 	for k := range this.approvals_to_add.key {
