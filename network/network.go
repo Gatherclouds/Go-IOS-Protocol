@@ -180,6 +180,18 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan message.Message, error) {
 	return req, nil
 }
 
+func reqToBytes(req message.Message) ([]byte, []byte, error) {
+	reqBodyBytes, err := req.Marshal(nil)
+	if err != nil {
+		return nil, reqBodyBytes, err
+	}
+	reqHead := new(bytes.Buffer)
+	if err := binary.Write(reqHead, binary.BigEndian, int32(len(reqBodyBytes))); err != nil {
+		return nil, reqBodyBytes, err
+	}
+	return reqHead.Bytes(), reqBodyBytes, nil
+}
+
 
 //BaseNetwork boot node maintain all node table, and distribute the node table to all node
 type BaseNetwork struct {
