@@ -394,3 +394,11 @@ func (bn *BaseNetwork) Send(msg message.Message) {
 		bn.peers.RemoveByNodeStr(msg.To)
 	}
 }
+
+// Close all connection
+func (bn *BaseNetwork) Close(port uint16) error {
+	if bn.listener != nil {
+		bn.listener.Close()
+	}
+	return nil
+}
