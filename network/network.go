@@ -3,6 +3,8 @@ package network
 import (
 	"Go-IOS-Protocol/core/message"
 	"Go-IOS-Protocol/db"
+	"Go-IOS-Protocol/network/discover"
+	"Go-IOS-Protocol/log"
 	"net"
 	"io/ioutil"
 	"os"
@@ -11,6 +13,7 @@ import (
 	"sync"
 	"encoding/binary"
 	"time"
+	"bytes"
 )
 
 type RequestHead struct {
@@ -190,6 +193,22 @@ func reqToBytes(req message.Message) ([]byte, []byte, error) {
 		return nil, reqBodyBytes, err
 	}
 	return reqHead.Bytes(), reqBodyBytes, nil
+}
+
+func (conf *NetConifg) SetLogPath(path string) *NetConifg {
+	if path == "" {
+		fmt.Errorf("path of log should not be empty")
+	}
+	conf.LogPath = path
+	return conf
+}
+
+func (conf *NetConifg) SetNodeTablePath(path string) *NetConifg {
+	if path == "" {
+		fmt.Errorf("path of node table should not be empty")
+	}
+	conf.NodeTablePath = path
+	return conf
 }
 
 
