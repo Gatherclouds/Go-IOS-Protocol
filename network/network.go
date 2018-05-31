@@ -351,3 +351,46 @@ func (bn *BaseNetwork) broadcast(msg message.Message) {
 		bn.peers.RemoveByNodeStr(msg.To)
 	}
 }
+
+func (bn *BaseNetwork) dial(nodeStr string) (net.Conn, error) {
+	bn.lock.Lock()
+	defer bn.lock.Unlock()
+	node, _ := discover.ParseNode(nodeStr)
+	peer := bn.peers.Get(node)
+	if peer == nil {
+		bn.log.D("[net] dial to %v", node.Addr())
+		conn, err := net.Dial("tcp", node.Addr())
+		if err != nil {
+			bn.log.E("[net] dial tcp %v got err:%v", node.Addr(), err)
+			return conn, fmt.Errorf("dial tcp %v got err:%v", node.Addr(), err)
+		}
+		go bn.receiveLoop(conn)
+		peer := newPeer(conn, bn.localNode.String(), nodeStr)
+		bn.peers.Set(node, peer)
+	}
+
+	return bn.peers.Get(node).conn, nil
+}
+
+//Send msg to msg.To
+func (bn *BaseNetwork) Send(msg message.Message) {
+	if msg.TTL == 0 {
+		return
+	} else {
+		msg.TTL = msg.TTL - 1
+	}
+	data, err := msg.Marshal(nil)
+	if err != nil {
+		bn.log.E("[net] marshal request encountered err:%v", err)
+	}
+	bn.log.D("[net] send msg: type= %v, from=%v,to=%v,time=%v, to node: %v", msg.ReqType, msg.From, msg.To, msg.Time)
+	req := newRequest(Message, bn.localNode.String(), data)
+	conn, err := bn.dial(msg.To)
+	if err != nil {
+		bn.log.E("[net] Send, dial tcp got err:%v", err)
+		return
+	}
+	if er := bn.send(conn, req); er != nil {
+		bn.peers.RemoveByNodeStr(msg.To)
+	}
+}

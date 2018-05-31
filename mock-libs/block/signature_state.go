@@ -12,22 +12,6 @@ type SignatureState struct {
 	max_recursion int
 }
 
-func (this *SignatureState) signed_by_key(key PublicKeyType) bool {
-
-	ps := this.provided_signatures
-	ak := this.available_keys
-
-	itr, exist := ps[key]
-	if !exist {
-		pk, pexist := ak.find(key)
-		if !pexist {
-			this.provided_signatures[key] = true
-			return true
-		}
-		return false
-	}
-}
-
 func (this *SignatureState) signed_by_address(add AddressType) bool {
 
 	ps := this.provided_signatures
