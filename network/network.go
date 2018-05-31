@@ -15,6 +15,7 @@ import (
 	"time"
 	"bytes"
 	"errors"
+	"strings"
 )
 
 type RequestHead struct {
@@ -401,4 +402,16 @@ func (bn *BaseNetwork) Close(port uint16) error {
 		bn.listener.Close()
 	}
 	return nil
+}
+
+//put node into node table of server
+func (bn *BaseNetwork) putNode(addrs string) {
+	addrArr := strings.Split(addrs, ",")
+	for _, addr := range addrArr {
+		if addr != "" && addr != bn.localNode.String() {
+			bn.nodeTable.Put([]byte(addr), common.Int64ToBytes(time.Now().Unix()))
+		}
+	}
+	bn.findNeighbours()
+	return
 }
