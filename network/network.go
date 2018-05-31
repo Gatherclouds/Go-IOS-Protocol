@@ -329,3 +329,25 @@ func (bn *BaseNetwork) Broadcast(msg message.Message) {
 	}
 	bn.lock.Unlock()
 }
+
+//broadcast broadcast to all neighbours, stop broadcast when msg already broadcast
+func (bn *BaseNetwork) broadcast(msg message.Message) {
+	if msg.TTL == 0 {
+		return
+	} else {
+		msg.TTL = msg.TTL - 1
+	}
+	data, err := msg.Marshal(nil)
+	if err != nil {
+		bn.log.E("[net] marshal request encountered err:%v", err)
+	}
+	req := newRequest(BroadcastMessage, bn.localNode.String(), data)
+	conn, err := bn.dial(msg.To)
+	if err != nil {
+		bn.log.E("[net] broadcast dial tcp got err:%v", err)
+		return
+	}
+	if er := bn.send(conn, req); er != nil {
+		bn.peers.RemoveByNodeStr(msg.To)
+	}
+}
