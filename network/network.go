@@ -92,6 +92,28 @@ func (nn *NaiveNetwork) Broadcast(req message.Message) error {
 	return iter.Error()
 }
 
+func (nn *NaiveNetwork) Send(req message.Message) {
+	if nn.conn == nil {
+		fmt.Errorf("no connect in network")
+		return
+	}
+	defer nn.conn.Close()
+
+	reqHeadBytes, reqBodyBytes, err := reqToBytes(req)
+	if err != nil {
+		fmt.Errorf("reqToBytes encounter err : %v\n", err.Error())
+		return
+	}
+	if _, err = nn.conn.Write(reqHeadBytes); err != nil {
+		fmt.Errorf("sending request head encounter err :%v\n", err.Error())
+	}
+	if _, err = nn.conn.Write(reqBodyBytes[:]); err != nil {
+		fmt.Errorf("sending request body encounter err : %v\n", err.Error())
+	}
+	return
+}
+
+
 //BaseNetwork boot node maintain all node table, and distribute the node table to all node
 type BaseNetwork struct {
 	nodeTable  *db.LDBDatabase //all known node except remoteAddr
