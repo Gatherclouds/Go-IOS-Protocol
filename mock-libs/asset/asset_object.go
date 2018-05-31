@@ -30,10 +30,6 @@ func (this *AssetObj) amount_from_string(amount string) AssetType {
 		for len(rhs) < max_rhs {
 			rhs += '0'
 		}
-		if len(rhs) != 0 {
-			answer += this.stoll(rhs)
-		}
-	}
 	if negative {
 		answer *= -1
 	}

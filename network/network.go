@@ -14,6 +14,7 @@ import (
 	"encoding/binary"
 	"time"
 	"bytes"
+	"errors"
 )
 
 type RequestHead struct {
@@ -290,4 +291,29 @@ func NewBaseNetwork(conf *NetConifg) (*BaseNetwork, error) {
 		DownloadHeights: downloadHeights,
 	}
 	return s, nil
+}
+
+// Listen listen local port, find neighbours
+func (bn *BaseNetwork) Listen(port uint16) (<-chan message.Message, error) {
+	bn.localNode.TCP = port
+	bn.log.D("[net] listening %v", bn.localNode)
+	var err error
+	bn.listener, err = net.Listen("tcp", bn.localNode.Addr())
+	if err != nil {
+		return bn.RecvCh, errors.New("failed to listen addr, err  = " + fmt.Sprintf("%v", err))
+	}
+	go func() {
+		for {
+			conn, err := bn.listener.Accept()
+			if err != nil {
+				bn.log.E("[net] accept downStream node err:%v", err)
+				continue
+			}
+			go bn.receiveLoop(conn)
+		}
+	}()
+	//register
+	go bn.registerLoop()
+	go bn.nodeCheckLoop()
+	return bn.RecvCh, nil
 }
