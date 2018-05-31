@@ -195,6 +195,14 @@ func reqToBytes(req message.Message) ([]byte, []byte, error) {
 	return reqHead.Bytes(), reqBodyBytes, nil
 }
 
+//NetConfig p2p net config
+type NetConifg struct {
+	LogPath       string
+	NodeTablePath string
+	NodeID        string
+	ListenAddr    string
+}
+
 func (conf *NetConifg) SetLogPath(path string) *NetConifg {
 	if path == "" {
 		fmt.Errorf("path of log should not be empty")
@@ -211,6 +219,21 @@ func (conf *NetConifg) SetNodeTablePath(path string) *NetConifg {
 	return conf
 }
 
+func (conf *NetConifg) SetNodeID(id string) *NetConifg {
+	if id == "" {
+		fmt.Errorf("node id should not be empty")
+	}
+	conf.NodeID = id
+	return conf
+}
+
+func (conf *NetConifg) SetListenAddr(addr string) *NetConifg {
+	if addr == "" {
+		fmt.Errorf("listen addr should not be empty")
+	}
+	conf.ListenAddr = addr
+	return conf
+}
 
 //BaseNetwork boot node maintain all node table, and distribute the node table to all node
 type BaseNetwork struct {
