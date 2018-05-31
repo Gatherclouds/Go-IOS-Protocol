@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"fmt"
 )
 
 type RequestHead struct {
@@ -69,5 +70,24 @@ func (nn *NaiveNetwork) Close(port uint16) error {
 	port = 3 // 避免出现unused variable
 	nn.done = true
 	return nn.listen.Close()
+}
+
+func (nn *NaiveNetwork) Broadcast(req message.Message) error {
+	iter := nn.db.NewIterator()
+	for iter.Next() {
+		addr, _ := nn.db.Get([]byte(string(iter.Key())))
+		conn, err := net.Dial("tcp", string(addr))
+		if err != nil {
+			if dErr := nn.db.Delete([]byte(string(iter.Key()))); dErr != nil {
+				fmt.Errorf("failed to delete peer : k= %v, v = %v, err:%v\n", iter.Key(), addr, err.Error())
+			}
+			fmt.Errorf("dialing to %v encounter err : %v\n", addr, err.Error())
+			continue
+		}
+		nn.conn = conn
+		go nn.Send(req)
+	}
+	iter.Release()
+	return iter.Error()
 }
 
