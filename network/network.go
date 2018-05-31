@@ -251,3 +251,43 @@ type BaseNetwork struct {
 	log             *log.Logger
 }
 
+// NewBaseNetwork ...
+func NewBaseNetwork(conf *NetConifg) (*BaseNetwork, error) {
+	recv := make(chan message.Message, 100)
+	var err error
+	if conf.LogPath == "" {
+		conf.LogPath, err = ioutil.TempDir(os.TempDir(), "iost_log_")
+		if err != nil {
+			return nil, fmt.Errorf("iost_log_path err: %v", err)
+		}
+	}
+	if conf.NodeTablePath == "" {
+		conf.NodeTablePath = "iost_node_table_"
+	}
+	srvLog, err := log.NewLogger(conf.LogPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to init log %v", err)
+	}
+
+	nodeTable, err := db.NewLDBDatabase(conf.NodeTablePath, 0, 0)
+	if err != nil {
+		return nil, fmt.Errorf("failed to init db %v", err)
+	}
+	neighbours := make(map[string]*discover.Node, 0)
+	NodeHeightMap := make(map[string]uint64, 0)
+	if conf.NodeID == "" {
+		conf.NodeID = string(discover.GenNodeId())
+	}
+	localNode := &discover.Node{ID: discover.NodeID(conf.NodeID), IP: net.ParseIP(conf.ListenAddr)}
+	downloadHeights := make(map[uint64]uint8, 0)
+	s := &BaseNetwork{
+		nodeTable:       nodeTable,
+		RecvCh:          recv,
+		localNode:       localNode,
+		neighbours:      neighbours,
+		log:             srvLog,
+		NodeHeightMap:   NodeHeightMap,
+		DownloadHeights: downloadHeights,
+	}
+	return s, nil
+}
