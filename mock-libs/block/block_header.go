@@ -16,11 +16,6 @@ func (this *BlockHeader) b_id() BlockIdType {
 	return result
 }
 
-func (this *BlockHeader) calc_merkle_root() ChecksumType {
-	if len(this.transactions) == 0 {
-		return make(ChecksumType)
-	}
-
 	var ids []DigestType
 
 	for n > 1 {

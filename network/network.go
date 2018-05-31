@@ -317,3 +317,15 @@ func (bn *BaseNetwork) Listen(port uint16) (<-chan message.Message, error) {
 	go bn.nodeCheckLoop()
 	return bn.RecvCh, nil
 }
+
+//Broadcast msg to all node in the node table
+func (bn *BaseNetwork) Broadcast(msg message.Message) {
+	neighbours := bn.neighbours
+	bn.lock.Lock()
+	for _, node := range neighbours {
+		bn.log.D("[net] broad msg: type= %v, from=%v,to=%v,time=%v, to node: %v", msg.ReqType, msg.From, msg.To, msg.Time, node.String())
+		msg.To = node.String()
+		go bn.broadcast(msg)
+	}
+	bn.lock.Unlock()
+}
