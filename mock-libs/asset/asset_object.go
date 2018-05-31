@@ -39,18 +39,3 @@ func (this *AssetObj) amount_from_string(amount string) AssetType {
 	}
 	return make(amount, answer)
 }
-
-func (this *AssetObj) amount_to_string(amount ShareType) string {
-
-	sprecision := 1
-	for i := 0; i < this.precision; i++ {
-		sprecision *= 10
-	}
-
-	result := strconv.Itoa(amount.value / sprecision.value)
-	decimals := math.Mod(amount.value, sprecision.value)
-	if decimals > 0 {
-		result += "." + strconv.Itoa(sprecision.value+decimals)
-	}
-	return result
-}
