@@ -16,17 +16,6 @@ func (this *AssetObj) amount_from_string(amount string) AssetType {
 		if !decimal {
 			decimal_pos++
 		}
-
-		if isdigit(c) {
-			continue
-		} else if c == '-' && !negative {
-			negative = true
-		} else if c == '.' && !decimal {
-			decimal = true
-		} else {
-			return nil //Invalid Input Amount, Fix me!!
-		}
-
 	}
 
 	var answer, sprecision ShareType

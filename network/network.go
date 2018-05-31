@@ -65,3 +65,9 @@ func NewNaiveNetwork(n int) (*NaiveNetwork, error) {
 	return nn, nil
 }
 
+func (nn *NaiveNetwork) Close(port uint16) error {
+	port = 3 // 避免出现unused variable
+	nn.done = true
+	return nn.listen.Close()
+}
+
