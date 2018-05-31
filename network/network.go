@@ -17,6 +17,7 @@ import (
 	"errors"
 	"strings"
 	"Go-IOS-Protocol/common"
+	"Go-IOS-Protocol/params"
 )
 
 type RequestHead struct {
@@ -428,6 +429,27 @@ func (bn *BaseNetwork) nodeCheckLoop() {
 				bn.nodeTable.Delete(iter.Key())
 				bn.peers.RemoveByNodeStr(string(iter.Key()))
 				bn.delNeighbour(string(iter.Key()))
+			}
+		}
+		time.Sleep(CheckKnownNodeInterval * time.Second)
+	}
+}
+
+//registerLoop register local address to boot nodes
+func (bn *BaseNetwork) registerLoop() {
+	for {
+		for _, encodeAddr := range params.TestnetBootnodes {
+			if bn.localNode.TCP != 30304 {
+				conn, err := bn.dial(encodeAddr)
+				if err != nil {
+					bn.log.E("[net] failed to connect boot node, err:%v", err)
+					continue
+				}
+				bn.log.D("[net] %v request node table from %v", bn.localNode.Addr(), encodeAddr)
+				req := newRequest(ReqNodeTable, bn.localNode.String(), nil)
+				if er := bn.send(conn, req); er != nil {
+					bn.peers.RemoveByNodeStr(encodeAddr)
+				}
 			}
 		}
 		time.Sleep(CheckKnownNodeInterval * time.Second)
