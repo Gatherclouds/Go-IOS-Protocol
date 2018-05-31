@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"fmt"
+	"sync"
 )
 
 type RequestHead struct {
@@ -89,5 +90,21 @@ func (nn *NaiveNetwork) Broadcast(req message.Message) error {
 	}
 	iter.Release()
 	return iter.Error()
+}
+
+//BaseNetwork boot node maintain all node table, and distribute the node table to all node
+type BaseNetwork struct {
+	nodeTable  *db.LDBDatabase //all known node except remoteAddr
+	neighbours map[string]*discover.Node
+	lock       sync.RWMutex
+	peers      peerSet // manage all connection
+	RecvCh     chan message.Message
+	listener   net.Listener
+
+	NodeHeightMap map[string]uint64 //maintain all height of nodes higher than current height
+	localNode     *discover.Node
+
+	DownloadHeights map[uint64]uint8 //map[height]retry_times
+	log             *log.Logger
 }
 
