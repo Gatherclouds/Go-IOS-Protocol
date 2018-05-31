@@ -138,7 +138,45 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan message.Message, error) {
 			conn <- c
 		}
 	}(nn.listen)
-	
+	go func() {
+		for {
+			select {
+			case c := <-conn:
+				if c == nil {
+					if nn.done {
+						return
+					}
+					fmt.Println("Error accepting: ")
+					break
+				}
+
+				go func(conn net.Conn) {
+					defer conn.Close()
+					// Make a buffer to hold incoming data.
+					buf := make([]byte, HEADLENGTH)
+					// Read the incoming connection into the buffer.
+					_, err := conn.Read(buf)
+					if err != nil {
+						fmt.Errorf("Error reading request head:%v", err.Error())
+					}
+					length := binary.BigEndian.Uint32(buf)
+					_buf := make([]byte, length)
+					_, err = conn.Read(_buf)
+
+					if err != nil {
+						fmt.Errorf("Error reading request body:%v", err.Error())
+					}
+					var received message.Message
+					received.Unmarshal(_buf)
+					req <- received
+					// Send a response back to person contacting us.
+					//conn.Write([]byte("Message received."))
+				}(c)
+			case <-time.After(1000.0 * time.Second):
+				fmt.Println("accepting time out..")
+			}
+		}
+	}()
 	return req, nil
 }
 
