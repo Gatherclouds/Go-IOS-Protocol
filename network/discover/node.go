@@ -131,3 +131,17 @@ func (n *Node) FindNeighbours(ns []*Node) []*Node {
 	}
 	return neighbours
 }
+
+func xorDistance(one, other NodeID) (ret int) {
+	oneBytes := []byte(one)
+	otherBytes := []byte(other)
+	for i := 0; i < len(oneBytes); i++ {
+		xor := oneBytes[i] ^ otherBytes[i]
+		for j := 0; j < 8; j++ {
+			if (xor>>uint8(7-j))&0x01 != 0 {
+				return i*8 + j
+			}
+		}
+	}
+	return len(oneBytes) * 8
+}
