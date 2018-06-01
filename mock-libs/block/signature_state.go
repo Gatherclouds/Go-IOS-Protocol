@@ -12,16 +12,6 @@ type SignatureState struct {
 	max_recursion int
 }
 
-func (this *SignatureState) check_authority(id AccountIdType) bool {
-
-	findid, exist := this.approved_by[id]
-	if exist {
-		return true
-	} else {
-		return check_authority_by_authority(get_active(id), 0)
-	}
-}
-
 func (this *SignatureState) check_authority_by_authority(au *AuthorityType, depth int) bool {
 	if au == nil {
 		return false
