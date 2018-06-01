@@ -10,10 +10,6 @@ func make_left_canon(v DigestType) DigestType {
 	return cleft
 }
 
-func is_right_canon(v DigestType) bool {
-	return !!(v.hash[0] & 0x80)
-}
-
 //merge together to make a merkle tree
 func merkle(ids []DigestType) DigestType {
 	if len(ids) == 0 {

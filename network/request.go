@@ -1,5 +1,7 @@
 package network
 
+import "time"
+
 type NetReqType int16
 
 const (
@@ -23,4 +25,19 @@ func isNetVersionMatch(buf []byte) bool {
 			buf[3] == NET_VERSION[3]
 	}
 	return false
+}
+
+func newRequest(typ NetReqType, from string, data []byte) *Request {
+	r := &Request{
+		Version:   NET_VERSION,
+		Timestamp: time.Now().UnixNano(),
+		Type:      typ,
+		FromLen:   int16(len(from)),
+		From:      []byte(from),
+		Body:      data,
+	}
+	//len(timestamp) + len(type) + len(fromLen) + len(from) + len(body)
+	r.Length = int32(8 + 2 + 2 + len(r.From) + len(data))
+
+	return r
 }
