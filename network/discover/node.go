@@ -5,6 +5,7 @@ import (
 	"time"
 	"Go-IOS-Protocol/common"
 	"errors"
+	"strconv"
 )
 
 type NodeID string
@@ -58,4 +59,12 @@ func (n *Node) validateComplete() error {
 		return errors.New("invalid IP (multicast/unspecified)")
 	}
 	return nil
+}
+
+func (n *Node) String() string {
+	return string(n.ID) + "@" + n.IP.String() + ":" + strconv.Itoa(int(n.TCP))
+}
+
+func (n *Node) Addr() string {
+	return n.IP.String() + ":" + strconv.Itoa(int(n.TCP))
 }
