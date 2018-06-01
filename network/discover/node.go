@@ -6,6 +6,7 @@ import (
 	"Go-IOS-Protocol/common"
 	"errors"
 	"strconv"
+	"fmt"
 )
 
 type NodeID string
@@ -67,4 +68,14 @@ func (n *Node) String() string {
 
 func (n *Node) Addr() string {
 	return n.IP.String() + ":" + strconv.Itoa(int(n.TCP))
+}
+
+// NodeID prints as a long hexadecimal number.
+func (n NodeID) String() string {
+	return fmt.Sprintf("%s", string(n))
+}
+
+func GenNodeId() NodeID {
+	id := common.ToHex(common.Sha256(common.Int64ToBytes(time.Now().UnixNano())))
+	return NodeID(id)
 }
