@@ -5,7 +5,7 @@ import (
 	"Go-IOS-Protocol/common/mclock"
 	"log"
 	"os"
-
+	"sync"
 	"Go-IOS-Protocol/network/discover"
 )
 
@@ -33,6 +33,13 @@ func newPeer(conn net.Conn, local, remote string) *Peer {
 		created: mclock.Now(),
 		closed:  make(chan struct{}),
 	}
+}
+
+// peerSet represents the collection of active peers
+type peerSet struct {
+	peers  map[string]*Peer
+	lock   sync.RWMutex
+	closed bool
 }
 
 func (ps *peerSet) Get(node *discover.Node) *Peer {
