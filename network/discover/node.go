@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"fmt"
 	"strings"
+	"sort"
 )
 
 type NodeID string
@@ -97,4 +98,36 @@ func ParseNode(nodeStr string) (node *Node, err error) {
 	node.TCP = uint16(tcp)
 	return node, nil
 
+}
+
+const MaxNeighbourNum = 8
+
+func (n *Node) FindNeighbours(ns []*Node) []*Node {
+	if len(ns) < MaxNeighbourNum {
+		return ns
+	}
+	neighbours := make([]*Node, 0)
+	disArr := make([]int, len(ns))
+	for k, v := range ns {
+		disArr[k] = xorDistance(n.ID, v.ID)
+	}
+	sortArr := make([]int, len(ns))
+	copy(sortArr, disArr)
+	sort.Ints(sortArr)
+
+	neighbourKeys := make(map[int]int, 0)
+	for _, v := range sortArr {
+		for k, vd := range disArr {
+			if _, ok := neighbourKeys[k]; !ok && v == vd && len(neighbourKeys) < MaxNeighbourNum {
+				neighbourKeys[k] = 0
+			}
+		}
+	}
+	for k, _ := range neighbourKeys {
+		if len(neighbours) >= MaxNeighbourNum {
+			break
+		}
+		neighbours = append(neighbours, ns[k])
+	}
+	return neighbours
 }

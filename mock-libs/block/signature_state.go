@@ -19,7 +19,7 @@ func (this *SignatureState) signed_by_address(add AddressType) bool {
 	ak := this.available_keys
 
 	itr, exist := ps[add]
-	
+
 	provided_signatures[itr.value] = true
 	return true
 }
