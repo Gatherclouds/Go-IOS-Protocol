@@ -4,12 +4,6 @@ import (
 	"crypto"
 )
 
-func make_left_canon(v DigestType) DigestType {
-	cleft := v
-	cleft.hash[0] &= (^uint(0) - 0x80)
-	return cleft
-}
-
 //merge together to make a merkle tree
 func merkle(ids []DigestType) DigestType {
 	if len(ids) == 0 {

@@ -41,3 +41,16 @@ func newRequest(typ NetReqType, from string, data []byte) *Request {
 
 	return r
 }
+
+func (r *Request) Pack() ([]byte, error) {
+	var err error
+	buf := new(bytes.Buffer)
+	err = binary.Write(buf, binary.BigEndian, &r.Version)
+	err = binary.Write(buf, binary.BigEndian, &r.Length)
+	err = binary.Write(buf, binary.BigEndian, &r.Timestamp)
+	err = binary.Write(buf, binary.BigEndian, &r.Type)
+	err = binary.Write(buf, binary.BigEndian, &r.FromLen)
+	err = binary.Write(buf, binary.BigEndian, &r.From)
+	err = binary.Write(buf, binary.BigEndian, &r.Body)
+	return buf.Bytes(), err
+}
