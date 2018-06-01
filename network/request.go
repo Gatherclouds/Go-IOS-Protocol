@@ -1,6 +1,10 @@
 package network
 
-import "time"
+import (
+	"time"
+	"bytes"
+	"encoding/binary"
+)
 
 type NetReqType int16
 
@@ -14,6 +18,17 @@ const (
 	ReqNodeTable
 	NodeTable
 )
+
+// Request data structure exchanged by nodes
+type Request struct {
+	Version   [4]byte
+	Length    int32 // length of request
+	Timestamp int64
+	Type      NetReqType
+	FromLen   int16
+	From      []byte
+	Body      []byte
+}
 
 var NET_VERSION = [4]byte{'i', 'o', 's', 't'}
 
