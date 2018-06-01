@@ -7,6 +7,7 @@ import (
 	"errors"
 	"strconv"
 	"fmt"
+	"strings"
 )
 
 type NodeID string
@@ -78,4 +79,22 @@ func (n NodeID) String() string {
 func GenNodeId() NodeID {
 	id := common.ToHex(common.Sha256(common.Int64ToBytes(time.Now().UnixNano())))
 	return NodeID(id)
+}
+
+func ParseNode(nodeStr string) (node *Node, err error) {
+	node = &Node{}
+	nodeIdStrs := strings.Split(nodeStr, "@")
+	if len(nodeIdStrs) < 2 {
+		return node, fmt.Errorf("miss nodeId")
+	}
+	node.ID = NodeID(nodeIdStrs[0])
+	tcpStr := strings.Split(nodeIdStrs[1], ":")
+	node.IP = net.ParseIP(tcpStr[0])
+	tcp, err := strconv.Atoi(tcpStr[1])
+	if err != nil {
+		return
+	}
+	node.TCP = uint16(tcp)
+	return node, nil
+
 }
