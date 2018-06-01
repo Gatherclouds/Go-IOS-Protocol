@@ -69,3 +69,17 @@ func (r *Request) Pack() ([]byte, error) {
 	err = binary.Write(buf, binary.BigEndian, &r.Body)
 	return buf.Bytes(), err
 }
+
+//handle broadcast node's height
+func (r *Request) msgHandle(net *BaseNetwork) {
+	msg := &message.Message{}
+	if _, err := msg.Unmarshal(r.Body); err == nil {
+		switch msg.ReqType {
+		case int32(RecvBlockHeight):
+			var rh message.ResponseHeight
+			rh.Decode(msg.Body)
+			net.SetNodeHeightMap(string(r.From), rh.BlockHeight)
+		default:
+		}
+	}
+}
