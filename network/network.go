@@ -538,3 +538,14 @@ func (bn *BaseNetwork) findNeighbours() {
 		bn.setNeighbour(n)
 	}
 }
+
+//Download block by height from which node in NodeHeightMap
+func (bn *BaseNetwork) Download(start, end uint64) error {
+	bn.lock.Lock()
+	for i := start; i <= end; i++ {
+		bn.DownloadHeights[i] = 0
+	}
+	bn.lock.Unlock()
+	
+	return nil
+}
