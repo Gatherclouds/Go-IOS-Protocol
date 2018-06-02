@@ -39,3 +39,13 @@ func testBootNodeConn() {
 	fmt.Println("conn to remote success!")
 }
 
+//CancelDownload cancel downloading block with height between start and end
+func (bn *BaseNetwork) CancelDownload(start, end uint64) error {
+	bn.lock.Lock()
+	defer bn.lock.Unlock()
+	for ; start <= end; start++ {
+		delete(bn.DownloadHeights, start)
+	}
+	return nil
+}
+
