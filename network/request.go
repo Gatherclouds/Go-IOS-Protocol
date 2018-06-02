@@ -5,6 +5,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"Go-IOS-Protocol/core/message"
+	"strings"
+	"net"
 )
 
 type NetReqType int16
@@ -82,5 +84,53 @@ func (r *Request) msgHandle(net *BaseNetwork) {
 			net.SetNodeHeightMap(string(r.From), rh.BlockHeight)
 		default:
 		}
+	}
+}
+
+func (r *Request) handle(base *BaseNetwork, conn net.Conn) {
+	switch r.Type {
+	case Message:
+		appReq := &message.Message{}
+		if _, err := appReq.Unmarshal(r.Body); err == nil {
+			base.log.D("[net] msg from =%v, to = %v, typ = %v,  ttl = %v", appReq.From, appReq.To, appReq.ReqType, appReq.TTL)
+			base.RecvCh <- *appReq
+		} else {
+			base.log.E("[net] failed to unmarshal recv msg:%v, err:%v", r, err)
+		}
+		if er := base.send(conn, newRequest(MessageReceived, base.localNode.String(), common.Int64ToBytes(r.Timestamp))); er != nil {
+			conn.Close()
+		}
+		r.msgHandle(base)
+	case MessageReceived:
+		base.log.D("[net] MessageReceived: %v", string(r.From), common.BytesToInt64(r.Body))
+	case BroadcastMessage:
+		appReq := &message.Message{}
+		if _, err := appReq.Unmarshal(r.Body); err == nil {
+			base.log.D("[net] msg from =%v, to = %v, typ = %v,  ttl = %v", appReq.From, appReq.To, appReq.ReqType, appReq.TTL)
+			if appReq.ReqType == int32(ReqBlockHeight) {
+				appReq.From = string(r.From)
+			}
+			base.RecvCh <- *appReq
+			base.Broadcast(*appReq)
+		}
+		r.msgHandle(base)
+	case BroadcastMessageReceived:
+		//request for nodeTable
+	case ReqNodeTable:
+		base.putNode(string(r.From))
+		base.peers.SetAddr(string(r.From), newPeer(conn, base.localNode.String(), conn.RemoteAddr().String()))
+		addrs, err := base.AllNodesExcludeAddr(string(r.From))
+		if err != nil {
+			base.log.E("[net] failed to nodetable ", err)
+		}
+		req := newRequest(NodeTable, base.localNode.String(), []byte(strings.Join(addrs, ",")))
+		if er := base.send(conn, req); er != nil {
+			conn.Close()
+		}
+		//got nodeTable and save
+	case NodeTable:
+		base.putNode(string(r.Body))
+	default:
+		base.log.E("[net] wrong request :", r)
 	}
 }
