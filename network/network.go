@@ -18,6 +18,7 @@ import (
 	"strings"
 	"Go-IOS-Protocol/common"
 	"Go-IOS-Protocol/params"
+	"bufio"
 )
 
 type RequestHead struct {
@@ -421,6 +422,35 @@ func (bn *BaseNetwork) send(conn net.Conn, r *Request) error {
 		bn.log.E("[net] conn write got err:%v", err)
 	}
 	return err
+}
+
+func (bn *BaseNetwork) receiveLoop(conn net.Conn) {
+	defer conn.Close()
+	for {
+		scanner := bufio.NewScanner(conn)
+		scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+			if !atEOF && isNetVersionMatch(data) {
+				if len(data) > 8 {
+					length := int32(0)
+					binary.Read(bytes.NewReader(data[4:8]), binary.BigEndian, &length)
+					if int(length)+8 <= len(data) {
+						return int(length) + 8, data[:int(length)+8], nil
+					}
+				}
+			}
+			return
+		})
+		for scanner.Scan() {
+			req := new(Request)
+			req.Unpack(bytes.NewReader(scanner.Bytes()))
+			req.handle(bn, conn)
+		}
+		if err := scanner.Err(); err != nil {
+			bn.log.E("[net] invalid data packets: %v", err)
+			return
+		}
+	}
+	bn.log.D("[net] recieve loop finish..")
 }
 
 //put node into node table of server
