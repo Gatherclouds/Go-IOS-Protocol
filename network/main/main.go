@@ -49,3 +49,15 @@ func (bn *BaseNetwork) CancelDownload(start, end uint64) error {
 	return nil
 }
 
+//sendTo send request to the address
+func (bn *BaseNetwork) sendTo(addr string, req *Request) {
+	conn, err := bn.dial(addr)
+	if err != nil {
+		bn.log.E("[net] dial tcp got err:%v", err)
+		return
+	}
+	if er := bn.send(conn, req); er != nil {
+		bn.peers.RemoveByNodeStr(addr)
+	}
+}
+
