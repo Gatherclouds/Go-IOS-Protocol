@@ -546,6 +546,31 @@ func (bn *BaseNetwork) Download(start, end uint64) error {
 		bn.DownloadHeights[i] = 0
 	}
 	bn.lock.Unlock()
-	
+	for retry := 0; retry < MaxDownloadRetry; retry++ {
+		wg := sync.WaitGroup{}
+		time.Sleep(time.Duration(retry) * time.Second)
+		for downloadHeight, retryTimes := range bn.DownloadHeights {
+			if retryTimes > MaxDownloadRetry {
+				continue
+			}
+			msg := message.Message{
+				Body:    common.Uint64ToBytes(downloadHeight),
+				ReqType: int32(ReqDownloadBlock),
+				TTL:     MsgMaxTTL,
+				From:    bn.localNode.String(),
+				Time:    time.Now().UnixNano(),
+			}
+			bn.log.D("[net] download height = %v  nodeMap = %v", downloadHeight, bn.NodeHeightMap)
+			bn.lock.Lock()
+			bn.DownloadHeights[downloadHeight] = retryTimes + 1
+			bn.lock.Unlock()
+			wg.Add(1)
+			go func() {
+				bn.Broadcast(msg)
+				wg.Done()
+			}()
+		}
+		wg.Wait()
+	}
 	return nil
 }
