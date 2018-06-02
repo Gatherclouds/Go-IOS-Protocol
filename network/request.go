@@ -9,6 +9,7 @@ import (
 	"net"
 	"fmt"
 	"Go-IOS-Protocol/common"
+	"io"
 )
 
 type NetReqType int16
@@ -73,6 +74,20 @@ func (r *Request) Pack() ([]byte, error) {
 	err = binary.Write(buf, binary.BigEndian, &r.From)
 	err = binary.Write(buf, binary.BigEndian, &r.Body)
 	return buf.Bytes(), err
+}
+
+func (r *Request) Unpack(reader io.Reader) error {
+	var err error
+	err = binary.Read(reader, binary.BigEndian, &r.Version)
+	err = binary.Read(reader, binary.BigEndian, &r.Length)
+	err = binary.Read(reader, binary.BigEndian, &r.Timestamp)
+	err = binary.Read(reader, binary.BigEndian, &r.Type)
+	err = binary.Read(reader, binary.BigEndian, &r.FromLen)
+	r.From = make([]byte, r.FromLen)
+	err = binary.Read(reader, binary.BigEndian, &r.From)
+	r.Body = make([]byte, r.Length-8-2-2-int32(r.FromLen))
+	err = binary.Read(reader, binary.BigEndian, &r.Body)
+	return err
 }
 
 func (r *Request) String() string {
