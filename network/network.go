@@ -524,3 +524,17 @@ func (bn *BaseNetwork) registerLoop() {
 		time.Sleep(CheckKnownNodeInterval * time.Second)
 	}
 }
+
+//findNeighbours find neighbour nodes in the node table
+func (bn *BaseNetwork) findNeighbours() {
+	nodesStr, _ := bn.AllNodesExcludeAddr(bn.localNode.String())
+	nodes := make([]*discover.Node, 0)
+	for _, nodeStr := range nodesStr {
+		node, _ := discover.ParseNode(nodeStr)
+		nodes = append(nodes, node)
+	}
+	neighbours := bn.localNode.FindNeighbours(nodes)
+	for _, n := range neighbours {
+		bn.setNeighbour(n)
+	}
+}
