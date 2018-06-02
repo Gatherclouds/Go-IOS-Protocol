@@ -7,6 +7,8 @@ import (
 	"Go-IOS-Protocol/core/message"
 	"strings"
 	"net"
+	"fmt"
+	"Go-IOS-Protocol/common"
 )
 
 type NetReqType int16
@@ -73,18 +75,15 @@ func (r *Request) Pack() ([]byte, error) {
 	return buf.Bytes(), err
 }
 
-//handle broadcast node's height
-func (r *Request) msgHandle(net *BaseNetwork) {
-	msg := &message.Message{}
-	if _, err := msg.Unmarshal(r.Body); err == nil {
-		switch msg.ReqType {
-		case int32(RecvBlockHeight):
-			var rh message.ResponseHeight
-			rh.Decode(msg.Body)
-			net.SetNodeHeightMap(string(r.From), rh.BlockHeight)
-		default:
-		}
-	}
+func (r *Request) String() string {
+	return fmt.Sprintf("version:%s length:%d type:%d timestamp:%s from:%s Body:%v",
+		r.Version,
+		r.Length,
+		r.Type,
+		time.Unix(r.Timestamp/1e9, r.Timestamp%1e9).Format("2006-01-02 15:04:05"),
+		r.From,
+		r.Body,
+	)
 }
 
 func (r *Request) handle(base *BaseNetwork, conn net.Conn) {
