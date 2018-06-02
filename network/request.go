@@ -4,6 +4,7 @@ import (
 	"time"
 	"bytes"
 	"encoding/binary"
+	"Go-IOS-Protocol/core/message"
 )
 
 type NetReqType int16

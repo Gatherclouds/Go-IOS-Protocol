@@ -406,6 +406,23 @@ func (bn *BaseNetwork) Close(port uint16) error {
 	return nil
 }
 
+func (bn *BaseNetwork) send(conn net.Conn, r *Request) error {
+	if conn == nil {
+		bn.log.E("[net] from %v,send data = %v, conn is nil", bn.localNode.String(), r)
+		return nil
+	}
+	pack, err := r.Pack()
+	if err != nil {
+		bn.log.E("[net] pack data encountered err:%v", err)
+		return nil
+	}
+	_, err = conn.Write(pack)
+	if err != nil {
+		bn.log.E("[net] conn write got err:%v", err)
+	}
+	return err
+}
+
 //put node into node table of server
 func (bn *BaseNetwork) putNode(addrs string) {
 	addrArr := strings.Split(addrs, ",")
