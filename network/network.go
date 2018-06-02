@@ -453,6 +453,28 @@ func (bn *BaseNetwork) receiveLoop(conn net.Conn) {
 	bn.log.D("[net] recieve loop finish..")
 }
 
+//AllNodesExcludeAddr returns all the known node in the network
+func (bn *BaseNetwork) AllNodesExcludeAddr(excludeAddr string) ([]string, error) {
+	if bn.nodeTable == nil {
+		return nil, nil
+	}
+	addrs := make([]string, 0)
+	iter := bn.nodeTable.NewIterator()
+	for iter.Next() {
+		addr := string(iter.Key())
+		if addr != excludeAddr {
+			addrs = append(addrs, addr)
+		}
+	}
+	iter.Release()
+	if err := iter.Error(); err != nil {
+		return nil, err
+	}
+
+	return addrs, nil
+}
+
+
 //put node into node table of server
 func (bn *BaseNetwork) putNode(addrs string) {
 	addrArr := strings.Split(addrs, ",")
