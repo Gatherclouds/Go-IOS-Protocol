@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"math/rand"
+	"time"
 )
 
 var serverAddr = flag.String("s", "", "server port 30304, or other ports that have already started.")
@@ -39,25 +41,4 @@ func testBootNodeConn() {
 	fmt.Println("conn to remote success!")
 }
 
-//CancelDownload cancel downloading block with height between start and end
-func (bn *BaseNetwork) CancelDownload(start, end uint64) error {
-	bn.lock.Lock()
-	defer bn.lock.Unlock()
-	for ; start <= end; start++ {
-		delete(bn.DownloadHeights, start)
-	}
-	return nil
-}
-
-//sendTo send request to the address
-func (bn *BaseNetwork) sendTo(addr string, req *Request) {
-	conn, err := bn.dial(addr)
-	if err != nil {
-		bn.log.E("[net] dial tcp got err:%v", err)
-		return
-	}
-	if er := bn.send(conn, req); er != nil {
-		bn.peers.RemoveByNodeStr(addr)
-	}
-}
 

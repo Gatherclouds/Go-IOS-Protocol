@@ -19,6 +19,7 @@ import (
 	"Go-IOS-Protocol/common"
 	"Go-IOS-Protocol/params"
 	"bufio"
+	"math/rand"
 )
 
 type RequestHead struct {
@@ -585,4 +586,55 @@ func (bn *BaseNetwork) Download(start, end uint64) error {
 		wg.Wait()
 	}
 	return nil
+}
+
+//CancelDownload cancel downloading block with height between start and end
+func (bn *BaseNetwork) CancelDownload(start, end uint64) error {
+	bn.lock.Lock()
+	defer bn.lock.Unlock()
+	for ; start <= end; start++ {
+		delete(bn.DownloadHeights, start)
+	}
+	return nil
+}
+
+//sendTo send request to the address
+func (bn *BaseNetwork) sendTo(addr string, req *Request) {
+	conn, err := bn.dial(addr)
+	if err != nil {
+		bn.log.E("[net] dial tcp got err:%v", err)
+		return
+	}
+	if er := bn.send(conn, req); er != nil {
+		bn.peers.RemoveByNodeStr(addr)
+	}
+}
+
+//SetNodeHeightMap ...
+func (bn *BaseNetwork) SetNodeHeightMap(nodeStr string, height uint64) {
+	bn.lock.Lock()
+	defer bn.lock.Unlock()
+	bn.NodeHeightMap[nodeStr] = height
+}
+
+//GetNodeHeightMap ...
+func (bn *BaseNetwork) GetNodeHeightMap(nodeStr string) uint64 {
+	bn.lock.RLock()
+	defer bn.lock.RUnlock()
+	return bn.NodeHeightMap[nodeStr]
+}
+
+func randNodeMatchHeight(m map[string]uint64, downloadHeight uint64) (targetNode string) {
+	rand.Seed(time.Now().UnixNano())
+	matchNum := 1
+	for nodeStr, height := range m {
+		if height >= downloadHeight {
+			randNum := rand.Int31n(int32(matchNum))
+			if randNum == 0 {
+				targetNode = nodeStr
+			}
+			matchNum++
+		}
+	}
+	return targetNode
 }
