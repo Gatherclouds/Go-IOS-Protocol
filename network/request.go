@@ -134,3 +134,17 @@ func (r *Request) handle(base *BaseNetwork, conn net.Conn) {
 		base.log.E("[net] wrong request :", r)
 	}
 }
+
+//handle broadcast node's height
+func (r *Request) msgHandle(net *BaseNetwork) {
+	msg := &message.Message{}
+	if _, err := msg.Unmarshal(r.Body); err == nil {
+		switch msg.ReqType {
+		case int32(RecvBlockHeight):
+			var rh message.ResponseHeight
+			rh.Decode(msg.Body)
+			net.SetNodeHeightMap(string(r.From), rh.BlockHeight)
+		default:
+		}
+	}
+}
