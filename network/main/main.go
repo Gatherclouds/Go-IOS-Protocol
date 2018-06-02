@@ -4,8 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"net"
-	"math/rand"
-	"time"
+	"Go-IOS-Protocol/network/discover"
 )
 
 var serverAddr = flag.String("s", "", "server port 30304, or other ports that have already started.")
