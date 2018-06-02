@@ -539,6 +539,18 @@ func (bn *BaseNetwork) findNeighbours() {
 	}
 }
 
+func (bn *BaseNetwork) setNeighbour(node *discover.Node) {
+	bn.lock.Lock()
+	defer bn.lock.Unlock()
+	bn.neighbours[node.String()] = node
+}
+
+func (bn *BaseNetwork) delNeighbour(nodeStr string) {
+	bn.lock.Lock()
+	defer bn.lock.Unlock()
+	delete(bn.neighbours, nodeStr)
+}
+
 //Download block by height from which node in NodeHeightMap
 func (bn *BaseNetwork) Download(start, end uint64) error {
 	bn.lock.Lock()

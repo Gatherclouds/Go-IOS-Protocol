@@ -16,12 +16,3 @@ func (this *ProposalUpdate) get_actives(a []AccountIdType) {
 		a.append(i)
 	}
 }
-
-func (this *ProposalUpdate) get_owners(a []AccountIdType) {
-	for i := range this.approvals_to_add.owner {
-		a.append(i)
-	}
-	for i := range this.approvals_to_remove.owner {
-		a.append(i)
-	}
-}
