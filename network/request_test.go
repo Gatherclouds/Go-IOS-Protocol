@@ -24,6 +24,22 @@ func TestRequest_Unpack(t *testing.T) {
 		// scanner
 		reader(buf, readerCh)
 		i := 0
+		for {
+			select {
+			case req := <-readerCh:
+				if len(req.Body) > 0 {
+					So(common.BytesToInt64(req.Body), ShouldEqual, tim)
+					i++
+				}
+				if i == 3 {
+					return
+				}
+			case <-time.After(1 * time.Second):
+				So("timeout", ShouldEqual, "")
+				break
+
+			}
+		}
 
 	})
 }
