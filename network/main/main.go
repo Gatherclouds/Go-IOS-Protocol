@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"Go-IOS-Protocol/network/discover"
+	"Go-IOS-Protocol/core/message"
 )
 
 var serverAddr = flag.String("s", "", "server port 30304, or other ports that have already started.")
@@ -61,4 +62,37 @@ func bootnodeStart() {
 	go router.Run()
 	fmt.Println("server starting", node.Addr())
 	select {}
+}
+
+//Filter The filter used by Router
+// Rulers :
+//     1. if both white list and black list are nil, this filter is all-pass
+//     2. if one of those is not nil, filter as it is
+//     3. if both of those list are not nil, filter as white list
+type Filter struct {
+	WhiteList  []message.Message
+	BlackList  []message.Message
+	RejectType []ReqType
+	AcceptType []ReqType
+}
+
+func (f *Filter) check(req message.Message) bool {
+	var memberCheck, typeCheck byte
+	if f.WhiteList == nil && f.BlackList == nil {
+		memberCheck = byte(0)
+	} else if f.WhiteList != nil {
+		memberCheck = byte(1)
+	} else {
+		memberCheck = byte(2)
+	}
+	if f.AcceptType == nil && f.RejectType == nil {
+		typeCheck = byte(0)
+	} else if f.AcceptType != nil {
+		typeCheck = byte(1)
+	} else {
+		typeCheck = byte(2)
+	}
+
+
+	return m && t
 }
