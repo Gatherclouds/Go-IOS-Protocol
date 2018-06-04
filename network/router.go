@@ -121,6 +121,19 @@ func (r *RouterImpl) receiveLoop() {
 	}
 }
 
+func (r *RouterImpl) Run() {
+	go r.receiveLoop()
+}
+
+func (r *RouterImpl) Stop() {
+	r.ExitSignal <- true
+}
+
+func (r *RouterImpl) Send(req message.Message) {
+	req.TTL = MsgMaxTTL
+	r.base.Send(req)
+}
+
 // Broadcast to all known members
 func (r *RouterImpl) Broadcast(req message.Message) {
 	req.TTL = MsgMaxTTL
