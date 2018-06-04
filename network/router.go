@@ -32,4 +32,28 @@ type Router interface {
 var Route Router
 var once sync.Once
 
+//GetInstance get singleton of network, [NOTE] conf.ListenAddr = your ip, port = !30304
+func GetInstance(conf *NetConifg, target string, port uint16) (Router, error) {
+	var err error
+	once.Do(func() {
+		baseNet, er := NewBaseNetwork(conf)
+		if er != nil {
+			err = er
+			return
+		}
+		if target == "" {
+			target = "base"
+		}
+		Route, err = RouterFactory(target)
+		if err != nil {
+			return
+		}
+		err = Route.Init(baseNet, port)
+		if err != nil {
+			return
+		}
+		Route.Run()
+	})
+	return Route, err
+}
 
