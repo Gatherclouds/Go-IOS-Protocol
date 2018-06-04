@@ -80,3 +80,44 @@ type RouterImpl struct {
 	port uint16
 }
 
+func (r *RouterImpl) Init(base Network, port uint16) error {
+	var err error
+	r.base = base
+	r.filterList = make([]Filter, 0)
+	r.filterMap = make(map[int]chan message.Message)
+	r.knownMember = make([]string, 0)
+	r.ExitSignal = make(chan bool)
+	r.port = port
+	r.chIn, err = r.base.Listen(port)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//FilteredChan Get filtered request channel
+func (r *RouterImpl) FilteredChan(filter Filter) (chan message.Message, error) {
+	chReq := make(chan message.Message, 100)
+
+	r.filterList = append(r.filterList, filter)
+	r.filterMap[len(r.filterList)-1] = chReq
+
+	return chReq, nil
+}
+
+func (r *RouterImpl) receiveLoop() {
+	for true {
+		select {
+		case <-r.ExitSignal:
+			r.base.Close(r.port)
+			return
+		case req := <-r.chIn:
+			for i, f := range r.filterList {
+				if f.check(req) {
+					r.filterMap[i] <- req
+				}
+			}
+		}
+	}
+}
+
