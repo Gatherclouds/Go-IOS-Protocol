@@ -4,10 +4,6 @@ import (
 	"crypto"
 )
 
-func (this *BlockHeader) b_digest() DigestType {
-	return make(DigestType(this))
-}
-
 func (this *BlockHeader) b_id() BlockIdType {
 	this_hash := crypto.sha224.hash(this)
 	this_hash.hash[0] = crypto.reverse(this.block_num)
