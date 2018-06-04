@@ -3,6 +3,7 @@ package network
 import (
 	"sync"
 	"Go-IOS-Protocol/core/message"
+	"fmt"
 )
 
 type ReqType int32
@@ -55,5 +56,27 @@ func GetInstance(conf *NetConifg, target string, port uint16) (Router, error) {
 		Route.Run()
 	})
 	return Route, err
+}
+
+func RouterFactory(target string) (Router, error) {
+	switch target {
+	case "base":
+		return &RouterImpl{}, nil
+	}
+	return nil, fmt.Errorf("target Router not found")
+}
+
+type RouterImpl struct {
+	base Network
+
+	chIn  <-chan message.Message
+	chOut chan<- message.Message
+
+	filterList  []Filter
+	filterMap   map[int]chan message.Message
+	knownMember []string
+	ExitSignal  chan bool
+
+	port uint16
 }
 
