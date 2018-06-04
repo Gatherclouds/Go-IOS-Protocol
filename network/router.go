@@ -126,3 +126,12 @@ func (r *RouterImpl) Broadcast(req message.Message) {
 	req.TTL = MsgMaxTTL
 	r.base.Broadcast(req)
 }
+
+//download block with height >= start && height <= end
+func (r *RouterImpl) Download(start uint64, end uint64) error {
+	fmt.Println("sync:", start, end)
+	if end < start {
+		return fmt.Errorf("end should be greater than start")
+	}
+	return r.base.Download(start, end)
+}
