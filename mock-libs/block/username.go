@@ -13,7 +13,3 @@ func (this *NameType) set(str string) {
 	this.name = str
 }
 
-func (this *NameType) is_valid_char(c rune) {
-	str_map := tools.VALID_USERNAME
-	return str_map[c]
-}

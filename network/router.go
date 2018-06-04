@@ -135,3 +135,8 @@ func (r *RouterImpl) Download(start uint64, end uint64) error {
 	}
 	return r.base.Download(start, end)
 }
+
+//CancelDownload cancel download
+func (r *RouterImpl) CancelDownload(start uint64, end uint64) error {
+	return r.base.CancelDownload(start, end)
+}
