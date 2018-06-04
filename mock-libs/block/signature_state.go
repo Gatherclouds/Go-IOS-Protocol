@@ -61,15 +61,3 @@ func (this *SignatureState) check_authority_by_authority(au *AuthorityType, dept
 	return total_weight >= auth.weight_threshold
 }
 
-func (this *SignatureState) remove_unused_signatures() bool {
-	var remove_sigs []PublicKeyType
-	for sig := range this.provided_signatures {
-		if !sig.value {
-			remove_sigs = append(remove_sigs, sig.key)
-		}
-	}
-	for sig := range remove_sigs {
-		this.provided_signatures.delete(sig)
-	}
-	return remove_sigs.len != 0
-}
