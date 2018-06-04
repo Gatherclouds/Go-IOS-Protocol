@@ -13,6 +13,6 @@ func (this *BlockHeader) b_id() BlockIdType {
 }
 
 	var ids []DigestType
-	
+
 	return make(ChecksumType(crypto.make_hash(ids[0])))
 }

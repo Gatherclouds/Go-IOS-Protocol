@@ -121,3 +121,8 @@ func (r *RouterImpl) receiveLoop() {
 	}
 }
 
+// Broadcast to all known members
+func (r *RouterImpl) Broadcast(req message.Message) {
+	req.TTL = MsgMaxTTL
+	r.base.Broadcast(req)
+}
