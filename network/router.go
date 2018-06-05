@@ -153,3 +153,15 @@ func (r *RouterImpl) Download(start uint64, end uint64) error {
 func (r *RouterImpl) CancelDownload(start uint64, end uint64) error {
 	return r.base.CancelDownload(start, end)
 }
+
+//Filter The filter used by Router
+// Rulers :
+//     1. if both white list and black list are nil, this filter is all-pass
+//     2. if one of those is not nil, filter as it is
+//     3. if both of those list are not nil, filter as white list
+type Filter struct {
+	WhiteList  []message.Message
+	BlackList  []message.Message
+	RejectType []ReqType
+	AcceptType []ReqType
+}
