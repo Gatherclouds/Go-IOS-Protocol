@@ -4,9 +4,6 @@ func (this *AssetDataStructure) max_settle_volume(supply ShareType) ShareType {
 	if this.max_settle_volume == 0 {
 		return 0
 	}
-	if this.max_settle_volume == this.MAX {
-		return supply + this.settle_volume.value
-	}
 	volume := supply.value + this.settle_volume.value
 	volume *= this.max_settle_volume
 	volume /= this.MAX
@@ -27,11 +24,6 @@ func (this *AssetDataStructure) update_median_feeds(ctime SecondType) int {
 	if len(cfeed) < this.minimum_feeds {
 		this.cfeed_publication_time = ctime
 		cfeed = make(PriceType)
-		return 0
-	}
-
-	if len(cfeed) == 1 {
-		cfeed = move(cfeed.front())
 		return 0
 	}
 

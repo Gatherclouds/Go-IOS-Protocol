@@ -18,6 +18,6 @@ func (this *AssetObj) amount_from_string(amount string) AssetType {
 		for len(rhs) < max_rhs {
 			rhs += '0'
 		}
-	
+
 	return make(amount, answer)
 }
