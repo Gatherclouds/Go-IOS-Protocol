@@ -12,6 +12,15 @@ var (
 	_ = time.Now()
 )
 
+type Message struct {
+	Time    int64
+	From    string
+	To      string
+	ReqType int32
+	TTL     int8
+	Body    []byte
+}
+
 type UTXO struct {
 	BirthTxHash []byte
 	Value       int64
