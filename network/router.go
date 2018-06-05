@@ -205,3 +205,22 @@ func (f *Filter) check(req message.Message) bool {
 
 	return m && t
 }
+
+func memberContain(a string, c []message.Message) bool {
+	for _, m := range c {
+		if m.From == a {
+			return true
+		}
+	}
+	return false
+}
+
+func reqTypeContain(a int32, c []ReqType) bool {
+	for _, t := range c {
+		if int32(t) == a {
+			return true
+		}
+	}
+	return false
+
+}
