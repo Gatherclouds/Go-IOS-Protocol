@@ -1,10 +1,5 @@
 package asset
 
-import (
-	"math"
-	"strconv"
-)
-
 func (this *AssetObj) amount_from_string(amount string) AssetType {
 
 	negative := false
