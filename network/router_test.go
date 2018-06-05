@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"time"
+	"fmt"
 )
 
 func TestRouterImpl_Init(t *testing.T) {
@@ -39,3 +40,28 @@ func initNetConf() *NetConifg {
 	conf.SetListenAddr("0.0.0.0")
 	return conf
 }
+
+//start boot node
+func newBootRouters() []Router {
+	rs := make([]Router, 0)
+	for _, encodeAddr := range params.TestnetBootnodes {
+		node, err := discover.ParseNode(encodeAddr)
+		if err != nil {
+			fmt.Errorf("parse boot node got err:%v", err)
+		}
+		router, _ := RouterFactory("base")
+		conf := initNetConf()
+		conf.SetNodeID(string(node.ID))
+		baseNet, err := NewBaseNetwork(conf)
+		if err != nil {
+			fmt.Println("NewBaseNetwork ", err)
+		}
+		err = router.Init(baseNet, node.TCP)
+		if err != nil {
+			fmt.Println("Init ", err)
+		}
+		go router.Run()
+	}
+	return rs
+}
+
