@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"time"
 	"fmt"
+	"Go-IOS-Protocol/core/message"
+	"math/rand"
 )
 
 func TestRouterImpl_Init(t *testing.T) {
@@ -82,4 +84,22 @@ func newRouters(n int) []Router {
 	time.Sleep(15 * time.Second)
 
 	return rs
+}
+
+func broadcast(t *testing.T) {
+	height := uint64(32)
+	deltaHeight := uint64(5)
+
+	routers := newRouters(3)
+	net0 := routers[0].(*RouterImpl).base.(*BaseNetwork)
+	net1 := routers[1].(*RouterImpl).base.(*BaseNetwork)
+	net2 := routers[2].(*RouterImpl).base.(*BaseNetwork)
+
+	requestHeight := message.RequestHeight{LocalBlockHeight: height}
+	broadHeight := message.Message{
+		Body:    requestHeight.Encode(),
+		ReqType: int32(ReqBlockHeight),
+		From:    net2.localNode.String(),
+	}
+
 }
