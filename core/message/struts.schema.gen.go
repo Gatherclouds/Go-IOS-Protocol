@@ -72,7 +72,7 @@ func (d *Message) Size() (s uint64) {
 	return
 }
 
-func (d *UTXO) Marshal(buf []byte) ([]byte, error) {
+func (d *Message) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
 		if uint64(cap(buf)) >= size {
@@ -84,45 +84,26 @@ func (d *UTXO) Marshal(buf []byte) ([]byte, error) {
 	i := uint64(0)
 
 	{
-		l := uint64(len(d.BirthTxHash))
 
-		{
+		buf[0+0] = byte(d.Time >> 0)
 
-			t := uint64(l)
+		buf[1+0] = byte(d.Time >> 8)
 
-			for t >= 0x80 {
-				buf[i+0] = byte(t) | 0x80
-				t >>= 7
-				i++
-			}
-			buf[i+0] = byte(t)
-			i++
+		buf[2+0] = byte(d.Time >> 16)
 
-		}
-		copy(buf[i+0:], d.BirthTxHash)
-		i += l
-	}
-	{
+		buf[3+0] = byte(d.Time >> 24)
 
-		buf[i+0+0] = byte(d.Value >> 0)
+		buf[4+0] = byte(d.Time >> 32)
 
-		buf[i+1+0] = byte(d.Value >> 8)
+		buf[5+0] = byte(d.Time >> 40)
 
-		buf[i+2+0] = byte(d.Value >> 16)
+		buf[6+0] = byte(d.Time >> 48)
 
-		buf[i+3+0] = byte(d.Value >> 24)
-
-		buf[i+4+0] = byte(d.Value >> 32)
-
-		buf[i+5+0] = byte(d.Value >> 40)
-
-		buf[i+6+0] = byte(d.Value >> 48)
-
-		buf[i+7+0] = byte(d.Value >> 56)
+		buf[7+0] = byte(d.Time >> 56)
 
 	}
 	{
-		l := uint64(len(d.Script))
+		l := uint64(len(d.From))
 
 		{
 
@@ -137,11 +118,66 @@ func (d *UTXO) Marshal(buf []byte) ([]byte, error) {
 			i++
 
 		}
-		copy(buf[i+8:], d.Script)
+		copy(buf[i+8:], d.From)
 		i += l
 	}
-	return buf[:i+8], nil
+	{
+		l := uint64(len(d.To))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+8] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+8] = byte(t)
+			i++
+
+		}
+		copy(buf[i+8:], d.To)
+		i += l
+	}
+	{
+
+		buf[i+0+8] = byte(d.ReqType >> 0)
+
+		buf[i+1+8] = byte(d.ReqType >> 8)
+
+		buf[i+2+8] = byte(d.ReqType >> 16)
+
+		buf[i+3+8] = byte(d.ReqType >> 24)
+
+	}
+	{
+
+		buf[i+0+12] = byte(d.TTL >> 0)
+
+	}
+	{
+		l := uint64(len(d.Body))
+
+		{
+
+			t := uint64(l)
+
+			for t >= 0x80 {
+				buf[i+13] = byte(t) | 0x80
+				t >>= 7
+				i++
+			}
+			buf[i+13] = byte(t)
+			i++
+
+		}
+		copy(buf[i+13:], d.Body)
+		i += l
+	}
+	return buf[:i+13], nil
 }
+
 func (d *UTXO) Unmarshal(buf []byte) (uint64, error) {
 	i := uint64(0)
 
