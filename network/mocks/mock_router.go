@@ -12,3 +12,7 @@ type MockRouter struct {
 	recorder *MockRouterMockRecorder
 }
 
+// MockRouterMockRecorder is the mock recorder for MockRouter
+type MockRouterMockRecorder struct {
+	mock *MockRouter
+}
