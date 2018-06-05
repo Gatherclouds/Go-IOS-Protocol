@@ -21,15 +21,10 @@ type Message struct {
 	Body    []byte
 }
 
-type UTXO struct {
-	BirthTxHash []byte
-	Value       int64
-	Script      string
-}
-func (d *UTXO) Size() (s uint64) {
+func (d *Message) Size() (s uint64) {
 
 	{
-		l := uint64(len(d.BirthTxHash))
+		l := uint64(len(d.From))
 
 		{
 
@@ -44,7 +39,7 @@ func (d *UTXO) Size() (s uint64) {
 		s += l
 	}
 	{
-		l := uint64(len(d.Script))
+		l := uint64(len(d.To))
 
 		{
 
@@ -58,9 +53,25 @@ func (d *UTXO) Size() (s uint64) {
 		}
 		s += l
 	}
-	s += 8
+	{
+		l := uint64(len(d.Body))
+
+		{
+
+			t := l
+			for t >= 0x80 {
+				t >>= 7
+				s++
+			}
+			s++
+
+		}
+		s += l
+	}
+	s += 13
 	return
 }
+
 func (d *UTXO) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{
