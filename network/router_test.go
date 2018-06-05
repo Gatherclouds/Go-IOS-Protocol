@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"Go-IOS-Protocol/core/message"
 	"math/rand"
+	"Go-IOS-Protocol/common"
 )
 
 func TestRouterImpl_Init(t *testing.T) {
@@ -101,5 +102,19 @@ func broadcast(t *testing.T) {
 		ReqType: int32(ReqBlockHeight),
 		From:    net2.localNode.String(),
 	}
+	Convey("", t, func() {
+		//broadcast block height test
+		go routers[2].Broadcast(broadHeight)
+		time.Sleep(10 * time.Second)
+		//check app msg chan
+		select {
+		case data := <-routers[1].(*RouterImpl).filterMap[1]:
+			So(common.BytesToUint64(data.Body), ShouldEqual, height)
+		}
+		So(len(routers[1].(*RouterImpl).base.(*BaseNetwork).NodeHeightMap), ShouldBeGreaterThanOrEqualTo, 1)
+
+		
+		//	cancel download block test
+	})
 
 }
