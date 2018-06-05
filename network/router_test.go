@@ -65,3 +65,21 @@ func newBootRouters() []Router {
 	return rs
 }
 
+//create n nodes
+func newRouters(n int) []Router {
+	newBootRouters()
+	rs := make([]Router, 0)
+	for i := 0; i < n; i++ {
+		router, _ := RouterFactory("base")
+		baseNet, _ := NewBaseNetwork(&NetConifg{ListenAddr: "0.0.0.0", NodeTablePath: "iost_db_" + strconv.Itoa(i)})
+		router.Init(baseNet, uint16(30600+i))
+
+		router.FilteredChan(Filter{AcceptType: []ReqType{ReqDownloadBlock}})
+		router.FilteredChan(Filter{AcceptType: []ReqType{ReqBlockHeight}})
+		go router.Run()
+		rs = append(rs, router)
+	}
+	time.Sleep(15 * time.Second)
+
+	return rs
+}
