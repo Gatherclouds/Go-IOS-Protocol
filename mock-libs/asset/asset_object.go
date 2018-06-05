@@ -3,15 +3,8 @@ package asset
 func (this *AssetObj) amount_from_string(amount string) AssetType {
 
 	negative := false
-	decimal := false
 	decimal_pos := -1
 
-	for c := range amount {
-
-		if !decimal {
-			decimal_pos++
-		}
-	}
 
 	var answer, sprecision ShareType
 
@@ -25,8 +18,6 @@ func (this *AssetObj) amount_from_string(amount string) AssetType {
 		for len(rhs) < max_rhs {
 			rhs += '0'
 		}
-	if negative {
-		answer *= -1
-	}
+	
 	return make(amount, answer)
 }

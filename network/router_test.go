@@ -31,4 +31,11 @@ func TestGetInstance(t *testing.T) {
 	})
 }
 
-
+func initNetConf() *NetConifg {
+	conf := &NetConifg{}
+	conf.SetLogPath("iost_log_")
+	tablePath, _ := ioutil.TempDir(os.TempDir(), "iost_node_table_"+strconv.Itoa(int(time.Now().UnixNano())))
+	conf.SetNodeTablePath(tablePath)
+	conf.SetListenAddr("0.0.0.0")
+	return conf
+}
