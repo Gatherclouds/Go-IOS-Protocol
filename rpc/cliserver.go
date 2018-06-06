@@ -3,8 +3,25 @@ package rpc
 import (
 	"context"
 	"fmt"
+
 	"Go-IOS-Protocol/common"
+	"Go-IOS-Protocol/core/block"
 )
+//go:generate mockgen -destination mock_rpc/mock_rpc.go -package rpc_mock github.com/iost-official/prototype/rpc CliServer
+
+type BInfo struct {
+	Head  block.BlockHead
+	txCnt int
+}
+type HttpServer struct {
+}
+
+// newHttpServer 初始Http RPC结构体
+func newHttpServer() *HttpServer {
+	s := &HttpServer{}
+	return s
+}
+
 
 func (s *HttpServer) GetTransaction(ctx context.Context, txkey *TransactionKey) (*Transaction, error) {
 	fmt.Println("GetTransaction begin")
