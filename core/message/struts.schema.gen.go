@@ -264,11 +264,17 @@ func (d *Message) Unmarshal(buf []byte) (uint64, error) {
 	return i + 13, nil
 }
 
-type TxInput struct {
-	TxHash       []byte
-	UnlockScript string
-	UTXOHash     []byte
+type RequestHeight struct {
+	LocalBlockHeight uint64
+	NeedBlockHeight  uint64
 }
+
+func (d *RequestHeight) Size() (s uint64) {
+
+	s += 16
+	return
+}
+
 func (d *TxInput) Size() (s uint64) {
 
 	{

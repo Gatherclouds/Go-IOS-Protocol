@@ -11,12 +11,6 @@ func (this *AssetDataStructure) update_median_feeds(ctime SecondType) int {
 		}
 	}
 
-	if len(cfeed) < this.minimum_feeds {
-		this.cfeed_publication_time = ctime
-		cfeed = make(PriceType)
-		return 0
-	}
-
 	median := cfeeds[len(cfeeds)/2]
 	cfeed = median
 
