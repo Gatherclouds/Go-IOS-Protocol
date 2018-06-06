@@ -178,37 +178,12 @@ func (d *Message) Marshal(buf []byte) ([]byte, error) {
 	return buf[:i+13], nil
 }
 
-func (d *UTXO) Unmarshal(buf []byte) (uint64, error) {
+func (d *Message) Unmarshal(buf []byte) (uint64, error) {
 	i := uint64(0)
 
 	{
-		l := uint64(0)
 
-		{
-
-			bs := uint8(7)
-			t := uint64(buf[i+0] & 0x7F)
-			for buf[i+0]&0x80 == 0x80 {
-				i++
-				t |= uint64(buf[i+0]&0x7F) << bs
-				bs += 7
-			}
-			i++
-
-			l = t
-
-		}
-		if uint64(cap(d.BirthTxHash)) >= l {
-			d.BirthTxHash = d.BirthTxHash[:l]
-		} else {
-			d.BirthTxHash = make([]byte, l)
-		}
-		copy(d.BirthTxHash, buf[i+0:])
-		i += l
-	}
-	{
-
-		d.Value = 0 | (int64(buf[i+0+0]) << 0) | (int64(buf[i+1+0]) << 8) | (int64(buf[i+2+0]) << 16) | (int64(buf[i+3+0]) << 24) | (int64(buf[i+4+0]) << 32) | (int64(buf[i+5+0]) << 40) | (int64(buf[i+6+0]) << 48) | (int64(buf[i+7+0]) << 56)
+		d.Time = 0 | (int64(buf[i+0+0]) << 0) | (int64(buf[i+1+0]) << 8) | (int64(buf[i+2+0]) << 16) | (int64(buf[i+3+0]) << 24) | (int64(buf[i+4+0]) << 32) | (int64(buf[i+5+0]) << 40) | (int64(buf[i+6+0]) << 48) | (int64(buf[i+7+0]) << 56)
 
 	}
 	{
@@ -228,10 +203,65 @@ func (d *UTXO) Unmarshal(buf []byte) (uint64, error) {
 			l = t
 
 		}
-		d.Script = string(buf[i+8 : i+8+l])
+		d.From = string(buf[i+8 : i+8+l])
 		i += l
 	}
-	return i + 8, nil
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+8] & 0x7F)
+			for buf[i+8]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+8]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		d.To = string(buf[i+8 : i+8+l])
+		i += l
+	}
+	{
+
+		d.ReqType = 0 | (int32(buf[i+0+8]) << 0) | (int32(buf[i+1+8]) << 8) | (int32(buf[i+2+8]) << 16) | (int32(buf[i+3+8]) << 24)
+
+	}
+	{
+
+		d.TTL = 0 | (int8(buf[i+0+12]) << 0)
+
+	}
+	{
+		l := uint64(0)
+
+		{
+
+			bs := uint8(7)
+			t := uint64(buf[i+13] & 0x7F)
+			for buf[i+13]&0x80 == 0x80 {
+				i++
+				t |= uint64(buf[i+13]&0x7F) << bs
+				bs += 7
+			}
+			i++
+
+			l = t
+
+		}
+		if uint64(cap(d.Body)) >= l {
+			d.Body = d.Body[:l]
+		} else {
+			d.Body = make([]byte, l)
+		}
+		copy(d.Body, buf[i+13:])
+		i += l
+	}
+	return i + 13, nil
 }
 
 type TxInput struct {
