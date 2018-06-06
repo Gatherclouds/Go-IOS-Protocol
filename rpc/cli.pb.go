@@ -54,6 +54,37 @@ func (m *Transaction) XXX_DiscardUnknown() {
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
+var _Cli_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "rpc.Cli",
+	HandlerType: (*CliServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "PublishTx",
+			Handler:    _Cli_PublishTx_Handler,
+		},
+		{
+			MethodName: "GetTransaction",
+			Handler:    _Cli_GetTransaction_Handler,
+		},
+		{
+			MethodName: "GetBalance",
+			Handler:    _Cli_GetBalance_Handler,
+		},
+		{
+			MethodName: "GetState",
+			Handler:    _Cli_GetState_Handler,
+		},
+		{
+			MethodName: "GetBlock",
+			Handler:    _Cli_GetBlock_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "cli.proto",
+}
+
+func init() { proto.RegisterFile("cli.proto", fileDescriptor_cli_7f181ac8c7362e80) }
+
 var fileDescriptor_cli_7f181ac8c7362e80 = []byte{
 	// 318 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x91, 0x4d, 0x4b, 0xfb, 0x40,
