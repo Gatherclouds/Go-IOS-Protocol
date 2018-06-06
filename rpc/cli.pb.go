@@ -54,6 +54,16 @@ func (m *Transaction) XXX_DiscardUnknown() {
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
+// Server API for Cli service
+type CliServer interface {
+	PublishTx(context.Context, *Transaction) (*Response, error)
+	GetTransaction(context.Context, *TransactionKey) (*Transaction, error)
+	GetBalance(context.Context, *Key) (*Value, error)
+	GetState(context.Context, *Key) (*Value, error)
+	GetBlock(context.Context, *BlockKey) (*BlockInfo, error)
+}
+
+
 var _Cli_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "rpc.Cli",
 	HandlerType: (*CliServer)(nil),
