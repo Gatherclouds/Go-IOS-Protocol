@@ -54,6 +54,17 @@ func (m *Transaction) XXX_DiscardUnknown() {
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
+// CliClient is the client API for Cli service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type CliClient interface {
+	PublishTx(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*Response, error)
+	GetTransaction(ctx context.Context, in *TransactionKey, opts ...grpc.CallOption) (*Transaction, error)
+	GetBalance(ctx context.Context, in *Key, opts ...grpc.CallOption) (*Value, error)
+	GetState(ctx context.Context, in *Key, opts ...grpc.CallOption) (*Value, error)
+	GetBlock(ctx context.Context, in *BlockKey, opts ...grpc.CallOption) (*BlockInfo, error)
+}
+
 // Server API for Cli service
 type CliServer interface {
 	PublishTx(context.Context, *Transaction) (*Response, error)
