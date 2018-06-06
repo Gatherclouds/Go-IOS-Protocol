@@ -1,15 +1,5 @@
 package asset
 
-func (this *AssetDataStructure) max_settle_volume(supply ShareType) ShareType {
-	if this.max_settle_volume == 0 {
-		return 0
-	}
-	volume := supply.value + this.settle_volume.value
-	volume *= this.max_settle_volume
-	volume /= this.MAX
-	return volume
-}
-
 func (this *AssetDataStructure) update_median_feeds(ctime SecondType) int {
 	this.cfeed_publication_time = ctime
 	var cfeeds []PriceType
