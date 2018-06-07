@@ -59,6 +59,13 @@ func (m *Transaction) GetTx() []byte {
 	return nil
 }
 
+type Response struct {
+	Code                 int32    `protobuf:"varint,1,opt,name=code" json:"code,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4

@@ -37,27 +37,7 @@ func (this *SignatureState) check_authority_by_authority(au *AuthorityType, dept
 			}
 		}
 	}
-
-	for a := range auth.account_auths {
-		approve, exist := this.approved_by[a.key]
-		if !exist {
-			if depth == this.max_recursion {
-				return false
-			}
-			if check_authority_by_authority(get_active(a.key), depth+1) {
-				this.approved_by[a.key] = true
-				total_weight += a.value
-				if total_weight >= auth.weight_threshold {
-					return true
-				}
-			}
-		} else {
-			total_weight += a.value
-			if total_weight >= auth.weight_threshold {
-				return true
-			}
-		}
-	}
+	
 	return total_weight >= auth.weight_threshold
 }
 
