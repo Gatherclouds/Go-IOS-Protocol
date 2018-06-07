@@ -9,6 +9,9 @@ import (
 	"Go-IOS-Protocol/core/tx"
 	"Go-IOS-Protocol/network"
 	"Go-IOS-Protocol/core/message"
+	"reflect"
+	"Go-IOS-Protocol/vm"
+	"Go-IOS-Protocol/core/state"
 )
 //go:generate mockgen -destination mock_rpc/mock_rpc.go -package rpc_mock github.com/iost-official/prototype/rpc CliServer
 
@@ -85,5 +88,25 @@ func (s *HttpServer) GetTransaction(ctx context.Context, txkey *TransactionKey) 
 	}
 
 	return &Transaction{Tx: tx.Encode()}, nil
+}
+
+func (s *HttpServer) GetBalance(ctx context.Context, iak *Key) (*Value, error) {
+	fmt.Println("GetBalance begin")
+	if iak == nil {
+		return nil, fmt.Errorf("argument cannot be nil pointer")
+	}
+	ia := iak.S
+	val0, err := state.StdPool.GetHM("iost", state.Key(ia))
+	if err != nil {
+		return nil, err
+	}
+	val, ok := val0.(*state.VFloat)
+	if !ok {
+		return nil, fmt.Errorf("pool type error: should VFloat, acture %v; in iost.%v",
+			reflect.TypeOf(val0).String(), vm.IOSTAccount(ia))
+	}
+	balance := val.EncodeString()
+
+	return &Value{Sv: balance}, nil
 }
 
