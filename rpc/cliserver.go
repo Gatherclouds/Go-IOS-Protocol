@@ -40,7 +40,15 @@ func (s *HttpServer) PublishTx(ctx context.Context, _tx *Transaction) (*Response
 	if err != nil {
 		return &Response{Code: -1}, err
 	}
-	
+	//broadcast the tx
+	router := network.Route
+	if router == nil {
+		panic(fmt.Errorf("network.Router shouldn't be nil"))
+	}
+	broadTx := message.Message{
+		Body:    tx1.Encode(),
+		ReqType: int32(network.ReqPublishTx),
+	}
 	router.Broadcast(broadTx)
 
 	go func() {
