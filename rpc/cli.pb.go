@@ -50,6 +50,15 @@ func (m *Transaction) XXX_DiscardUnknown() {
 	xxx_messageInfo_Transaction.DiscardUnknown(m)
 }
 
+var xxx_messageInfo_Transaction proto.InternalMessageInfo
+
+func (m *Transaction) GetTx() []byte {
+	if m != nil {
+		return m.Tx
+	}
+	return nil
+}
+
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
