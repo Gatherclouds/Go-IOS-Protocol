@@ -76,6 +76,19 @@ func (m *Response) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Response.Unmarshal(m, b)
 }
 
+func (m *Response) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Response.Marshal(b, m, deterministic)
+}
+func (dst *Response) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Response.Merge(dst, src)
+}
+func (m *Response) XXX_Size() int {
+	return xxx_messageInfo_Response.Size(m)
+}
+func (m *Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_Response.DiscardUnknown(m)
+}
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
 var _ grpc.ClientConn
