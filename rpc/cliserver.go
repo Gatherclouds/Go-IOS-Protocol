@@ -6,6 +6,9 @@ import (
 
 	"Go-IOS-Protocol/common"
 	"Go-IOS-Protocol/core/block"
+	"Go-IOS-Protocol/core/tx"
+	"Go-IOS-Protocol/network"
+	"Go-IOS-Protocol/core/message"
 )
 //go:generate mockgen -destination mock_rpc/mock_rpc.go -package rpc_mock github.com/iost-official/prototype/rpc CliServer
 
@@ -22,6 +25,34 @@ func newHttpServer() *HttpServer {
 	return s
 }
 
+func (s *HttpServer) PublishTx(ctx context.Context, _tx *Transaction) (*Response, error) {
+	fmt.Println("PublishTx begin")
+	var tx1 tx.Tx
+	if _tx == nil {
+		return &Response{Code: -1}, fmt.Errorf("argument cannot be nil pointer")
+	}
+	err := tx1.Decode(_tx.Tx)
+	if err != nil {
+		return &Response{Code: -1}, err
+	}
+
+	err = tx1.VerifySelf() //verify Publisher and Signers
+	if err != nil {
+		return &Response{Code: -1}, err
+	}
+	
+	router.Broadcast(broadTx)
+
+	go func() {
+		Cons := consensus.Cons
+		if Cons == nil {
+			panic(fmt.Errorf("Consensus is nil"))
+		}
+		Cons.(*dpos.DPoS).ChTx <- broadTx
+		fmt.Println("[rpc.PublishTx]:add tx to TxPool")
+	}()
+	return &Response{Code: 0}, nil
+}
 
 func (s *HttpServer) GetTransaction(ctx context.Context, txkey *TransactionKey) (*Transaction, error) {
 	fmt.Println("GetTransaction begin")
