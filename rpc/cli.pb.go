@@ -89,6 +89,16 @@ func (m *Response) XXX_DiscardUnknown() {
 	xxx_messageInfo_Response.DiscardUnknown(m)
 }
 
+var xxx_messageInfo_Response proto.InternalMessageInfo
+
+func (m *Response) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
 var _ grpc.ClientConn
