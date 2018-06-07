@@ -98,6 +98,17 @@ func (m *Response) GetCode() int32 {
 	return 0
 }
 
+type TransactionKey struct {
+	Publisher            string   `protobuf:"bytes,1,opt,name=publisher" json:"publisher,omitempty"`
+	Nonce                int64    `protobuf:"varint,2,opt,name=nonce" json:"nonce,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TransactionKey) Reset()         { *m = TransactionKey{} }
+func (m *TransactionKey) String() string { return proto.CompactTextString(m) }
+
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
