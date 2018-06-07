@@ -109,6 +109,27 @@ type TransactionKey struct {
 func (m *TransactionKey) Reset()         { *m = TransactionKey{} }
 func (m *TransactionKey) String() string { return proto.CompactTextString(m) }
 
+func (*TransactionKey) ProtoMessage()    {}
+func (*TransactionKey) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cli_7f181ac8c7362e80, []int{2}
+}
+func (m *TransactionKey) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TransactionKey.Unmarshal(m, b)
+}
+func (m *TransactionKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TransactionKey.Marshal(b, m, deterministic)
+}
+func (dst *TransactionKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransactionKey.Merge(dst, src)
+}
+func (m *TransactionKey) XXX_Size() int {
+	return xxx_messageInfo_TransactionKey.Size(m)
+}
+func (m *TransactionKey) XXX_DiscardUnknown() {
+	xxx_messageInfo_TransactionKey.DiscardUnknown(m)
+}
+var xxx_messageInfo_TransactionKey proto.InternalMessageInfo
+
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
