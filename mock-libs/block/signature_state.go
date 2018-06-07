@@ -37,7 +37,7 @@ func (this *SignatureState) check_authority_by_authority(au *AuthorityType, dept
 			}
 		}
 	}
-	
+
 	return total_weight >= auth.weight_threshold
 }
 
