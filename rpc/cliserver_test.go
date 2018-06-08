@@ -98,6 +98,20 @@ func TestHttpServer(t *testing.T) {
 			_, err := hs.GetBlock(context.Background(), &BlockKey{Layer: 10})
 			So(err, ShouldBeNil)
 		})
+		Convey("Test of GetBalance", func() {
+			ctl := gomock.NewController(t)
+			mockPool := core_mock.NewMockPool(ctl)
+			mockPool.EXPECT().GetHM(gomock.Any(), gomock.Any()).AnyTimes().Return(state.MakeVFloat(18.0), nil)
+			state.StdPool = mockPool
+
+			hs := new(HttpServer)
+			balance, err := hs.GetBalance(context.Background(), &Key{S: "HowHsu"})
+			So(err, ShouldBeNil)
+
+			vf := state.MakeVFloat(18.0)
+			So(balance.Sv, ShouldEqual, vf.EncodeString())
+
+		})
 
 	})
 }
