@@ -55,5 +55,29 @@ func TestHttpServer(t *testing.T) {
 			So(err, ShouldBeNil)
 		})
 
+		Convey("Test of GetBlock", func() {
+			ctl := gomock.NewController(t)
+			mockChain := core_mock.NewMockChain(ctl)
+			mockChain.EXPECT().Length().AnyTimes().Return(uint64(100))
+			mockChain.EXPECT().GetBlockByNumber(gomock.Any()).AnyTimes().Return(&block.Block{
+				Head: block.BlockHead{
+					Version:    2,
+					ParentHash: []byte("parent Hash"),
+					TreeHash:   []byte("tree hash"),
+					BlockHash:  []byte("block hash"),
+					Info:       []byte("info "),
+					Number:     int64(0),
+					Witness:    "id2,id3,id5,id6",
+					Signature:  []byte("Signatrue"),
+					Time:       201222,
+				},
+			})
+			block.BChain = mockChain
+
+			hs := new(HttpServer)
+			_, err := hs.GetBlock(context.Background(), &BlockKey{Layer: 10})
+			So(err, ShouldBeNil)
+		})
+
 	})
 }
