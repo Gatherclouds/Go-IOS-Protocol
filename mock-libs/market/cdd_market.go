@@ -36,11 +36,6 @@ func (this *CddMarket) get_allowed_withdraw(context PolicyObj) AssetObj {
 }
 
 
-func (this *CddMarket) on_deposit_vested(context PolicyObj) {
-	this.on_deposit(context)
-	this.coin_second_earned += context.amount.amount.value * math.max(1, this.vesting_second)
-}
-
 func (this *CddMarket) is_deposit_allowed(context PlicyObj) bool {
 	return context.amount.asset_id == context.balance.asset_id && sum_below_max_shares(context.amount, context.balance)
 }
