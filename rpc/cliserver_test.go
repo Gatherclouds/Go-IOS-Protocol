@@ -43,5 +43,17 @@ func TestHttpServer(t *testing.T) {
 			So(res.Code, ShouldEqual, 0)
 		})
 
+		//tmp test,better to create new state,insert to StdPool and test it
+		Convey("Test of GetState", func() {
+			ctl := gomock.NewController(t)
+			mockPool := core_mock.NewMockPool(ctl)
+			mockPool.EXPECT().Get(gomock.Any()).AnyTimes().Return(state.MakeVString("hello"), nil)
+			state.StdPool = mockPool
+
+			hs := new(HttpServer)
+			_, err := hs.GetState(context.Background(), &Key{S: "HowHsu"})
+			So(err, ShouldBeNil)
+		})
+
 	})
 }
