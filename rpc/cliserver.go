@@ -148,6 +148,15 @@ func (s *HttpServer) GetBlock(ctx context.Context, bk *BlockKey) (*BlockInfo, er
 	if block == nil {
 		return nil, fmt.Errorf("cannot get BlockInfo")
 	}
+	//better to Encode BlockHead first?
+	binfo := BInfo{
+		Head:  block.Head,
+		txCnt: block.LenTx(),
+	}
+	b, err := json.Marshal(binfo)
+	if err != nil {
+		return nil, fmt.Errorf("json.Marshal failed: [%v]", err)
+	}
 
 	return &BlockInfo{Json: string(b)}, nil
 }
