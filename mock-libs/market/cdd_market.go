@@ -35,11 +35,6 @@ func (this *CddMarket) get_allowed_withdraw(context PolicyObj) AssetObj {
 	return make(AssetObj(withdraw_available, context.balance.asset_id))
 }
 
-
-func (this *CddMarket) is_deposit_allowed(context PlicyObj) bool {
-	return context.amount.asset_id == context.balance.asset_id && sum_below_max_shares(context.amount, context.balance)
-}
-
 func (this *CddMarket) is_deposit_vested_allowed(context PlicyObj) bool {
 	return this.is_deposit_allowed(context)
 }
