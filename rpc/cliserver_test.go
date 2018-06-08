@@ -7,13 +7,16 @@ import (
 	"Go-IOS-Protocol/account"
 
 	"github.com/golang/mock/gomock"
-	"Go-IOS-Protocol/protocol/mocks"
-	"Go-IOS-Protocol/network"
+	//"Go-IOS-Protocol/protocol/mocks"
+	//"Go-IOS-Protocol/network"
 	"context"
 	"Go-IOS-Protocol/core/tx"
+	"Go-IOS-Protocol/core/block"
 	. "github.com/smartystreets/goconvey/convey"
 	"Go-IOS-Protocol/core/mocks"
 	"Go-IOS-Protocol/core/state"
+	"fmt"
+	"Go-IOS-Protocol/common"
 )
 
 func TestHttpServer(t *testing.T) {
@@ -45,6 +48,21 @@ func TestHttpServer(t *testing.T) {
 		//	So(res.Code, ShouldEqual, 0)
 		//})
 
+		Convey("Test of GetTransaction", func() {
+			txdb := tx.TxDb
+			fmt.Println(txdb)
+			err := txdb.Add(&_tx)
+			So(err, ShouldBeNil)
+
+			txkey := TransactionKey{
+				Publisher: common.Base58Encode(_tx.Publisher.Pubkey),
+				Nonce:     _tx.Nonce,
+			}
+			fmt.Println(txkey.Publisher)
+			hs := new(HttpServer)
+			_, err = hs.GetTransaction(context.Background(), &txkey)
+			So(err, ShouldBeNil)
+		})
 		//tmp test,better to create new state,insert to StdPool and test it
 		Convey("Test of GetState", func() {
 			ctl := gomock.NewController(t)
