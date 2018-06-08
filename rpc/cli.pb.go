@@ -175,6 +175,20 @@ func (m *Key) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Key proto.InternalMessageInfo
 
+func (m *Key) GetS() string {
+	if m != nil {
+		return m.S
+	}
+	return ""
+}
+
+type Value struct {
+	Sv                   string   `protobuf:"bytes,2,opt,name=sv" json:"sv,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
 var _ grpc.ClientConn
