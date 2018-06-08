@@ -130,6 +130,21 @@ func (m *TransactionKey) XXX_DiscardUnknown() {
 }
 var xxx_messageInfo_TransactionKey proto.InternalMessageInfo
 
+func (m *TransactionKey) GetPublisher() string {
+if m != nil {
+return m.Publisher
+}
+return ""
+}
+
+func (m *TransactionKey) GetNonce() int64 {
+	if m != nil {
+		return m.Nonce
+	}
+	return 0
+}
+
+
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
