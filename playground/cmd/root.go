@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/viper"
 	"Go-IOS-Protocol/verifier"
 	"Go-IOS-Protocol/vm"
+	"Go-IOS-Protocol/vm/lua"
+	"fmt"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -17,6 +19,9 @@ examples and usage of using your application. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+
+	// Uncomment the following line if your bare application
+	// has an action associated with it:
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
@@ -32,6 +37,41 @@ to quickly create a Cobra application.`,
 		v := verifier.NewCacheVerifier(pool)
 		var sc0 vm.Contract
 
+		switch language {
+		case "lua":
+			for i, file := range args {
+				code := ReadSourceFile(file)
+				parser, err := lua.NewDocCommentParser(code)
+				if err != nil {
+					panic(err)
+				}
+				sc, err := parser.Parse()
+				if err != nil {
+					panic(err)
+				}
+				if i == 0 {
+					sc0 = sc
+				}
+
+				v.StartVM(sc)
+			}
+		default:
+			fmt.Println(language, "not supported")
+		}
+
 	},
+
+}
+
+// initConfig reads in config file and ENV variables if set.
+func initConfig() {
+	if cfgFile != "" {
+		// Use config file from the flag.
+		viper.SetConfigFile(cfgFile)
+	} else {
+		viper.SetConfigName("./values.yaml")
+	}
+
+	viper.AutomaticEnv() // read in environment variables that match
 
 }
