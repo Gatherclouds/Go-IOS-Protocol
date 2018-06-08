@@ -110,3 +110,21 @@ func (s *HttpServer) GetBalance(ctx context.Context, iak *Key) (*Value, error) {
 	return &Value{Sv: balance}, nil
 }
 
+func (s *HttpServer) GetState(ctx context.Context, stkey *Key) (*Value, error) {
+	fmt.Println("GetState begin")
+	if stkey == nil {
+		return nil, fmt.Errorf("argument cannot be nil pointer")
+	}
+	key := stkey.S
+
+	stPool := state.StdPool
+	if stPool == nil {
+		panic(fmt.Errorf("state.StdPool shouldn't be nil"))
+	}
+	stValue, err := stPool.Get(state.Key(key))
+	if err != nil {
+		return nil, fmt.Errorf("GetState Error: [%v]", err)
+	}
+
+	return &Value{Sv: stValue.EncodeString()}, nil
+}
