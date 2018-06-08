@@ -35,9 +35,6 @@ func (this *CddMarket) get_allowed_withdraw(context PolicyObj) AssetObj {
 	return make(AssetObj(withdraw_available, context.balance.asset_id))
 }
 
-func (this *CddMarket) on_deposit(context PolicyObj) {
-	this.update_benefit(context)
-}
 
 func (this *CddMarket) on_deposit_vested(context PolicyObj) {
 	this.on_deposit(context)

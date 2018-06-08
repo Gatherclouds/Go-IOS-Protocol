@@ -144,6 +144,13 @@ func (m *TransactionKey) GetNonce() int64 {
 	return 0
 }
 
+type Key struct {
+	S                    string   `protobuf:"bytes,1,opt,name=s" json:"s,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
 
 
 // Reference imports to suppress errors if they are not otherwise used.
