@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"Go-IOS-Protocol/vm"
 	"Go-IOS-Protocol/core/state"
+	"encoding/json"
 )
 //go:generate mockgen -destination mock_rpc/mock_rpc.go -package rpc_mock github.com/iost-official/prototype/rpc CliServer
 
@@ -127,4 +128,26 @@ func (s *HttpServer) GetState(ctx context.Context, stkey *Key) (*Value, error) {
 	}
 
 	return &Value{Sv: stValue.EncodeString()}, nil
+}
+
+func (s *HttpServer) GetBlock(ctx context.Context, bk *BlockKey) (*BlockInfo, error) {
+	if bk == nil {
+		return nil, fmt.Errorf("argument cannot be nil pointer")
+	}
+
+	bc := block.BChain //we should get the instance of Chain,not to Create it again in the real version
+	if bc == nil {
+		panic(fmt.Errorf("block.BChain cannot be nil"))
+	}
+	layer := bk.Layer //I think bk.Layer should be uint64,because bc.Length() is uint64
+	curLen := bc.Length()
+	if (layer < 0) || (uint64(layer) > curLen-1) {
+		return nil, fmt.Errorf("out of bound")
+	}
+	block := bc.GetBlockByNumber(curLen - 1 - uint64(layer))
+	if block == nil {
+		return nil, fmt.Errorf("cannot get BlockInfo")
+	}
+
+	return &BlockInfo{Json: string(b)}, nil
 }
