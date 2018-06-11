@@ -21,11 +21,7 @@ func (this *SignedTransaction) get_required_signatures(chain_id ChainIdType, ava
 
 	s := make(SignatureState(get_signature_keys(chain_id), get_active, available_keys))
 	s.max_recursion = this.max_recursion_depth
-
-	for auth := range other {
-		s.check_authority_by_authority(&auth, 0)
-	}
-
+	
 	for active := range required_active {
 		s.check_authority(active)
 	}
