@@ -8,6 +8,7 @@ import (
 	"Go-IOS-Protocol/vm"
 	"Go-IOS-Protocol/vm/lua"
 	"fmt"
+	"os"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -83,6 +84,16 @@ func Execute() {
 	}
 }
 
+func init() {
+	cobra.OnInitialize(initConfig)
+
+	// Here you will define your flags and configuration settings.
+	// Cobra supports persistent flags, which, if defined here,
+	// will be global for your application.
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "values", "", "get values of test environment, default ./values.yaml")
+	rootCmd.PersistentFlags().StringVarP(&language, "lang", "l", "lua", "set language of contract, default lua")
+
+}
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	if cfgFile != "" {
