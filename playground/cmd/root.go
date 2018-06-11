@@ -58,6 +58,17 @@ to quickly create a Cobra application.`,
 		default:
 			fmt.Println(language, "not supported")
 		}
+		pool2, gas, err := v.Verify(sc0)
+		if err != nil {
+			fmt.Println("error:", err.Error())
+		}
+		pool2.Flush()
+		fmt.Println("======Report")
+		fmt.Println("gas spend:", gas)
+		fmt.Println("state trasition:")
+		for k, v := range db.Normal {
+			fmt.Printf("  %v: %v\n", k, string(v))
+		}
 
 	},
 
