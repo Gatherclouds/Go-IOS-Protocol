@@ -12,22 +12,6 @@ type SignatureState struct {
 	max_recursion int
 }
 
-func (this *SignatureState) check_authority_by_authority(au *AuthorityType, depth int) bool {
-	if au == nil {
-		return false
-	}
-
-	auth := *au
-	total_weight := 0
-
-	for k := range auth.key_auths {
-		if signed_by_key(k.key) {
-			total_weight += k.value
-			if total_weight >= auth.weight_threshold {
-				return true
-			}
-		}
-	}
 
 	return total_weight >= auth.weight_threshold
 }
