@@ -41,3 +41,8 @@ func NewNode(id NodeID, ip net.IP, udpPort, tcpPort uint16) *Node {
 		//TODO: implement Keccak256
 	}
 }
+
+// Incomplete returns true for nodes with no IP address.
+func (n *Node) Incomplete() bool {
+	return n.IP == nil
+}
