@@ -35,10 +35,6 @@ func (this *CddMarket) get_allowed_withdraw(context PolicyObj) AssetObj {
 	return make(AssetObj(withdraw_available, context.balance.asset_id))
 }
 
-func (this *CddMarket) is_withdraw_allowed(context PlicyObj) bool {
-	return context.amount <= this.get_allowed_withdraw(context)
-}
-
 func (this *CddMarket) on_withdraw(context PolicyObj) {
 	this.update_benefit(context)
 	coin_seconds_needed := context.amount.amount.value
