@@ -5,6 +5,7 @@ import (
 	"time"
 	"github.com/ethereum/go-ethereum/common"
 	"errors"
+	"strconv"
 )
 
 type NodeID [NodeIDBits / 8]byte
@@ -63,4 +64,17 @@ func (n *Node) validateComplete() error {
 		return errors.New("invalid IP (multicast/unspecified)")
 	}
 	return nil
+}
+
+func (n *Node) String() string {
+	return string(n.ID) + "@" + n.IP.String() + ":" + strconv.Itoa(int(n.TCP))
+}
+
+func (n *Node) Addr() string {
+	return n.IP.String() + ":" + strconv.Itoa(int(n.TCP))
+}
+
+// NodeID prints as a long hexadecimal number.
+func (n NodeID) String() string {
+	return fmt.Sprintf("%s", string(n))
 }
