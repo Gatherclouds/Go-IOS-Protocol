@@ -33,3 +33,8 @@ func (m *MockRouter) EXPECT() *MockRouterMockRecorder {
 func (m *MockRouter) Broadcast(arg0 message.Message) {
 	m.ctrl.Call(m, "Broadcast", arg0)
 }
+
+// Broadcast indicates an expected call of Broadcast
+func (mr *MockRouterMockRecorder) Broadcast(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Broadcast", reflect.TypeOf((*MockRouter)(nil).Broadcast), arg0)
+}
