@@ -46,3 +46,8 @@ func (m *MockRouter) CancelDownload(arg0, arg1 uint64) error {
 	ret0, _ := ret[0].(error)
 	return ret0
 }
+
+// CancelDownload indicates an expected call of CancelDownload
+func (mr *MockRouterMockRecorder) CancelDownload(arg0, arg1 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CancelDownload", reflect.TypeOf((*MockRouter)(nil).CancelDownload), arg0, arg1)
+}
