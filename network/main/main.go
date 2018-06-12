@@ -6,6 +6,8 @@ import (
 	"net"
 	"Go-IOS-Protocol/network/discover"
 	"Go-IOS-Protocol/core/message"
+	"strconv"
+	"time"
 )
 
 var serverAddr = flag.String("s", "", "server port 30304, or other ports that have already started.")
@@ -64,16 +66,22 @@ func bootnodeStart() {
 	select {}
 }
 
-//Filter The filter used by Router
-// Rulers :
-//     1. if both white list and black list are nil, this filter is all-pass
-//     2. if one of those is not nil, filter as it is
-//     3. if both of those list are not nil, filter as white list
-type Filter struct {
-	WhiteList  []message.Message
-	BlackList  []message.Message
-	RejectType []ReqType
-	AcceptType []ReqType
+func testBaseNetwork() {
+	rs := make([]Router, 0)
+	for i := 0; i < 2; i++ {
+		router, _ := RouterFactory("base")
+		baseNet, _ := NewBaseNetwork(&NetConifg{NodeTablePath: "node_table_" + strconv.Itoa(i), ListenAddr: "192.168.1.34"})
+		err := router.Init(baseNet, uint16(20002+i))
+		if err != nil {
+			fmt.Println("init net got err", err)
+			return
+		}
+		router.Run()
+		rs = append(rs, router)
+	}
+	time.Sleep(15 * time.Second)
+	
+
 }
 
 func (f *Filter) check(req message.Message) bool {
