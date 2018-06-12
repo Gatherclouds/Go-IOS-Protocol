@@ -28,3 +28,8 @@ func NewMockRouter(ctrl *gomock.Controller) *MockRouter {
 func (m *MockRouter) EXPECT() *MockRouterMockRecorder {
 	return m.recorder
 }
+
+// Broadcast mocks base method
+func (m *MockRouter) Broadcast(arg0 message.Message) {
+	m.ctrl.Call(m, "Broadcast", arg0)
+}
