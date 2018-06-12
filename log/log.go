@@ -11,8 +11,9 @@ import (
 )
 
 type Logger struct {
-	Tag     string
-	logFile *os.File
+	Tag       string
+	logFile   *os.File
+	NeedPrint bool
 }
 
 var instance *os.File
