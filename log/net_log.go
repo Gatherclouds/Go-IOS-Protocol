@@ -1,5 +1,11 @@
 package log
 
+import (
+	"net/http"
+	"io/ioutil"
+	"errors"
+	"strconv"
+)
 
 var Server = "127.0.0.1:1001"
 var LocalID = "default"
@@ -21,4 +27,13 @@ func Report(msg Msg) error {
 		return errors.New(strconv.Itoa(resp.StatusCode) + " " + string(body))
 	}
 	return nil
+}
+
+type Timestamp struct {
+	second int64
+	nano   int
+}
+
+func (t Timestamp) String() string {
+	return strconv.FormatInt(t.second, 10) + "+" + strconv.Itoa(t.nano)
 }
