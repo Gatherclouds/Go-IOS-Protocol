@@ -51,3 +51,10 @@ func (m *MockRouter) CancelDownload(arg0, arg1 uint64) error {
 func (mr *MockRouterMockRecorder) CancelDownload(arg0, arg1 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CancelDownload", reflect.TypeOf((*MockRouter)(nil).CancelDownload), arg0, arg1)
 }
+
+// Download mocks base method
+func (m *MockRouter) Download(arg0, arg1 uint64) error {
+	ret := m.ctrl.Call(m, "Download", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
