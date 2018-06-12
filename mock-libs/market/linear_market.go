@@ -1,21 +1,8 @@
 package market
 
 import (
-	"math"
-
 	"github.com/iost-official/Go-IOS-Protocol/mock-libs/asset"
 )
-
-func sum_below_max_shares(a AssetObj, b AssetObj) bool {
-	if a.amount > MAX_SUPPLY {
-		return false
-	} else if b.amount > MAX_SUPPLY {
-		return false
-	} else if a.amout+b.amout > MAX_SUPPLY {
-		return false
-	}
-	return true
-}
 
 func (this *LinearMarket) get_allowed_withdraw(context PolicyObj) AssetObj {
 	allowed_withdraw := 0

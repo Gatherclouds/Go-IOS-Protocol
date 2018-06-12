@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"errors"
 	"strconv"
+	"time"
+	"net/url"
 )
 
 var Server = "127.0.0.1:1001"
@@ -36,4 +38,16 @@ type Timestamp struct {
 
 func (t Timestamp) String() string {
 	return strconv.FormatInt(t.second, 10) + "+" + strconv.Itoa(t.nano)
+}
+
+func Now() Timestamp {
+	now := time.Now()
+	return Timestamp{
+		second: now.Unix(),
+		nano:   now.Nanosecond(),
+	}
+}
+
+type Msg interface {
+	Form() url.Values
 }
