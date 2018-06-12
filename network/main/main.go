@@ -80,7 +80,18 @@ func testBaseNetwork() {
 		rs = append(rs, router)
 	}
 	time.Sleep(15 * time.Second)
-	
+	go func() {
+		req := message.Message{From: "sender", Time: time.Now().UnixNano(), To: "192.168.1.34:20003", Body: []byte{22, 11, 125}}
+		for {
+			//rs[1].Send(req)
+			req.Body = append(req.Body, []byte{111}...)
+			rs[0].Broadcast(req)
+			time.Sleep(5 * time.Second)
+		}
+	}()
+	for {
+		select {}
+	}
 
 }
 
@@ -132,12 +143,3 @@ func memberContain(a string, c []message.Message) bool {
 	return false
 }
 
-func reqTypeContain(a int32, c []ReqType) bool {
-	for _, t := range c {
-		if int32(t) == a {
-			return true
-		}
-	}
-	return false
-
-}
