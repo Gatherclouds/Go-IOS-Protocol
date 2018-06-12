@@ -16,3 +16,10 @@ type MockRouter struct {
 type MockRouterMockRecorder struct {
 	mock *MockRouter
 }
+
+// NewMockRouter creates a new mock instance
+func NewMockRouter(ctrl *gomock.Controller) *MockRouter {
+	mock := &MockRouter{ctrl: ctrl}
+	mock.recorder = &MockRouterMockRecorder{mock}
+	return mock
+}
