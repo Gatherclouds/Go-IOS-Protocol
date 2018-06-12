@@ -18,11 +18,6 @@ func (this *CddMarket) calc_benefit(context PolicyObj) int {
 	return math.min(this.coin_second_earned+delta_coin, benefit)
 }
 
-func (this *CddMarket) update_benefit(context PolicyObj) {
-	this.last_update = context.now
-	this.coin_second_earned = this.calc_benefit(context)
-}
-
 func (this *CddMarket) get_allowed_withdraw(context PolicyObj) AssetObj {
 
 	if context.now <= this.start_clain {
