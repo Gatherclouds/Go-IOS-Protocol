@@ -58,3 +58,8 @@ func (m *MockRouter) Download(arg0, arg1 uint64) error {
 	ret0, _ := ret[0].(error)
 	return ret0
 }
+
+// Download indicates an expected call of Download
+func (mr *MockRouterMockRecorder) Download(arg0, arg1 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Download", reflect.TypeOf((*MockRouter)(nil).Download), arg0, arg1)
+}
