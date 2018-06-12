@@ -63,3 +63,9 @@ func (m *MockRouter) Download(arg0, arg1 uint64) error {
 func (mr *MockRouterMockRecorder) Download(arg0, arg1 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Download", reflect.TypeOf((*MockRouter)(nil).Download), arg0, arg1)
 }
+
+// FilteredChan indicates an expected call of FilteredChan
+func (mr *MockRouterMockRecorder) FilteredChan(arg0 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilteredChan", reflect.TypeOf((*MockRouter)(nil).FilteredChan), arg0)
+}
+

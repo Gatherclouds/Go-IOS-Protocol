@@ -10,14 +10,6 @@ func (this *TransactionIndex) create(constructor func(*TransactionObject)) *Tran
 	return &(*result.first)
 }
 
-func (this *TransactionIndex) modify(obj *TransactionObject, m *func(TransactionObject)) {
-
-	var t *TransactionObject
-
-	itr := this._index.find((*obj).id.instance())
-	this._index.modify(itr, m(o&TransactionObject))
-}
-
 func (this *TransactionIndex) add(o UniquePtr) {
 
 	var id ObjectIdType
