@@ -134,12 +134,4 @@ func (f *Filter) check(req message.Message) bool {
 	return m && t
 }
 
-func memberContain(a string, c []message.Message) bool {
-	for _, m := range c {
-		if m.From == a {
-			return true
-		}
-	}
-	return false
-}
 
