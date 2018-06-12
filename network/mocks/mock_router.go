@@ -38,3 +38,11 @@ func (m *MockRouter) Broadcast(arg0 message.Message) {
 func (mr *MockRouterMockRecorder) Broadcast(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Broadcast", reflect.TypeOf((*MockRouter)(nil).Broadcast), arg0)
 }
+
+
+// CancelDownload mocks base method
+func (m *MockRouter) CancelDownload(arg0, arg1 uint64) error {
+	ret := m.ctrl.Call(m, "CancelDownload", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
