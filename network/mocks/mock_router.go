@@ -64,8 +64,12 @@ func (mr *MockRouterMockRecorder) Download(arg0, arg1 interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Download", reflect.TypeOf((*MockRouter)(nil).Download), arg0, arg1)
 }
 
-// FilteredChan indicates an expected call of FilteredChan
-func (mr *MockRouterMockRecorder) FilteredChan(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilteredChan", reflect.TypeOf((*MockRouter)(nil).FilteredChan), arg0)
+// FilteredChan mocks base method
+func (m *MockRouter) FilteredChan(arg0 network.Filter) (chan message.Message, error) {
+	ret := m.ctrl.Call(m, "FilteredChan", arg0)
+	ret0, _ := ret[0].(chan message.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
+
 
