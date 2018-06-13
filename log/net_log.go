@@ -51,3 +51,19 @@ func Now() Timestamp {
 type Msg interface {
 	Form() url.Values
 }
+
+type MsgBlock struct {
+	SubType       string
+	BlockHeadHash string // base64
+	BlockNum      uint64
+}
+
+func (m *MsgBlock) Form() url.Values {
+	return url.Values{
+		"from":            {LocalID},
+		"time":            {Now().String()},
+		"type":            {"Block", m.SubType},
+		"block-head-hash": {m.BlockHeadHash},
+		"block-number":    {strconv.FormatUint(m.BlockNum, 10)},
+	}
+}
