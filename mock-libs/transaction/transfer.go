@@ -24,7 +24,7 @@ func (this *TransferTo) validate() {
 		}
 	}
 	public_c := make(crypto.blind(this.bf, net_public))
-	
+
 }
 
 func (this *TransferTo) calculate_fee(k FeeType) ShareType {

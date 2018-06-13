@@ -99,3 +99,29 @@ func (m *MsgNode) Form() url.Values {
 		"log":  {m.Log},
 	}
 }
+
+func ParseMsg(v url.Values) Msg {
+	switch v["type"][0] {
+	case "Block":
+		num, _ := strconv.ParseUint(v["block-number"][0], 10, 64)
+		return &MsgBlock{
+			SubType:       v["type"][1],
+			BlockHeadHash: v["block-head-hash"][0],
+			BlockNum:      num,
+		}
+	case "Tx":
+		num, _ := strconv.ParseInt(v["nonce"][0], 10, 64)
+		return &MsgTx{
+			SubType:   v["type"][1],
+			TxHash:    v["hash"][0],
+			Publisher: v["publisher"][0],
+			Nonce:     num,
+		}
+	case "Node":
+		return &MsgNode{
+			SubType: v["type"][1],
+			Log:     v["log"][0],
+		}
+	}
+	return nil
+}
