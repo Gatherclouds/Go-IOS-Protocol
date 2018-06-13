@@ -77,3 +77,9 @@ func (mr *MockRouterMockRecorder) FilteredChan(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilteredChan", reflect.TypeOf((*MockRouter)(nil).FilteredChan), arg0)
 }
 
+// Init mocks base method
+func (m *MockRouter) Init(arg0 network.Network, arg1 uint16) error {
+	ret := m.ctrl.Call(m, "Init", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
