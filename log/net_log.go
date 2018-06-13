@@ -67,3 +67,10 @@ func (m *MsgBlock) Form() url.Values {
 		"block-number":    {strconv.FormatUint(m.BlockNum, 10)},
 	}
 }
+
+type MsgTx struct {
+	SubType   string
+	TxHash    string
+	Publisher string
+	Nonce     int64
+}
