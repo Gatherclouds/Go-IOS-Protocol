@@ -83,3 +83,8 @@ func (m *MockRouter) Init(arg0 network.Network, arg1 uint16) error {
 	ret0, _ := ret[0].(error)
 	return ret0
 }
+
+// Init indicates an expected call of Init
+func (mr *MockRouterMockRecorder) Init(arg0, arg1 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockRouter)(nil).Init), arg0, arg1)
+}
