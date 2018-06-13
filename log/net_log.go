@@ -74,3 +74,14 @@ type MsgTx struct {
 	Publisher string
 	Nonce     int64
 }
+
+func (m *MsgTx) Form() url.Values {
+	return url.Values{
+		"from":      {LocalID},
+		"time":      {Now().String()},
+		"type":      {"Tx", m.SubType},
+		"hash":      {m.TxHash},
+		"publisher": {m.Publisher},
+		"nonce":     {strconv.FormatInt(m.Nonce, 10)},
+	}
+}
