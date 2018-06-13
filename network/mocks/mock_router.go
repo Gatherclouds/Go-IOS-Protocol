@@ -84,6 +84,11 @@ func (m *MockRouter) Init(arg0 network.Network, arg1 uint16) error {
 	return ret0
 }
 
+// Send mocks base method
+func (m *MockRouter) Send(arg0 message.Message) {
+	m.ctrl.Call(m, "Send", arg0)
+}
+
 // Init indicates an expected call of Init
 func (mr *MockRouterMockRecorder) Init(arg0, arg1 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockRouter)(nil).Init), arg0, arg1)
