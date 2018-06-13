@@ -89,6 +89,11 @@ func (mr *MockRouterMockRecorder) Init(arg0, arg1 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockRouter)(nil).Init), arg0, arg1)
 }
 
+// Stop mocks base method
+func (m *MockRouter) Stop() {
+	m.ctrl.Call(m, "Stop")
+}
+
 // Stop indicates an expected call of Stop
 func (mr *MockRouterMockRecorder) Stop() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stop", reflect.TypeOf((*MockRouter)(nil).Stop))

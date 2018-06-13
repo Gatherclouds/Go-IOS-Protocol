@@ -27,9 +27,6 @@ func (this *TransferTo) validate() {
 
 }
 
-func (this *TransferTo) calculate_fee(k FeeType) ShareType {
-	return k.fee + len(this.outputs)*k.price_per_output
-}
 
 func (this *TransferFrom) validate() {
 	debug.assert(this.fee.amount >= 0, "fee < 0")
