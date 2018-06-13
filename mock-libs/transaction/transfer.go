@@ -24,13 +24,7 @@ func (this *TransferTo) validate() {
 		}
 	}
 	public_c := make(crypto.blind(this.bf, net_public))
-
-	if len(outputs) > 1 {
-		for out := range outputs {
-			info := crypto.get_info(out.range_proof)
-			debug.assert(info.max_value <= database.MAX_SUPPLY, "Exceed Max Supply")
-		}
-	}
+	
 }
 
 func (this *TransferTo) calculate_fee(k FeeType) ShareType {

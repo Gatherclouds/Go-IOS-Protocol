@@ -85,3 +85,17 @@ func (m *MsgTx) Form() url.Values {
 		"nonce":     {strconv.FormatInt(m.Nonce, 10)},
 	}
 }
+
+type MsgNode struct {
+	SubType string
+	Log     string
+}
+
+func (m *MsgNode) Form() url.Values {
+	return url.Values{
+		"from": {LocalID},
+		"time": {Now().String()},
+		"type": {"Node", m.SubType},
+		"log":  {m.Log},
+	}
+}
