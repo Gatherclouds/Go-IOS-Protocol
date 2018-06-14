@@ -24,6 +24,24 @@ func Encode(w io.Writer, val interface{}) error {
 	return eb.toWriter(w)
 }
 
+func EncodeToBytes(val interface{}) ([]byte, error) {
+	eb := encbufPool.Get().(*encbuf)
+	defer encbufPool.Put(eb)
+	eb.reset()
+	if err := eb.encode(val); err != nil {
+		return nil, err
+	}
+	return eb.toBytes(), nil
+}
+
+func EncodeToReader(val interface{}) (size int, r io.Reader, err error) {
+	eb := encbufPool.Get().(*encbuf)
+	eb.reset()
+	if err := eb.encode(val); err != nil {
+		return 0, nil, err
+	}
+	return eb.size(), &encReader{buf: eb}, nil
+}
 
 // encode writes head to the given buffer, which must be at least
 // 9 bytes long. It returns the encoded bytes.
