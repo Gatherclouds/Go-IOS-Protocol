@@ -4,6 +4,8 @@ import (
 	"errors"
 	"io"
 	"bytes"
+	"reflect"
+	"fmt"
 )
 
 var (
@@ -30,4 +32,20 @@ func DecodeBytes(b []byte, val interface{}) error {
 		return ErrMoreThanOneValue
 	}
 	return nil
+}
+type decodeError struct {
+	msg string
+	typ reflect.Type
+	ctx []string
+}
+
+func (err *decodeError) Error() string {
+	ctx := ""
+	if len(err.ctx) > 0 {
+		ctx = ", decoding into "
+		for i := len(err.ctx) - 1; i >= 0; i-- {
+			ctx += err.ctx[i]
+		}
+	}
+	return fmt.Sprintf("rlp: %s for %v%s", err.msg, err.typ, ctx)
 }
