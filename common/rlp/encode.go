@@ -1,6 +1,9 @@
 package rlp
 
-import "io"
+import (
+	"io"
+	"sync"
+)
 
 var (
 	EmptyString = []byte{0x80}
@@ -69,4 +72,9 @@ func puthead(buf []byte, smalltag, largetag byte, size uint64) int {
 		buf[0] = largetag + byte(sizesize)
 		return sizesize + 1
 	}
+}
+
+// encbufs are pooled.
+var encbufPool = sync.Pool{
+	New: func() interface{} { return &encbuf{sizebuf: make([]byte, 9)} },
 }
