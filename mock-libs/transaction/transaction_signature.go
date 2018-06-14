@@ -21,7 +21,3 @@ func (this *TransactionType) set_Expiration(time TimeType) {
 	this.expiration = time
 }
 
-func (this *TransactionType) set_refer_block(reference BlockIdType) {
-	this.ref_block_num = crypto.reverse(reference.hash[0])
-	this.ref_block_prefix = reference.hash[0]
-}
