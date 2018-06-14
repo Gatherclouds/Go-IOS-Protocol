@@ -67,3 +67,15 @@ func wrapStreamError(err error, typ reflect.Type) error {
 	}
 	return err
 }
+
+func addErrorContext(err error, ctx string) error {
+	if decErr, ok := err.(*decodeError); ok {
+		decErr.ctx = append(decErr.ctx, ctx)
+	}
+	return err
+}
+
+var (
+	decoderInterface = reflect.TypeOf(new(Decoder)).Elem()
+	bigInt           = reflect.TypeOf(big.Int{})
+)
