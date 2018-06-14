@@ -49,3 +49,21 @@ func (err *decodeError) Error() string {
 	}
 	return fmt.Sprintf("rlp: %s for %v%s", err.msg, err.typ, ctx)
 }
+
+func wrapStreamError(err error, typ reflect.Type) error {
+	switch err {
+	case ErrCanonInt:
+		return &decodeError{msg: "non-canonical integer (leading zero bytes)", typ: typ}
+	case ErrCanonSize:
+		return &decodeError{msg: "non-canonical size information", typ: typ}
+	case ErrExpectedList:
+		return &decodeError{msg: "expected input list", typ: typ}
+	case ErrExpectedString:
+		return &decodeError{msg: "expected input string or byte", typ: typ}
+	case errUintOverflow:
+		return &decodeError{msg: "input string too long", typ: typ}
+	case errNotAtEOL:
+		return &decodeError{msg: "input list has too many elements", typ: typ}
+	}
+	return err
+}
