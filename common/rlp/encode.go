@@ -78,3 +78,9 @@ func puthead(buf []byte, smalltag, largetag byte, size uint64) int {
 var encbufPool = sync.Pool{
 	New: func() interface{} { return &encbuf{sizebuf: make([]byte, 9)} },
 }
+
+// encbuf implements io.Writer so it can be passed it into EncodeRLP.
+func (w *encbuf) Write(b []byte) (int, error) {
+	w.str = append(w.str, b...)
+	return len(b), nil
+}

@@ -17,10 +17,6 @@ func (this *SignedTransaction) get_required_signatures(chain_id ChainIdType, ava
 		s.check_authority(active)
 	}
 
-	s.remove_unused_signatures()
-
-	var result map[PublicKeyType]bool
-
 	for provided_sig := range s.provided_signatures {
 		ak, exist := this.available[provided_sig.key]
 		if exist {
