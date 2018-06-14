@@ -23,7 +23,4 @@ func (this *LinearMarket) get_allowed_withdraw(context PolicyObj) AssetObj {
 	return make(AssetObj(allowed_withdraw, context.amount.asset_id))
 }
 
-func (this *LinearMarket) is_deposit_allowed(context PlicyObj) bool {
-	return context.amount.asset_id == context.balance.asset_id && sum_below_max_shares(context.amount, context.balance)
-}
 

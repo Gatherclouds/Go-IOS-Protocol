@@ -3,6 +3,7 @@ package rlp
 import (
 	"errors"
 	"io"
+	"bytes"
 )
 
 var (
@@ -19,3 +20,14 @@ func Decode(r io.Reader, val interface{}) error {
 	return NewStream(r, 0).Decode(val)
 }
 
+func DecodeBytes(b []byte, val interface{}) error {
+	// TODO: this could use a Stream from a pool.
+	r := bytes.NewReader(b)
+	if err := NewStream(r, uint64(len(b))).Decode(val); err != nil {
+		return err
+	}
+	if r.Len() > 0 {
+		return ErrMoreThanOneValue
+	}
+	return nil
+}
