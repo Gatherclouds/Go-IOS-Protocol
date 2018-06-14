@@ -94,6 +94,11 @@ func (mr *MockRouterMockRecorder) Init(arg0, arg1 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Init", reflect.TypeOf((*MockRouter)(nil).Init), arg0, arg1)
 }
 
+// Run indicates an expected call of Run
+func (mr *MockRouterMockRecorder) Run() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockRouter)(nil).Run))
+}
+
 // Send mocks base method
 func (m *MockRouter) Send(arg0 message.Message) {
 	m.ctrl.Call(m, "Send", arg0)
