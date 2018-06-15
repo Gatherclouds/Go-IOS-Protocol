@@ -250,3 +250,22 @@ func decodeSliceElems(s *Stream, val reflect.Value, elemdec decoder) error {
 	return nil
 }
 
+func decodeListArray(s *Stream, val reflect.Value, elemdec decoder) error {
+	if _, err := s.List(); err != nil {
+		return wrapStreamError(err, val.Type())
+	}
+	vlen := val.Len()
+	i := 0
+	for ; i < vlen; i++ {
+		if err := elemdec(s, val.Index(i)); err == EOL {
+			break
+		} else if err != nil {
+			return addErrorContext(err, fmt.Sprint("[", i, "]"))
+		}
+	}
+	if i < vlen {
+		return &decodeError{msg: "input list has too few elements", typ: val.Type()}
+	}
+	return wrapStreamError(s.ListEnd(), val.Type())
+}
+
