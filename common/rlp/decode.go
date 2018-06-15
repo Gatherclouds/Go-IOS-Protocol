@@ -115,3 +115,12 @@ func makeDecoder(typ reflect.Type, tags tags) (dec decoder, err error) {
 		return nil, fmt.Errorf("rlp: type %v is not RLP-serializable", typ)
 	}
 }
+
+func decodeRawValue(s *Stream, val reflect.Value) error {
+	r, err := s.Raw()
+	if err != nil {
+		return err
+	}
+	val.SetBytes(r)
+	return nil
+}
