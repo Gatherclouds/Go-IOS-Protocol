@@ -16,12 +16,6 @@ func (this *SignedTransaction) get_required_signatures(chain_id ChainIdType, ava
 	for active := range required_active {
 		s.check_authority(active)
 	}
-
-	for provided_sig := range s.provided_signatures {
-		ak, exist := this.available[provided_sig.key]
-		if exist {
-			result[provided_sig.key] = true
-		}
-	}
+	
 	return result
 }

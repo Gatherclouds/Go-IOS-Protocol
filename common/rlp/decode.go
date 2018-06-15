@@ -124,3 +124,13 @@ func decodeRawValue(s *Stream, val reflect.Value) error {
 	val.SetBytes(r)
 	return nil
 }
+
+func decodeUint(s *Stream, val reflect.Value) error {
+	typ := val.Type()
+	num, err := s.uint(typ.Bits())
+	if err != nil {
+		return wrapStreamError(err, val.Type())
+	}
+	val.SetUint(num)
+	return nil
+}
