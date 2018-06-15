@@ -315,3 +315,25 @@ func decodeByteArray(s *Stream, val reflect.Value) error {
 	}
 	return nil
 }
+
+func makeStructDecoder(typ reflect.Type) (decoder, error) {
+	fields, err := structFields(typ)
+	if err != nil {
+		return nil, err
+	}
+	dec := func(s *Stream, val reflect.Value) (err error) {
+		if _, err := s.List(); err != nil {
+			return wrapStreamError(err, typ)
+		}
+		for _, f := range fields {
+			err := f.info.decoder(s, val.Field(f.index))
+			if err == EOL {
+				return &decodeError{msg: "too few elements", typ: typ}
+			} else if err != nil {
+				return addErrorContext(err, "."+typ.Field(f.index).Name)
+			}
+		}
+		return wrapStreamError(s.ListEnd(), typ)
+	}
+	return dec, nil
+}
