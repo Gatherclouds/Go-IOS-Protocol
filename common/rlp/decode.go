@@ -394,3 +394,29 @@ func makeOptionalPtrDecoder(typ reflect.Type) (decoder, error) {
 	}
 	return dec, nil
 }
+
+var ifsliceType = reflect.TypeOf([]interface{}{})
+
+func decodeInterface(s *Stream, val reflect.Value) error {
+	if val.Type().NumMethod() != 0 {
+		return fmt.Errorf("rlp: type %v is not RLP-serializable", val.Type())
+	}
+	kind, _, err := s.Kind()
+	if err != nil {
+		return err
+	}
+	if kind == List {
+		slice := reflect.New(ifsliceType).Elem()
+		if err := decodeListSlice(s, slice, decodeInterface); err != nil {
+			return err
+		}
+		val.Set(slice)
+	} else {
+		b, err := s.Bytes()
+		if err != nil {
+			return err
+		}
+		val.Set(reflect.ValueOf(b))
+	}
+	return nil
+}
