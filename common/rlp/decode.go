@@ -174,3 +174,34 @@ func decodeBigInt(s *Stream, val reflect.Value) error {
 	i.SetBytes(b)
 	return nil
 }
+
+func makeListDecoder(typ reflect.Type, tag tags) (decoder, error) {
+	etype := typ.Elem()
+	if etype.Kind() == reflect.Uint8 && !reflect.PtrTo(etype).Implements(decoderInterface) {
+		if typ.Kind() == reflect.Array {
+			return decodeByteArray, nil
+		} else {
+			return decodeByteSlice, nil
+		}
+	}
+	etypeinfo, err := cachedTypeInfo1(etype, tags{})
+	if err != nil {
+		return nil, err
+	}
+	var dec decoder
+	switch {
+	case typ.Kind() == reflect.Array:
+		dec = func(s *Stream, val reflect.Value) error {
+			return decodeListArray(s, val, etypeinfo.decoder)
+		}
+	case tag.tail:
+		dec = func(s *Stream, val reflect.Value) error {
+			return decodeSliceElems(s, val, etypeinfo.decoder)
+		}
+	default:
+		dec = func(s *Stream, val reflect.Value) error {
+			return decodeListSlice(s, val, etypeinfo.decoder)
+		}
+	}
+	return dec, nil
+}
