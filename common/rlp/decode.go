@@ -278,3 +278,31 @@ func decodeByteSlice(s *Stream, val reflect.Value) error {
 	return nil
 }
 
+func decodeByteArray(s *Stream, val reflect.Value) error {
+	kind, size, err := s.Kind()
+	if err != nil {
+		return err
+	}
+	vlen := val.Len()
+	switch kind {
+	
+	case String:
+		if uint64(vlen) < size {
+			return &decodeError{msg: "input string too long", typ: val.Type()}
+		}
+		if uint64(vlen) > size {
+			return &decodeError{msg: "input string too short", typ: val.Type()}
+		}
+		slice := val.Slice(0, vlen).Interface().([]byte)
+		if err := s.readFull(slice); err != nil {
+			return err
+		}
+		// Reject cases where single byte encoding should have been used.
+		if size == 1 && slice[0] < 128 {
+			return wrapStreamError(ErrCanonSize, val.Type())
+		}
+	case List:
+		return wrapStreamError(ErrExpectedString, val.Type())
+	}
+	return nil
+}
