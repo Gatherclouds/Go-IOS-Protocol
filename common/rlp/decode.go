@@ -152,3 +152,25 @@ func decodeString(s *Stream, val reflect.Value) error {
 	val.SetString(string(b))
 	return nil
 }
+
+func decodeBigIntNoPtr(s *Stream, val reflect.Value) error {
+	return decodeBigInt(s, val.Addr())
+}
+
+func decodeBigInt(s *Stream, val reflect.Value) error {
+	b, err := s.Bytes()
+	if err != nil {
+		return wrapStreamError(err, val.Type())
+	}
+	i := val.Interface().(*big.Int)
+	if i == nil {
+		i = new(big.Int)
+		val.Set(reflect.ValueOf(i))
+	}
+	// Reject leading zero bytes
+	if len(b) > 0 && b[0] == 0 {
+		return wrapStreamError(ErrCanonInt, val.Type())
+	}
+	i.SetBytes(b)
+	return nil
+}
