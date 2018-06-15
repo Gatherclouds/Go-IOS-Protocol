@@ -56,7 +56,17 @@ func makeOptionalPtrDecoder(typ reflect.Type) (decoder, error) {
 	}
 	dec := func(s *Stream, val reflect.Value) (err error) {
 		kind, size, err := s.Kind()
-		
+
+		if err != nil || size == 0 && kind != Byte {
+			// rearm s.Kind. This is important because the input
+			// position must advance to the next value even though
+			// we don't read anything.
+			s.kind = -1
+			// set the pointer to nil.
+			val.Set(reflect.Zero(typ))
+			return err
+		}
+
 		newval := val
 		if val.IsNil() {
 			newval = reflect.New(etype)
