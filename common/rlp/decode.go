@@ -237,6 +237,16 @@ func decodeSliceElems(s *Stream, val reflect.Value, elemdec decoder) error {
 		if i >= val.Len() {
 			val.SetLen(i + 1)
 		}
-
+		// decode into element
+		if err := elemdec(s, val.Index(i)); err == EOL {
+			break
+		} else if err != nil {
+			return addErrorContext(err, fmt.Sprint("[", i, "]"))
+		}
+	}
+	if i < val.Len() {
+		val.SetLen(i)
+	}
 	return nil
 }
+
