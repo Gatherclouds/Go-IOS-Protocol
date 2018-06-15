@@ -269,3 +269,12 @@ func decodeListArray(s *Stream, val reflect.Value, elemdec decoder) error {
 	return wrapStreamError(s.ListEnd(), val.Type())
 }
 
+func decodeByteSlice(s *Stream, val reflect.Value) error {
+	b, err := s.Bytes()
+	if err != nil {
+		return wrapStreamError(err, val.Type())
+	}
+	val.SetBytes(b)
+	return nil
+}
+
