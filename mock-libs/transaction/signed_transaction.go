@@ -16,6 +16,6 @@ func (this *SignedTransaction) get_required_signatures(chain_id ChainIdType, ava
 	for active := range required_active {
 		s.check_authority(active)
 	}
-	
+
 	return result
 }

@@ -134,3 +134,21 @@ func decodeUint(s *Stream, val reflect.Value) error {
 	val.SetUint(num)
 	return nil
 }
+
+func decodeBool(s *Stream, val reflect.Value) error {
+	b, err := s.Bool()
+	if err != nil {
+		return wrapStreamError(err, val.Type())
+	}
+	val.SetBool(b)
+	return nil
+}
+
+func decodeString(s *Stream, val reflect.Value) error {
+	b, err := s.Bytes()
+	if err != nil {
+		return wrapStreamError(err, val.Type())
+	}
+	val.SetString(string(b))
+	return nil
+}
