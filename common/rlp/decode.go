@@ -80,3 +80,38 @@ var (
 	decoderInterface = reflect.TypeOf(new(Decoder)).Elem()
 	bigInt           = reflect.TypeOf(big.Int{})
 )
+
+func makeDecoder(typ reflect.Type, tags tags) (dec decoder, err error) {
+	kind := typ.Kind()
+	switch {
+	case typ == rawValueType:
+		return decodeRawValue, nil
+	case typ.Implements(decoderInterface):
+		return decodeDecoder, nil
+	case kind != reflect.Ptr && reflect.PtrTo(typ).Implements(decoderInterface):
+		return decodeDecoderNoPtr, nil
+	case typ.AssignableTo(reflect.PtrTo(bigInt)):
+		return decodeBigInt, nil
+	case typ.AssignableTo(bigInt):
+		return decodeBigIntNoPtr, nil
+	case isUint(kind):
+		return decodeUint, nil
+	case kind == reflect.Bool:
+		return decodeBool, nil
+	case kind == reflect.String:
+		return decodeString, nil
+	case kind == reflect.Slice || kind == reflect.Array:
+		return makeListDecoder(typ, tags)
+	case kind == reflect.Struct:
+		return makeStructDecoder(typ)
+	case kind == reflect.Ptr:
+		if tags.nilOK {
+			return makeOptionalPtrDecoder(typ)
+		}
+		return makePtrDecoder(typ)
+	case kind == reflect.Interface:
+		return decodeInterface, nil
+	default:
+		return nil, fmt.Errorf("rlp: type %v is not RLP-serializable", typ)
+	}
+}
