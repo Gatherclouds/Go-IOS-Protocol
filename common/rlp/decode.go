@@ -220,3 +220,23 @@ func decodeListSlice(s *Stream, val reflect.Value, elemdec decoder) error {
 	}
 	return s.ListEnd()
 }
+
+func decodeSliceElems(s *Stream, val reflect.Value, elemdec decoder) error {
+	i := 0
+	for ; ; i++ {
+		// grow slice if necessary
+		if i >= val.Cap() {
+			newcap := val.Cap() + val.Cap()/2
+			if newcap < 4 {
+				newcap = 4
+			}
+			newv := reflect.MakeSlice(val.Type(), val.Len(), newcap)
+			reflect.Copy(newv, val)
+			val.Set(newv)
+		}
+		if i >= val.Len() {
+			val.SetLen(i + 1)
+		}
+
+	return nil
+}
