@@ -205,3 +205,18 @@ func makeListDecoder(typ reflect.Type, tag tags) (decoder, error) {
 	}
 	return dec, nil
 }
+
+func decodeListSlice(s *Stream, val reflect.Value, elemdec decoder) error {
+	size, err := s.List()
+	if err != nil {
+		return wrapStreamError(err, val.Type())
+	}
+	if size == 0 {
+		val.Set(reflect.MakeSlice(val.Type(), 0, 0))
+		return s.ListEnd()
+	}
+	if err := decodeSliceElems(s, val, elemdec); err != nil {
+		return err
+	}
+	return s.ListEnd()
+}
