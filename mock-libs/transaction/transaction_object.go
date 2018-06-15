@@ -1,5 +1,7 @@
 package transaction
 
+import "reflect"
+
 func (this *TransactionIndex) create(constructor func(*TransactionObject)) *TransactionObject {
 
 	var obj TransactionObject
@@ -20,14 +22,24 @@ func (this *TransactionIndex) remove(id ObjectIdType) {
 	inde.erase(itr)
 }
 
-func (this *TransactionIndex) get(id ObjectIdType) {
-	if id.thistype() != TransactionObject.IdType || id.space() != TransactionObject.space_id {
-		return nil
+// makePtrDecoder creates a decoder that decodes into
+// the pointer's element type.
+func makePtrDecoder(typ reflect.Type) (decoder, error) {
+	etype := typ.Elem()
+	etypeinfo, err := cachedTypeInfo1(etype, tags{})
+	if err != nil {
+		return nil, err
 	}
-
-	itr := this._index.find(id.instance())
-	if itr == this._index.end() {
-		return nil
+	dec := func(s *Stream, val reflect.Value) (err error) {
+		newval := val
+		if val.IsNil() {
+			newval = reflect.New(etype)
+		}
+		if err = etypeinfo.decoder(s, newval.Elem()); err == nil {
+			val.Set(newval)
+		}
+		return err
 	}
-	return itr
+	return dec, nil
 }
+
