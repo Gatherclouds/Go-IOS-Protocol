@@ -43,3 +43,28 @@ func makePtrDecoder(typ reflect.Type) (decoder, error) {
 	return dec, nil
 }
 
+// makeOptionalPtrDecoder creates a decoder that decodes empty values
+// as nil. Non-empty values are decoded into a value of the element type,
+// just like makePtrDecoder does.
+//
+// This decoder is used for pointer-typed struct fields with struct tag "nil".
+func makeOptionalPtrDecoder(typ reflect.Type) (decoder, error) {
+	etype := typ.Elem()
+	etypeinfo, err := cachedTypeInfo1(etype, tags{})
+	if err != nil {
+		return nil, err
+	}
+	dec := func(s *Stream, val reflect.Value) (err error) {
+		kind, size, err := s.Kind()
+		
+		newval := val
+		if val.IsNil() {
+			newval = reflect.New(etype)
+		}
+		if err = etypeinfo.decoder(s, newval.Elem()); err == nil {
+			val.Set(newval)
+		}
+		return err
+	}
+	return dec, nil
+}
