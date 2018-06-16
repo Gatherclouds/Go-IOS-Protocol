@@ -427,6 +427,17 @@ func decodeDecoderNoPtr(s *Stream, val reflect.Value) error {
 	return val.Addr().Interface().(Decoder).DecodeRLP(s)
 }
 
+func decodeDecoder(s *Stream, val reflect.Value) error {
+	// Decoder instances are not handled using the pointer rule if the type
+	// implements Decoder with pointer receiver (i.e. always)
+	// because it might handle empty values specially.
+	// We need to allocate one here in this case, like makePtrDecoder does.
+	if val.Kind() == reflect.Ptr && val.IsNil() {
+		val.Set(reflect.New(val.Type().Elem()))
+	}
+	return val.Interface().(Decoder).DecodeRLP(s)
+}
+
 func (k Kind) String() string {
 	switch k {
 	case Byte:
