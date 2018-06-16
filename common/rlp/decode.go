@@ -518,3 +518,14 @@ type Stream struct {
 	kinderr error  // error from last readKind
 	stack   []listpos
 }
+
+
+// NewListStream creates a new stream that pretends to be positioned
+// at an encoded list of the given length.
+func NewListStream(r io.Reader, len uint64) *Stream {
+	s := new(Stream)
+	s.Reset(r, len)
+	s.kind = List
+	s.size = len
+	return s
+}
