@@ -46,6 +46,18 @@ func EncodeToReader(val interface{}) (size int, r io.Reader, err error) {
 	return eb.size(), &encReader{buf: eb}, nil
 }
 
+type encbuf struct {
+	str     []byte
+	lheads  []*listhead
+	lhsize  int
+	sizebuf []byte
+}
+
+type listhead struct {
+	offset int
+	size   int
+}
+
 // encode writes head to the given buffer, which must be at least
 // 9 bytes long. It returns the encoded bytes.
 func (head *listhead) encode(buf []byte) []byte {
