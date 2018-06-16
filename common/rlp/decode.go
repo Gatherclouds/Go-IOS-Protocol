@@ -489,3 +489,22 @@ type ByteReader interface {
 	io.Reader
 	io.ByteReader
 }
+
+
+// Stream is not safe for concurrent use.
+type Stream struct {
+	r ByteReader
+
+	// number of bytes remaining to be read from r.
+	remaining uint64
+	limited   bool
+
+	// auxiliary buffer for integer decoding
+	uintbuf []byte
+
+	kind    Kind   // kind of value ahead
+	size    uint64 // size of value ahead
+	byteval byte   // value of single byte in type tag
+	kinderr error  // error from last readKind
+	stack   []listpos
+}

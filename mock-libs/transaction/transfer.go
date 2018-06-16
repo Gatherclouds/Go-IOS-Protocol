@@ -15,14 +15,6 @@ func (this *TransferTo) validate() {
 
 	var in, out []CommitmentType
 	net_public := amount.amount.value
-
-	for i := 0; i < len(this.outputs); i++ {
-		out.append(this.outputs[i].commitment)
-
-		if i > 0 {
-			debug.assert(out[i-1] < out[i], "not in correct order")
-		}
-	}
 	public_c := make(crypto.blind(this.bf, net_public))
 
 }
