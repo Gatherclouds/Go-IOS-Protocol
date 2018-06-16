@@ -459,3 +459,9 @@ func (k Kind) String() string {
 		return fmt.Sprintf("Unknown(%d)", k)
 	}
 }
+
+var (
+	// EOL is returned when the end of the current list
+	// has been reached during streaming.
+	EOL = errors.New("rlp: end of list")
+	)

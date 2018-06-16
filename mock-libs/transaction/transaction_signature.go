@@ -17,7 +17,4 @@ func (this *SignatureType) s_sign(key PrivateKeyType, chain_id ChainIdType) Sign
 	return this.key.sign_compact(enc.result())
 }
 
-func (this *TransactionType) set_Expiration(time TimeType) {
-	this.expiration = time
-}
 
