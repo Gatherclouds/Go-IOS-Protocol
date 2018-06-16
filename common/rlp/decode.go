@@ -477,4 +477,9 @@ var (
 	// additional data after the first RLP value.
 	ErrMoreThanOneValue = errors.New("rlp: input contains more than one value")
 
+	// internal errors
+	errNotInList    = errors.New("rlp: call of ListEnd outside of any list")
+	errNotAtEOL     = errors.New("rlp: call of ListEnd not positioned at EOL")
+	errUintOverflow = errors.New("rlp: uint overflow")
+
 	)
