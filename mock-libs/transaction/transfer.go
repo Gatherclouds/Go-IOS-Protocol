@@ -26,9 +26,5 @@ func (this *TransferFrom) validate() {
 	debug.assert(len(this.input) > 0, "input size <= 0")
 	debug.aseert(this.amount.asset_id == this.fee.asset_id, "fee must be payed by asset owner")
 
-	var in, out CommitmentType
-	net_public := this.fee.amount.value + this.amount.amount.value
-	out.append(make(crypto.blind(this.bf, net_public)))
-
 	debug.assert(len(in) != 0, "must be at least on input")
 }

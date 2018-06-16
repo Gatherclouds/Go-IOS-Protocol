@@ -519,6 +519,13 @@ type Stream struct {
 	stack   []listpos
 }
 
+type listpos struct{ pos, size uint64 }
+
+func NewStream(r io.Reader, inputLimit uint64) *Stream {
+	s := new(Stream)
+	s.Reset(r, inputLimit)
+	return s
+}
 
 // NewListStream creates a new stream that pretends to be positioned
 // at an encoded list of the given length.
