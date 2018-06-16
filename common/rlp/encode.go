@@ -3,6 +3,7 @@ package rlp
 import (
 	"io"
 	"sync"
+	"reflect"
 )
 
 var (
@@ -105,4 +106,13 @@ func (w *encbuf) reset() {
 func (w *encbuf) Write(b []byte) (int, error) {
 	w.str = append(w.str, b...)
 	return len(b), nil
+}
+
+func (w *encbuf) encode(val interface{}) error {
+	rval := reflect.ValueOf(val)
+	ti, err := cachedTypeInfo(rval.Type(), tags{})
+	if err != nil {
+		return err
+	}
+	return ti.writer(rval, w)
 }

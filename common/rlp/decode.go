@@ -476,5 +476,5 @@ var (
 	// This error is reported by DecodeBytes if the slice contains
 	// additional data after the first RLP value.
 	ErrMoreThanOneValue = errors.New("rlp: input contains more than one value")
-	
+
 	)
