@@ -38,12 +38,5 @@ func (this *TransferFrom) validate() {
 	net_public := this.fee.amount.value + this.amount.amount.value
 	out.append(make(crypto.blind(this.bf, net_public)))
 
-	for i := 0; i < len(this.inputs); i++ {
-		in.append(this.inputs[i].commitment)
-		if i > 0 {
-			debug.assert(in[i-1] < in[i], "not in correct order")
-		}
-	}
-
 	debug.assert(len(in) != 0, "must be at least on input")
 }
