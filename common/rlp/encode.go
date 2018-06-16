@@ -91,6 +91,16 @@ var encbufPool = sync.Pool{
 	New: func() interface{} { return &encbuf{sizebuf: make([]byte, 9)} },
 }
 
+func (w *encbuf) reset() {
+	w.lhsize = 0
+	if w.str != nil {
+		w.str = w.str[:0]
+	}
+	if w.lheads != nil {
+		w.lheads = w.lheads[:0]
+	}
+}
+
 // encbuf implements io.Writer so it can be passed it into EncodeRLP.
 func (w *encbuf) Write(b []byte) (int, error) {
 	w.str = append(w.str, b...)
