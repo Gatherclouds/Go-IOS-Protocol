@@ -426,3 +426,16 @@ func decodeInterface(s *Stream, val reflect.Value) error {
 func decodeDecoderNoPtr(s *Stream, val reflect.Value) error {
 	return val.Addr().Interface().(Decoder).DecodeRLP(s)
 }
+
+func (k Kind) String() string {
+	switch k {
+	case Byte:
+		return "Byte"
+	case String:
+		return "String"
+	case List:
+		return "List"
+	default:
+		return fmt.Sprintf("Unknown(%d)", k)
+	}
+}
