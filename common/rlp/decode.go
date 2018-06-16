@@ -481,5 +481,11 @@ var (
 	errNotInList    = errors.New("rlp: call of ListEnd outside of any list")
 	errNotAtEOL     = errors.New("rlp: call of ListEnd not positioned at EOL")
 	errUintOverflow = errors.New("rlp: uint overflow")
+)
 
-	)
+// ByteReader must be implemented by any input reader for a Stream. It
+// is implemented by e.g. bufio.Reader and bytes.Reader.
+type ByteReader interface {
+	io.Reader
+	io.ByteReader
+}
