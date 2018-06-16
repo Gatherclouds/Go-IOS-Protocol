@@ -490,7 +490,17 @@ type ByteReader interface {
 	io.ByteReader
 }
 
-
+// Stream can be used for piecemeal decoding of an input stream. This
+// is useful if the input is very large or if the decoding rules for a
+// type depend on the input structure. Stream does not keep an
+// internal buffer. After decoding a value, the input reader will be
+// positioned just before the type information for the next value.
+//
+// When decoding a list and the input position reaches the declared
+// length of the list, all operations will return error EOL.
+// The end of the list must be acknowledged using ListEnd to continue
+// reading the enclosing list.
+//
 // Stream is not safe for concurrent use.
 type Stream struct {
 	r ByteReader
