@@ -714,6 +714,15 @@ func (s *Stream) Decode(val interface{}) error {
 	if rval.IsNil() {
 		return errDecodeIntoNil
 	}
-	
+	info, err := cachedTypeInfo(rtyp.Elem(), tags{})
+	if err != nil {
+		return err
+	}
+
+	err = info.decoder(s, rval.Elem())
+	if decErr, ok := err.(*decodeError); ok && len(decErr.ctx) > 0 {
+		// add decode target type to error so context has more meaning
+		decErr.ctx = append(decErr.ctx, fmt.Sprint("(", rtyp.Elem(), ")"))
+	}
 	return err
 }
