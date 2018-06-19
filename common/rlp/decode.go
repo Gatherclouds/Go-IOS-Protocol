@@ -662,3 +662,20 @@ func (s *Stream) Bool() (bool, error) {
 		return false, fmt.Errorf("rlp: invalid boolean value: %d", num)
 	}
 }
+
+// List starts decoding an RLP list. If the input does not contain a
+// list, the returned error will be ErrExpectedList. When the list's
+// end has been reached, any Stream operation will return EOL.
+func (s *Stream) List() (size uint64, err error) {
+	kind, size, err := s.Kind()
+	if err != nil {
+		return 0, err
+	}
+	if kind != List {
+		return 0, ErrExpectedList
+	}
+	s.stack = append(s.stack, listpos{0, size})
+	s.kind = -1
+	s.size = 0
+	return size, nil
+}
