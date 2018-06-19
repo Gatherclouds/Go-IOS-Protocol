@@ -611,3 +611,26 @@ func (s *Stream) Raw() ([]byte, error) {
 func (s *Stream) Uint() (uint64, error) {
 	return s.uint(64)
 }
+
+func (s *Stream) uint(maxbits int) (uint64, error) {
+	kind, size, err := s.Kind()
+	if err != nil {
+		return 0, err
+	}
+	switch kind {
+	case Byte:
+		if s.byteval == 0 {
+			return 0, ErrCanonInt
+		}
+		s.kind = -1 // rearm Kind
+		return uint64(s.byteval), nil
+	case String:
+		if size > uint64(maxbits/8) {
+			return 0, errUintOverflow
+		}
+		v, err := s.readUint(byte(size))
+		
+	default:
+		return 0, ErrExpectedString
+	}
+}
