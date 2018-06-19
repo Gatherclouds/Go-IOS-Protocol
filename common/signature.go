@@ -35,3 +35,12 @@ func VerifySignature(info []byte, s Signature) bool {
 	return false
 }
 
+func (s *Signature) Encode() []byte {
+	sr := SignatureRaw{int8(s.Algorithm), s.Sig, s.Pubkey}
+	b, err := sr.Marshal(nil)
+	if err != nil {
+		panic(err)
+		return nil
+	}
+	return b
+}
