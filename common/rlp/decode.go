@@ -590,7 +590,7 @@ func (s *Stream) Raw() ([]byte, error) {
 		s.kind = -1 // rearm Kind
 		return []byte{s.byteval}, nil
 	}
-	
+
 	if kind == String {
 		puthead(buf, 0x80, 0xB7, size)
 	} else {

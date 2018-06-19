@@ -10,11 +10,5 @@ func (this *SignatureType) s_sign(key PrivateKeyType, chain_id ChainIdType) Sign
 	return this.signatures[len(this.signatures)-1]
 }
 
-func (this *SignatureType) s_sign(key PrivateKeyType, chain_id ChainIdType) SignatureType {
-	var enc encoder
-	crypto.pack(enc, chain_id)
-	crypto.pack(enc, this)
-	return this.key.sign_compact(enc.result())
-}
 
 
