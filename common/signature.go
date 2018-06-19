@@ -44,3 +44,12 @@ func (s *Signature) Encode() []byte {
 	}
 	return b
 }
+
+func (s *Signature) Decode(b []byte) error {
+	var sr SignatureRaw
+	_, err := sr.Unmarshal(b)
+	s.Algorithm = SignAlgorithm(sr.Algorithm)
+	s.Sig = sr.Sig
+	s.Pubkey = sr.Pubkey
+	return err
+}
