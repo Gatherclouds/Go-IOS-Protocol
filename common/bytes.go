@@ -1,5 +1,7 @@
 package common
 
+import "encoding/hex"
+
 func FromHex(s string) []byte {
 	if len(s) > 1 {
 		if s[0:2] == "0x" || s[0:2] == "0X" {
@@ -11,3 +13,9 @@ func FromHex(s string) []byte {
 	}
 	return Hex2Bytes(s)
 }
+
+func Hex2Bytes(str string) []byte {
+	h, _ := hex.DecodeString(str)
+	return h
+}
+
