@@ -553,3 +553,29 @@ func NewListStream(r io.Reader, len uint64) *Stream {
 	s.size = len
 	return s
 }
+
+// Bytes reads an RLP string and returns its contents as a byte slice.
+// If the input does not contain an RLP string, the returned
+// error will be ErrExpectedString.
+func (s *Stream) Bytes() ([]byte, error) {
+	kind, size, err := s.Kind()
+	if err != nil {
+		return nil, err
+	}
+	switch kind {
+	case Byte:
+		s.kind = -1 // rearm Kind
+		return []byte{s.byteval}, nil
+	case String:
+		b := make([]byte, size)
+		if err = s.readFull(b); err != nil {
+			return nil, err
+		}
+		if size == 1 && b[0] < 128 {
+			return nil, ErrCanonSize
+		}
+		return b, nil
+	default:
+		return nil, ErrExpectedString
+	}
+}
