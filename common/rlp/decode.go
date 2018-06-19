@@ -629,7 +629,17 @@ func (s *Stream) uint(maxbits int) (uint64, error) {
 			return 0, errUintOverflow
 		}
 		v, err := s.readUint(byte(size))
-		
+		switch {
+		case err == ErrCanonSize:
+			// Adjust error because we're not reading a size right now.
+			return 0, ErrCanonInt
+		case err != nil:
+			return 0, err
+		case size > 0 && v < 128:
+			return 0, ErrCanonSize
+		default:
+			return v, nil
+		}
 	default:
 		return 0, ErrExpectedString
 	}
