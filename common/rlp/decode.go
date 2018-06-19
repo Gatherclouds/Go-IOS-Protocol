@@ -698,3 +698,22 @@ func (s *Stream) ListEnd() error {
 	s.size = 0
 	return nil
 }
+
+// Decode decodes a value and stores the result in the value pointed
+// to by val. Please see the documentation for the Decode function
+// to learn about the decoding rules.
+func (s *Stream) Decode(val interface{}) error {
+	if val == nil {
+		return errDecodeIntoNil
+	}
+	rval := reflect.ValueOf(val)
+	rtyp := rval.Type()
+	if rtyp.Kind() != reflect.Ptr {
+		return errNoPointer
+	}
+	if rval.IsNil() {
+		return errDecodeIntoNil
+	}
+	
+	return err
+}
