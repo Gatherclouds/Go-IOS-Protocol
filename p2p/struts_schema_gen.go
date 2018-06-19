@@ -1034,26 +1034,12 @@ func (d *TxPoolRaw) Unmarshal(buf []byte) (uint64, error) {
 					l = t
 
 				}
-				if uint64(cap(d.TxHash[k0])) >= l {
-					d.TxHash[k0] = d.TxHash[k0][:l]
-				} else {
-					d.TxHash[k0] = make([]byte, l)
-				}
-				copy(d.TxHash[k0], buf[i+0:])
-				i += l
-			}
 
 		}
 	}
 	return i + 0, nil
 }
 
-type BlockHead struct {
-	Version   int8
-	SuperHash []byte
-	TreeHash  []byte
-	Time      int64
-}
 
 
 

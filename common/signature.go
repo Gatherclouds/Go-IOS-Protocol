@@ -53,3 +53,7 @@ func (s *Signature) Decode(b []byte) error {
 	s.Pubkey = sr.Pubkey
 	return err
 }
+
+func (s *Signature) Hash() []byte {
+	return Sha256(s.Encode())
+}
