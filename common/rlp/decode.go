@@ -644,3 +644,21 @@ func (s *Stream) uint(maxbits int) (uint64, error) {
 		return 0, ErrExpectedString
 	}
 }
+
+// Bool reads an RLP string of up to 1 byte and returns its contents
+// as a boolean. If the input does not contain an RLP string, the
+// returned error will be ErrExpectedString.
+func (s *Stream) Bool() (bool, error) {
+	num, err := s.uint(8)
+	if err != nil {
+		return false, err
+	}
+	switch num {
+	case 0:
+		return false, nil
+	case 1:
+		return true, nil
+	default:
+		return false, fmt.Errorf("rlp: invalid boolean value: %d", num)
+	}
+}
