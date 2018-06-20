@@ -1015,27 +1015,7 @@ func (d *TxPoolRaw) Unmarshal(buf []byte) (uint64, error) {
 		} else {
 			d.TxHash = make([][]byte, l)
 		}
-		for k0 := range d.TxHash {
-
-			{
-				l := uint64(0)
-
-				{
-
-					bs := uint8(7)
-					t := uint64(buf[i+0] & 0x7F)
-					for buf[i+0]&0x80 == 0x80 {
-						i++
-						t |= uint64(buf[i+0]&0x7F) << bs
-						bs += 7
-					}
-					i++
-
-					l = t
-
-				}
-
-		}
+		
 	}
 	return i + 0, nil
 }
