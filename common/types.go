@@ -6,3 +6,9 @@ const (
 )
 
 type Hash [HashLength]byte
+
+func BytesToHash(b []byte) Hash {
+	var h Hash
+	h.SetBytes(b)
+	return h
+}
