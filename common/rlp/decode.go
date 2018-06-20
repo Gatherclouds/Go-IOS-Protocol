@@ -817,5 +817,12 @@ func (s *Stream) readKind() (kind Kind, size uint64, err error) {
 		}
 		return 0, 0, err
 	}
-	
+	s.byteval = 0
+	switch {
+	case b < 0x80:
+		// For a single byte whose value is in the [0x00, 0x7F] range, that byte
+		// is its own RLP encoding.
+		s.byteval = b
+		return Byte, 0, nil
+	}
 }
