@@ -753,5 +753,18 @@ func (s *Stream) Reset(r io.Reader, inputLimit uint64) {
 			s.limited = false
 		}
 	}
-	
+	// Wrap r with a buffer if it doesn't have one.
+	bufr, ok := r.(ByteReader)
+	if !ok {
+		bufr = bufio.NewReader(r)
+	}
+	s.r = bufr
+	// Reset the decoding context.
+	s.stack = s.stack[:0]
+	s.size = 0
+	s.kind = -1
+	s.kinderr = nil
+	if s.uintbuf == nil {
+		s.uintbuf = make([]byte, 8)
+	}
 }
