@@ -1015,7 +1015,7 @@ func (d *TxPoolRaw) Unmarshal(buf []byte) (uint64, error) {
 		} else {
 			d.TxHash = make([][]byte, l)
 		}
-		
+
 	}
 	return i + 0, nil
 }

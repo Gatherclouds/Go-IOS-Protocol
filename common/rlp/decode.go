@@ -768,3 +768,21 @@ func (s *Stream) Reset(r io.Reader, inputLimit uint64) {
 		s.uintbuf = make([]byte, 8)
 	}
 }
+
+func (s *Stream) Kind() (kind Kind, size uint64, err error) {
+	var tos *listpos
+	if len(s.stack) > 0 {
+		tos = &s.stack[len(s.stack)-1]
+	}
+	if s.kind < 0 {
+		s.kinderr = nil
+		// Don't read further if we're at the end of the
+		// innermost list.
+		if tos != nil && tos.pos == tos.size {
+			return 0, 0, EOL
+		}
+		
+	// Note: this might return a sticky error generated
+	// by an earlier call to readKind.
+	return s.kind, s.size, s.kinderr
+}
