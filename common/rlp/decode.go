@@ -781,7 +781,22 @@ func (s *Stream) Kind() (kind Kind, size uint64, err error) {
 		if tos != nil && tos.pos == tos.size {
 			return 0, 0, EOL
 		}
-		
+		s.kind, s.size, s.kinderr = s.readKind()
+		if s.kinderr == nil {
+			if tos == nil {
+				// At toplevel, check that the value is smaller
+				// than the remaining input length.
+				if s.limited && s.size > s.remaining {
+					s.kinderr = ErrValueTooLarge
+				}
+			} else {
+				// Inside a list, check that the value doesn't overflow the list.
+				if s.size > tos.size-tos.pos {
+					s.kinderr = ErrElemTooLarge
+				}
+			}
+		}
+	}
 	// Note: this might return a sticky error generated
 	// by an earlier call to readKind.
 	return s.kind, s.size, s.kinderr
