@@ -1010,11 +1010,6 @@ func (d *TxPoolRaw) Unmarshal(buf []byte) (uint64, error) {
 			l = t
 
 		}
-		if uint64(cap(d.TxHash)) >= l {
-			d.TxHash = d.TxHash[:l]
-		} else {
-			d.TxHash = make([][]byte, l)
-		}
 
 	}
 	return i + 0, nil

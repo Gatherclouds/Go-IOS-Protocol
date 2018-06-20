@@ -1,5 +1,10 @@
 package common
 
+import (
+	"bytes"
+	"encoding/binary"
+)
+
 const (
 	HashLength    = 32
 	AddressLength = 20
@@ -23,3 +28,11 @@ func (h *Hash) SetBytes(b []byte) {
 
 	copy(h[HashLength-len(b):], b)
 }
+
+func IntToBytes(n int) []byte {
+	x := int32(n)
+	bytesBuffer := bytes.NewBuffer([]byte{})
+	binary.Write(bytesBuffer, binary.BigEndian, x)
+	return bytesBuffer.Bytes()
+}
+
