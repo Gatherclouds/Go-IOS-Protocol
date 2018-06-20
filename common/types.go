@@ -56,3 +56,9 @@ func BytesToInt64(b []byte) int64 {
 	binary.Read(bytesBuffer, binary.BigEndian, &x)
 	return int64(x)
 }
+
+func Uint64ToBytes(i uint64) []byte {
+	buf := make([]byte, 8)
+	binary.LittleEndian.PutUint64(buf, uint64(i))
+	return buf
+}
