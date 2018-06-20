@@ -824,5 +824,11 @@ func (s *Stream) readKind() (kind Kind, size uint64, err error) {
 		// is its own RLP encoding.
 		s.byteval = b
 		return Byte, 0, nil
+	case b < 0xB8:
+		// Otherwise, if a string is 0-55 bytes long,
+		// the RLP encoding consists of a single byte with value 0x80 plus the
+		// length of the string followed by the string. The range of the first
+		// byte is thus [0x80, 0xB7].
+		return String, uint64(b - 0x80), nil
 	}
 }
