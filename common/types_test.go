@@ -14,3 +14,10 @@ func TestIntToBytes(t *testing.T) {
 		assert.Equal(t, byteCases[k], bs)
 	}
 }
+
+func TestBytesToInt(t *testing.T) {
+	for k, v := range byteCases {
+		i := BytesToInt(v)
+		assert.Equal(t, intCases[k], i)
+	}
+}
