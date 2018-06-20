@@ -801,3 +801,21 @@ func (s *Stream) Kind() (kind Kind, size uint64, err error) {
 	// by an earlier call to readKind.
 	return s.kind, s.size, s.kinderr
 }
+
+func (s *Stream) readKind() (kind Kind, size uint64, err error) {
+	b, err := s.readByte()
+	if err != nil {
+		if len(s.stack) == 0 {
+			// At toplevel, Adjust the error to actual EOF. io.EOF is
+			// used by callers to determine when to stop decoding.
+			switch err {
+			case io.ErrUnexpectedEOF:
+				err = io.EOF
+			case ErrValueTooLarge:
+				err = io.EOF
+			}
+		}
+		return 0, 0, err
+	}
+	
+}
