@@ -769,6 +769,17 @@ func (s *Stream) Reset(r io.Reader, inputLimit uint64) {
 	}
 }
 
+// Kind returns the kind and size of the next value in the
+// input stream.
+//
+// The returned size is the number of bytes that make up the value.
+// For kind == Byte, the size is zero because the value is
+// contained in the type tag.
+//
+// The first call to Kind will read size information from the input
+// reader and leave it positioned at the start of the actual bytes of
+// the value. Subsequent calls to Kind (until the value is decoded)
+// will not advance the input reader and return cached information.
 func (s *Stream) Kind() (kind Kind, size uint64, err error) {
 	var tos *listpos
 	if len(s.stack) > 0 {
