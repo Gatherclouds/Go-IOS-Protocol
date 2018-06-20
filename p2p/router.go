@@ -1,6 +1,9 @@
 package p2p
 
-import "fmt"
+import (
+	"fmt"
+	"Go-IOS-Protocol/core"
+)
 
 /*
 Marked request types using by protocol
@@ -178,14 +181,4 @@ func memberContain(a string, c []core.Member) bool {
 		}
 	}
 	return false
-}
-
-func reqTypeContain(a int, c []ReqType) bool {
-	for _, t := range c {
-		if int(t) == a {
-			return true
-		}
-	}
-	return false
-
 }
