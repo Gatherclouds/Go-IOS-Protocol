@@ -3,6 +3,7 @@ package common
 import (
 	"testing"
 	"bytes"
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestSignature(t *testing.T) {
