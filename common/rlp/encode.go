@@ -127,3 +127,19 @@ func (w *encbuf) encodeStringHeader(size int) {
 		w.str = append(w.str, w.sizebuf[:sizesize+1]...)
 	}
 }
+
+func (w *encbuf) encodeString(b []byte) {
+	if len(b) == 1 && b[0] <= 0x7F {
+		// fits single byte, no string header
+		w.str = append(w.str, b[0])
+	} else {
+		w.encodeStringHeader(len(b))
+		w.str = append(w.str, b...)
+	}
+}
+
+func (w *encbuf) list() *listhead {
+	lh := &listhead{offset: len(w.str), size: w.lhsize}
+	w.lheads = append(w.lheads, lh)
+	return lh
+}
