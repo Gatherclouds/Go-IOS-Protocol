@@ -132,16 +132,12 @@ func (n *Node) FindNeighbours(ns []*Node) []*Node {
 	return neighbours
 }
 
-func xorDistance(one, other NodeID) (ret int) {
-	oneBytes := []byte(one)
-	otherBytes := []byte(other)
-	for i := 0; i < len(oneBytes); i++ {
-		xor := oneBytes[i] ^ otherBytes[i]
-		for j := 0; j < 8; j++ {
-			if (xor>>uint8(7-j))&0x01 != 0 {
-				return i*8 + j
-			}
-		}
+func (w *encbuf) listEnd(lh *listhead) {
+	lh.size = w.size() - lh.offset - lh.size
+	if lh.size < 56 {
+		w.lhsize += 1 // length encoded into kind tag
+	} else {
+		w.lhsize += 1 + intsize(uint64(lh.size))
 	}
-	return len(oneBytes) * 8
 }
+
