@@ -105,12 +105,6 @@ func (n *Node) FindNeighbours(ns []*Node) []*Node {
 			}
 		}
 	}
-	for k, _ := range neighbourKeys {
-		if len(neighbours) >= MaxNeighbourNum {
-			break
-		}
-		neighbours = append(neighbours, ns[k])
-	}
 	return neighbours
 }
 

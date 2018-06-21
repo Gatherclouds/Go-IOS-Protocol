@@ -166,6 +166,9 @@ func (w *encbuf) toBytes() []byte {
 		n := copy(out[pos:], w.str[strpos:head.offset])
 		pos += n
 		strpos += n
+		// write the header
+		enc := head.encode(out[pos:])
+		pos += len(enc)
 	}
 
 	return out
