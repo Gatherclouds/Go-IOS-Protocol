@@ -916,3 +916,14 @@ func (s *Stream) readFull(buf []byte) (err error) {
 	}
 	return err
 }
+
+func (s *Stream) readByte() (byte, error) {
+	if err := s.willRead(1); err != nil {
+		return 0, err
+	}
+	b, err := s.r.ReadByte()
+	if err == io.EOF {
+		err = io.ErrUnexpectedEOF
+	}
+	return b, err
+}
