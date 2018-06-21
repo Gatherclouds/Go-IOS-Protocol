@@ -96,7 +96,7 @@ func (n *Node) FindNeighbours(ns []*Node) []*Node {
 	sortArr := make([]int, len(ns))
 	copy(sortArr, disArr)
 	sort.Ints(sortArr)
-	
+
 	return neighbours
 }
 

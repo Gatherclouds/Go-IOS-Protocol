@@ -170,6 +170,7 @@ func (w *encbuf) toBytes() []byte {
 		enc := head.encode(out[pos:])
 		pos += len(enc)
 	}
-
+	// copy string data after the last list header
+	copy(out[pos:], w.str[strpos:])
 	return out
 }
