@@ -96,15 +96,7 @@ func (n *Node) FindNeighbours(ns []*Node) []*Node {
 	sortArr := make([]int, len(ns))
 	copy(sortArr, disArr)
 	sort.Ints(sortArr)
-
-	neighbourKeys := make(map[int]int, 0)
-	for _, v := range sortArr {
-		for k, vd := range disArr {
-			if _, ok := neighbourKeys[k]; !ok && v == vd && len(neighbourKeys) < MaxNeighbourNum {
-				neighbourKeys[k] = 0
-			}
-		}
-	}
+	
 	return neighbours
 }
 

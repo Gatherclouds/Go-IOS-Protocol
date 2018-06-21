@@ -927,3 +927,23 @@ func (s *Stream) readByte() (byte, error) {
 	}
 	return b, err
 }
+
+func (s *Stream) willRead(n uint64) error {
+	s.kind = -1 // rearm Kind
+
+	if len(s.stack) > 0 {
+		// check list overflow
+		tos := s.stack[len(s.stack)-1]
+		if n > tos.size-tos.pos {
+			return ErrElemTooLarge
+		}
+		s.stack[len(s.stack)-1].pos += n
+	}
+	if s.limited {
+		if n > s.remaining {
+			return ErrValueTooLarge
+		}
+		s.remaining -= n
+	}
+	return nil
+}
