@@ -901,3 +901,18 @@ func (s *Stream) readUint(size byte) (uint64, error) {
 		return binary.BigEndian.Uint64(s.uintbuf), nil
 	}
 }
+
+func (s *Stream) readFull(buf []byte) (err error) {
+	if err := s.willRead(uint64(len(buf))); err != nil {
+		return err
+	}
+	var nn, n int
+	for n < len(buf) && err == nil {
+		nn, err = s.r.Read(buf[n:])
+		n += nn
+	}
+	if err == io.EOF {
+		err = io.ErrUnexpectedEOF
+	}
+	return err
+}
