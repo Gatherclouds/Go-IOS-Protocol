@@ -143,3 +143,12 @@ func (w *encbuf) list() *listhead {
 	w.lheads = append(w.lheads, lh)
 	return lh
 }
+
+func (w *encbuf) listEnd(lh *listhead) {
+	lh.size = w.size() - lh.offset - lh.size
+	if lh.size < 56 {
+		w.lhsize += 1 // length encoded into kind tag
+	} else {
+		w.lhsize += 1 + intsize(uint64(lh.size))
+	}
+}
