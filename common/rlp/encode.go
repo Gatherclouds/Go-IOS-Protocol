@@ -152,3 +152,21 @@ func (w *encbuf) listEnd(lh *listhead) {
 		w.lhsize += 1 + intsize(uint64(lh.size))
 	}
 }
+
+func (w *encbuf) size() int {
+	return len(w.str) + w.lhsize
+}
+
+func (w *encbuf) toBytes() []byte {
+	out := make([]byte, w.size())
+	strpos := 0
+	pos := 0
+	for _, head := range w.lheads {
+		// write string data before header
+		n := copy(out[pos:], w.str[strpos:head.offset])
+		pos += n
+		strpos += n
+	}
+
+	return out
+}
