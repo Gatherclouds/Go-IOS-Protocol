@@ -198,3 +198,12 @@ func (w *encbuf) toWriter(out io.Writer) (err error) {
 	}
 	return err
 }
+
+// encReader is the io.Reader returned by EncodeToReader.
+// It releases its encbuf at EOF.
+type encReader struct {
+	buf    *encbuf // the buffer we're reading from. this is nil when we're at EOF.
+	lhpos  int     // index of list header that we're reading
+	strpos int     // current position in string buffer
+	piece  []byte  // next piece to be read
+}
