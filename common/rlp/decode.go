@@ -9,6 +9,7 @@ import (
 	"math/big"
 	"strings"
 	"bufio"
+	"encoding/binary"
 )
 
 var (
@@ -872,5 +873,31 @@ func (s *Stream) readKind() (kind Kind, size uint64, err error) {
 			err = ErrCanonSize
 		}
 		return List, size, err
+	}
+}
+
+func (s *Stream) readUint(size byte) (uint64, error) {
+	switch size {
+	case 0:
+		s.kind = -1 // rearm Kind
+		return 0, nil
+	case 1:
+		b, err := s.readByte()
+		return uint64(b), err
+	default:
+		start := int(8 - size)
+		for i := 0; i < start; i++ {
+			s.uintbuf[i] = 0
+		}
+		if err := s.readFull(s.uintbuf[start:]); err != nil {
+			return 0, err
+		}
+		if s.uintbuf[start] == 0 {
+			// Note: readUint is also used to decode integer
+			// values. The error needs to be adjusted to become
+			// ErrCanonInt in this case.
+			return 0, ErrCanonSize
+		}
+		return binary.BigEndian.Uint64(s.uintbuf), nil
 	}
 }
