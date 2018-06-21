@@ -174,3 +174,27 @@ func (w *encbuf) toBytes() []byte {
 	copy(out[pos:], w.str[strpos:])
 	return out
 }
+
+func (w *encbuf) toWriter(out io.Writer) (err error) {
+	strpos := 0
+	for _, head := range w.lheads {
+		// write string data before header
+		if head.offset-strpos > 0 {
+			n, err := out.Write(w.str[strpos:head.offset])
+			strpos += n
+			if err != nil {
+				return err
+			}
+		}
+		// write the header
+		enc := head.encode(w.sizebuf)
+		if _, err = out.Write(enc); err != nil {
+			return err
+		}
+	}
+	if strpos < len(w.str) {
+		// write string data after the last list header
+		_, err = out.Write(w.str[strpos:])
+	}
+	return err
+}
