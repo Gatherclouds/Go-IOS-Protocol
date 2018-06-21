@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"strings"
 	"sort"
+	"reflect"
+	"math/big"
 )
 
 type NodeID [NodeIDBits / 8]byte
@@ -83,6 +85,8 @@ func (n NodeID) String() string {
 }
 
 const MaxNeighbourNum = 8
+
+
 
 
 

@@ -4,6 +4,7 @@ import (
 	"io"
 	"sync"
 	"reflect"
+	"math/big"
 )
 
 var (
@@ -230,3 +231,10 @@ func (r *encReader) Read(b []byte) (n int, err error) {
 		r.piece = nil
 	}
 }
+
+
+
+var (
+	encoderInterface = reflect.TypeOf(new(Encoder)).Elem()
+	big0             = big.NewInt(0)
+)
