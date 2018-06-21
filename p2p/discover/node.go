@@ -84,15 +84,7 @@ func (n NodeID) String() string {
 
 const MaxNeighbourNum = 8
 
-func (n *Node) FindNeighbours(ns []*Node) []*Node {
-	if len(ns) < MaxNeighbourNum {
-		return ns
-	}
-	neighbours := make([]*Node, 0)
-	disArr := make([]int, len(ns))
 
-	return neighbours
-}
 
 
 

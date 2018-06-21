@@ -222,7 +222,11 @@ func (r *encReader) Read(b []byte) (n int, err error) {
 		}
 		nn := copy(b[n:], r.piece)
 		n += nn
-		
+		if nn < len(r.piece) {
+			// piece didn't fit, see you next time.
+			r.piece = r.piece[nn:]
+			return n, nil
+		}
 		r.piece = nil
 	}
 }
