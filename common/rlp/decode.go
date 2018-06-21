@@ -853,5 +853,13 @@ func (s *Stream) readKind() (kind Kind, size uint64, err error) {
 			err = ErrCanonSize
 		}
 		return String, size, err
+	case b < 0xF8:
+		// If the total payload of a list
+		// (i.e. the combined length of all its items) is 0-55 bytes long, the
+		// RLP encoding consists of a single byte with value 0xC0 plus the length
+		// of the list followed by the concatenation of the RLP encodings of the
+		// items. The range of the first byte is thus [0xC0, 0xF7].
+		return List, uint64(b - 0xC0), nil
+
 	}
 }
