@@ -82,24 +82,6 @@ func (n NodeID) String() string {
 	return fmt.Sprintf("%s", string(n))
 }
 
-func ParseNode(nodeStr string) (node *Node, err error) {
-	node = &Node{}
-	nodeIdStrs := strings.Split(nodeStr, "@")
-	if len(nodeIdStrs) < 2 {
-		return node, fmt.Errorf("miss nodeId")
-	}
-	node.ID = NodeID(nodeIdStrs[0])
-	tcpStr := strings.Split(nodeIdStrs[1], ":")
-	node.IP = net.ParseIP(tcpStr[0])
-	tcp, err := strconv.Atoi(tcpStr[1])
-	if err != nil {
-		return
-	}
-	node.TCP = uint16(tcp)
-	return node, nil
-
-}
-
 const MaxNeighbourNum = 8
 
 func (n *Node) FindNeighbours(ns []*Node) []*Node {
