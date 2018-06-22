@@ -396,7 +396,14 @@ func writeString(val reflect.Value, w *encbuf) error {
 func writeEncoder(val reflect.Value, w *encbuf) error {
 	return val.Interface().(Encoder).EncodeRLP(w)
 }
-
+// writeEncoderNoPtr handles non-pointer values that implement Encoder
+// with a pointer receiver.
+func writeEncoderNoPtr(val reflect.Value, w *encbuf) error {
+	if !val.CanAddr() {
+		return fmt.Errorf("rlp: game over: unadressable value of type %v, EncodeRLP is pointer method", val.Type())
+	}
+	return val.Addr().Interface().(Encoder).EncodeRLP(w)
+}
 
 func makeSliceWriter(typ reflect.Type, ts tags) (writer, error) {
 	etypeinfo, err := cachedTypeInfo1(typ.Elem(), tags{})
