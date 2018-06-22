@@ -346,6 +346,11 @@ func writeBigIntPtr(val reflect.Value, w *encbuf) error {
 	return writeBigInt(ptr, w)
 }
 
+func writeBigIntNoPtr(val reflect.Value, w *encbuf) error {
+	i := val.Interface().(big.Int)
+	return writeBigInt(&i, w)
+}
+
 func writeByteArray(val reflect.Value, w *encbuf) error {
 	if !val.CanAddr() {
 		// Slice requires the value to be addressable.

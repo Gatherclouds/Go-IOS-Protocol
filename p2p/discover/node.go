@@ -49,11 +49,6 @@ func NewNode(id NodeID, ip net.IP, udpPort, tcpPort uint16) *Node {
 	}
 }
 
-// Incomplete returns true for nodes with no IP address.
-func (n *Node) Incomplete() bool {
-	return n.IP == nil
-}
-
 // checks whether n is a valid complete node.
 func (n *Node) validateComplete() error {
 	if n.Incomplete() {
