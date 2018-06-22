@@ -295,3 +295,12 @@ func writeUint(val reflect.Value, w *encbuf) error {
 	}
 	return nil
 }
+
+func writeBool(val reflect.Value, w *encbuf) error {
+	if val.Bool() {
+		w.str = append(w.str, 0x01)
+	} else {
+		w.str = append(w.str, 0x80)
+	}
+	return nil
+}
