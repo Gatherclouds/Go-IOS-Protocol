@@ -238,7 +238,10 @@ func (r *encReader) next() []byte {
 	switch {
 	case r.buf == nil:
 		return nil
-
+	case r.piece != nil:
+		// There is still data available for reading.
+		return r.piece
+		
 	default:
 		return nil
 	}
