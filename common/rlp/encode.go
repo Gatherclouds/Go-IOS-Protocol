@@ -241,7 +241,7 @@ func (r *encReader) next() []byte {
 	case r.piece != nil:
 		// There is still data available for reading.
 		return r.piece
-		
+
 	default:
 		return nil
 	}
@@ -252,3 +252,8 @@ var (
 	encoderInterface = reflect.TypeOf(new(Encoder)).Elem()
 	big0             = big.NewInt(0)
 )
+
+
+func isByte(typ reflect.Type) bool {
+	return typ.Kind() == reflect.Uint8 && !typ.Implements(encoderInterface)
+}
