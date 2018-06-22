@@ -297,7 +297,7 @@ func makeWriter(typ reflect.Type, ts tags) (writer, error) {
 		return writeBytes, nil
 	case kind == reflect.Array && isByte(typ.Elem()):
 		return writeByteArray, nil
-	
+
 	default:
 		return nil, fmt.Errorf("rlp: type %v is not RLP-serializable", typ)
 	}
@@ -335,4 +335,13 @@ func writeBool(val reflect.Value, w *encbuf) error {
 		w.str = append(w.str, 0x80)
 	}
 	return nil
+}
+
+func writeBigIntPtr(val reflect.Value, w *encbuf) error {
+	ptr := val.Interface().(*big.Int)
+	if ptr == nil {
+		w.str = append(w.str, 0x80)
+		return nil
+	}
+	return writeBigInt(ptr, w)
 }
