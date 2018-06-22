@@ -392,3 +392,7 @@ func writeString(val reflect.Value, w *encbuf) error {
 	}
 	return nil
 }
+
+func writeEncoder(val reflect.Value, w *encbuf) error {
+	return val.Interface().(Encoder).EncodeRLP(w)
+}

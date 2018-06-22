@@ -119,9 +119,6 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					// Send a response back to person contacting us.
 					//conn.Write([]byte("Message received."))
 				}(c)
-			case <-time.After(1000.0 * time.Second):
-				fmt.Println("accepting time out..")
-			}
 		}
 	}()
 	return req, nil
