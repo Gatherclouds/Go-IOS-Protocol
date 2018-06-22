@@ -5,6 +5,7 @@ import (
 	"sync"
 	"reflect"
 	"math/big"
+	"fmt"
 )
 
 var (
@@ -270,6 +271,37 @@ var (
 	big0             = big.NewInt(0)
 )
 
+// makeWriter creates a writer function for the given type.
+func makeWriter(typ reflect.Type, ts tags) (writer, error) {
+	kind := typ.Kind()
+	switch {
+	case typ == rawValueType:
+		return writeRawValue, nil
+	case typ.Implements(encoderInterface):
+		return writeEncoder, nil
+	case kind != reflect.Ptr && reflect.PtrTo(typ).Implements(encoderInterface):
+		return writeEncoderNoPtr, nil
+	case kind == reflect.Interface:
+		return writeInterface, nil
+	case typ.AssignableTo(reflect.PtrTo(bigInt)):
+		return writeBigIntPtr, nil
+	case typ.AssignableTo(bigInt):
+		return writeBigIntNoPtr, nil
+	case isUint(kind):
+		return writeUint, nil
+	case kind == reflect.Bool:
+		return writeBool, nil
+	case kind == reflect.String:
+		return writeString, nil
+	case kind == reflect.Slice && isByte(typ.Elem()):
+		return writeBytes, nil
+	case kind == reflect.Array && isByte(typ.Elem()):
+		return writeByteArray, nil
+	
+	default:
+		return nil, fmt.Errorf("rlp: type %v is not RLP-serializable", typ)
+	}
+}
 
 func isByte(typ reflect.Type) bool {
 	return typ.Kind() == reflect.Uint8 && !typ.Implements(encoderInterface)
