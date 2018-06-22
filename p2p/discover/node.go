@@ -79,12 +79,6 @@ func (n *Node) Addr() string {
 	return n.IP.String() + ":" + strconv.Itoa(int(n.TCP))
 }
 
-// NodeID prints as a long hexadecimal number.
-func (n NodeID) String() string {
-	return fmt.Sprintf("%s", string(n))
-}
-
-const MaxNeighbourNum = 8
 
 
 
