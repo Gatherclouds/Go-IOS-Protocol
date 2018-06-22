@@ -112,12 +112,7 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					if err != nil {
 						fmt.Println("Error reading request body:", err.Error())
 					}
-					var received Request
-					received.Unmarshal(_buf)
-					//fmt.Printf("got %+v %+v\n", received, port)
-					req <- received
-					// Send a response back to person contacting us.
-					//conn.Write([]byte("Message received."))
+
 				}(c)
 		}
 	}()

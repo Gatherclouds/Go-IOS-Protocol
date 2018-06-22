@@ -396,3 +396,24 @@ func writeString(val reflect.Value, w *encbuf) error {
 func writeEncoder(val reflect.Value, w *encbuf) error {
 	return val.Interface().(Encoder).EncodeRLP(w)
 }
+
+
+func makeSliceWriter(typ reflect.Type, ts tags) (writer, error) {
+	etypeinfo, err := cachedTypeInfo1(typ.Elem(), tags{})
+	if err != nil {
+		return nil, err
+	}
+	writer := func(val reflect.Value, w *encbuf) error {
+		if !ts.tail {
+			defer w.listEnd(w.list())
+		}
+		vlen := val.Len()
+		for i := 0; i < vlen; i++ {
+			if err := etypeinfo.writer(val.Index(i), w); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	return writer, nil
+}
