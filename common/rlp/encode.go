@@ -359,3 +359,15 @@ func writeByteArray(val reflect.Value, w *encbuf) error {
 	w.encodeString(slice)
 	return nil
 }
+
+func writeString(val reflect.Value, w *encbuf) error {
+	s := val.String()
+	if len(s) == 1 && s[0] <= 0x7f {
+		// fits single byte, no string header
+		w.str = append(w.str, s[0])
+	} else {
+		w.encodeStringHeader(len(s))
+		w.str = append(w.str, s...)
+	}
+	return nil
+}

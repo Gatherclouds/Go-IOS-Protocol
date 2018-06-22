@@ -71,9 +71,6 @@ func (n *Node) validateComplete() error {
 	return nil
 }
 
-func (n *Node) Addr() string {
-	return n.IP.String() + ":" + strconv.Itoa(int(n.TCP))
-}
 
 
 
