@@ -241,6 +241,19 @@ func (r *encReader) next() []byte {
 	case r.piece != nil:
 		// There is still data available for reading.
 		return r.piece
+	case r.lhpos < len(r.buf.lheads):
+		// We're before the last list header.
+		head := r.buf.lheads[r.lhpos]
+		sizebefore := head.offset - r.strpos
+		if sizebefore > 0 {
+			// String data before header.
+			p := r.buf.str[r.strpos:head.offset]
+			r.strpos += sizebefore
+			return p
+		} else {
+			r.lhpos++
+			return head.encode(r.buf.sizebuf)
+		}
 
 	default:
 		return nil
