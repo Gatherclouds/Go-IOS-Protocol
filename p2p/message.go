@@ -30,11 +30,3 @@ type MsgWriter interface {
 // payload reader is drained.
 WriteMsg(Msg) error
 }
-
-// MsgReadWriter provides reading and writing of encoded messages.
-// Implementations should ensure that ReadMsg and WriteMsg can be
-// called simultaneously from multiple goroutines.
-type MsgReadWriter interface {
-MsgReader
-MsgWriter
-}

@@ -362,6 +362,11 @@ func writeBigInt(i *big.Int, w *encbuf) error {
 	return nil
 }
 
+func writeBytes(val reflect.Value, w *encbuf) error {
+	w.encodeString(val.Bytes())
+	return nil
+}
+
 func writeByteArray(val reflect.Value, w *encbuf) error {
 	if !val.CanAddr() {
 		// Slice requires the value to be addressable.
