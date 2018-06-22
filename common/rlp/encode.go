@@ -232,6 +232,17 @@ func (r *encReader) Read(b []byte) (n int, err error) {
 	}
 }
 
+// next returns the next piece of data to be read.
+// it returns nil at EOF.
+func (r *encReader) next() []byte {
+	switch {
+	case r.buf == nil:
+		return nil
+
+	default:
+		return nil
+	}
+}
 
 
 var (
