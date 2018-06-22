@@ -5,12 +5,6 @@ import (
 	"time"
 	"github.com/ethereum/go-ethereum/common"
 	"errors"
-	"strconv"
-	"fmt"
-	"strings"
-	"sort"
-	"reflect"
-	"math/big"
 )
 
 type NodeID [NodeIDBits / 8]byte

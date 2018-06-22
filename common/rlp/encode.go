@@ -351,6 +351,17 @@ func writeBigIntNoPtr(val reflect.Value, w *encbuf) error {
 	return writeBigInt(&i, w)
 }
 
+func writeBigInt(i *big.Int, w *encbuf) error {
+	if cmp := i.Cmp(big0); cmp == -1 {
+		return fmt.Errorf("rlp: cannot encode negative *big.Int")
+	} else if cmp == 0 {
+		w.str = append(w.str, 0x80)
+	} else {
+		w.encodeString(i.Bytes())
+	}
+	return nil
+}
+
 func writeByteArray(val reflect.Value, w *encbuf) error {
 	if !val.CanAddr() {
 		// Slice requires the value to be addressable.
