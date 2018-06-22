@@ -254,7 +254,11 @@ func (r *encReader) next() []byte {
 			r.lhpos++
 			return head.encode(r.buf.sizebuf)
 		}
-
+	case r.strpos < len(r.buf.str):
+		// String data at the end, after all list headers.
+		p := r.buf.str[r.strpos:]
+		r.strpos = len(r.buf.str)
+		return p
 	default:
 		return nil
 	}
