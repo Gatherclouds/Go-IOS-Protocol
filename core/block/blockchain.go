@@ -35,12 +35,24 @@ func (b *ChainImpl) GetTx(hash []byte) (*tx.Tx, error) {
 	return b.tx.Get(hash)
 }
 
-//func (bc *BlockChainImpl) Push(block *Block) error {
-//	err := bc.db.Put(block.HeadHash(), block.Encode())
-//	if err != nil {
-//		return err
-//	}
-//
+// GetBlockByHash 通过区块hash查询块
+func (b *ChainImpl) GetBlockByHash(blockHash []byte) *Block {
+
+	block, err := b.db.Get(append(blockPrefix, blockHash...))
+	if err != nil {
+		return nil
+	}
+	if len(block) == 0 {
+		return nil
+	}
+
+	rBlock := new(Block)
+	if err := rBlock.Decode(block); err != nil {
+		return nil
+	}
+	return rBlock
+}
+
 //	_, err = bc.redis.Do("RPUSH", IndexKey, block.HeadHash())
 //	bc.length++
 //	return nil
