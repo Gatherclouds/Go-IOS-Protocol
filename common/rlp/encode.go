@@ -512,6 +512,15 @@ func putint(b []byte, i uint64) (size int) {
 	case i < (1 << 8):
 		b[0] = byte(i)
 		return 1
+	case i < (1 << 16):
+		b[0] = byte(i >> 8)
+		b[1] = byte(i)
+		return 2
+	case i < (1 << 24):
+		b[0] = byte(i >> 16)
+		b[1] = byte(i >> 8)
+		b[2] = byte(i)
+		return 3
 	default:
 	b[0] = byte(i >> 56)
 	b[1] = byte(i >> 48)

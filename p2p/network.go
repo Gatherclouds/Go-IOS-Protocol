@@ -95,15 +95,7 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					fmt.Println("Error accepting: ")
 					break
 				}
-
-				go func(conn net.Conn) {
-					defer conn.Close()
-					// Make a buffer to hold incoming data.
-					buf := make([]byte, HEADLENGTH)
-					// Read the incoming connection into the buffer.
-					_, err := conn.Read(buf)
-
-								}(c)
+				
 		}
 	}
 	return req, nil
