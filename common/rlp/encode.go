@@ -482,7 +482,12 @@ func makePtrWriter(typ reflect.Type) (writer, error) {
 			w.str = append(w.str, 0x80)
 			return nil
 		}
-	
+	default:
+		zero := reflect.Zero(typ.Elem())
+		nilfunc = func(w *encbuf) error {
+			return etypeinfo.writer(zero, w)
+		}
+	}
 	return writer, err
 }
 
