@@ -14,12 +14,18 @@ type Block struct {
 }
 
 
+// Encode 是区块的序列化方法
 func (d *Block) Encode() []byte {
-	bin, err := d.Marshal(nil)
+	c := make([][]byte, 0)
+	for _, t := range d.Content {
+		c = append(c, t.Encode())
+	}
+	br := BlockRaw{d.Head, c}
+	b, err := br.Marshal(nil)
 	if err != nil {
 		panic(err)
 	}
-	return bin
+	return b
 }
 
 func (d *Block) Decode(bin []byte) error {
