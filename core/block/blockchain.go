@@ -4,16 +4,12 @@ import (
 	_ "github.com/gomodule/redigo/redis"
 )
 
-///go:generate mockgen -destination mocks/mock_blockchain.go -package core_mock github.com/iost-official/prototype/core BlockChain
+var (
+	blockLength = []byte("BlockLength") //blockLength -> length of ChainImpl
 
-// Block chain
-type BlockChain interface {
-	Push(block *Block) error // 加入block，检查block是否合法在consensus内实现以解耦合
-	Length() int
-	Top() *Block // 语法糖
-
-	Iterator() BlockChainIterator
-}
+	blockNumberPrefix = []byte("n") //blockNumberPrefix + block number -> block hash
+	blockPrefix       = []byte("H") //blockHashPrefix + block hash -> block data
+)
 
 type BlockChainIterator interface {
 	Next() *Block // 返回下一个块

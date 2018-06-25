@@ -4,6 +4,7 @@ import (
 	"testing"
 	. "github.com/smartystreets/goconvey/convey"
 	"Go-IOS-Protocol/core/tx"
+	"sync"
 )
 
 func TestNewBlockChain(t *testing.T) {
