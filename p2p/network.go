@@ -105,7 +105,7 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					if err != nil {
 						fmt.Println("Error reading request head:", err.Error())
 					}
-					
+
 				}(c)
 		}
 	}
