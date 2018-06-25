@@ -447,3 +447,12 @@ func makeSliceWriter(typ reflect.Type, ts tags) (writer, error) {
 	}
 	return writer, nil
 }
+
+// intsize computes the minimum number of bytes required to store i.
+func intsize(i uint64) (size int) {
+	for size = 1; ; size++ {
+		if i >>= 8; i == 0 {
+			return size
+		}
+	}
+}
