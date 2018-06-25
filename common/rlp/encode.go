@@ -482,6 +482,13 @@ func makePtrWriter(typ reflect.Type) (writer, error) {
 			w.str = append(w.str, 0x80)
 			return nil
 		}
+	case kind == reflect.Struct || kind == reflect.Array:
+		nilfunc = func(w *encbuf) error {
+			// encoding the zero value of a struct/array could trigger
+			// infinite recursion, avoid that.
+			w.listEnd(w.list())
+			return nil
+		}
 	default:
 		zero := reflect.Zero(typ.Elem())
 		nilfunc = func(w *encbuf) error {
