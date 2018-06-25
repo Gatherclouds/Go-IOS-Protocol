@@ -87,16 +87,8 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 	go func() {
 		for {
 			select {
-			case c := <-conn:
-				if c == nil {
-					if nn.done {
-						return
-					}
-					fmt.Println("Error accepting: ")
-					break
-				}
 
-		}
+			}
 	}
 	return req, nil
 }

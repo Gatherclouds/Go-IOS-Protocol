@@ -28,10 +28,22 @@ func (d *Block) Encode() []byte {
 	return b
 }
 
+// Decode 是区块的反序列方法
 func (d *Block) Decode(bin []byte) error {
-	_, err := d.Unmarshal(bin)
-	return err
+	var br BlockRaw
+	_, err := br.Unmarshal(bin)
+	d.Head = br.Head
+	for _, t := range br.Content {
+		var tt tx.Tx
+		err = tt.Decode(t)
+		if err != nil {
+			return err
+		}
+		d.Content = append(d.Content, tt)
+	}
+	return nil
 }
+
 func (d *Block) Hash() []byte {
 	return common.Sha256(d.Encode())
 }
