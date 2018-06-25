@@ -25,12 +25,11 @@ func (b *ChainImpl) Length() uint64 {
 	return b.length
 }
 
-/
-//
-//	headHash, err := redis.Bytes(bc.redis.Do("LINDEX", IndexKey, layer))
-//	if err != nil {
-//		return nil, err
-//	}
+// HasTx 判断tx是否存在于db中
+func (b *ChainImpl) HasTx(tx *tx.Tx) (bool, error) {
+	return b.tx.Has(tx)
+}
+
 //
 //	blk, err := bc.db.Get(headHash)
 //	if err != nil {
