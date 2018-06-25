@@ -495,9 +495,15 @@ func makePtrWriter(typ reflect.Type) (writer, error) {
 			return etypeinfo.writer(zero, w)
 		}
 	}
+	writer := func(val reflect.Value, w *encbuf) error {
+		if val.IsNil() {
+			return nilfunc(w)
+		} else {
+			return etypeinfo.writer(val.Elem(), w)
+		}
+	}
 	return writer, err
 }
-
 
 // intsize computes the minimum number of bytes required to store i.
 func intsize(i uint64) (size int) {
