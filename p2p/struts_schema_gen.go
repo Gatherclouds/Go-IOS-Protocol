@@ -993,7 +993,7 @@ func (d *TxPoolRaw) Unmarshal(buf []byte) (uint64, error) {
 
 		}
 	}
-	
+
 	return i + 0, nil
 }
 
