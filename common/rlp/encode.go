@@ -467,6 +467,26 @@ func makeStructWriter(typ reflect.Type) (writer, error) {
 	return writer, nil
 }
 
+func makePtrWriter(typ reflect.Type) (writer, error) {
+	etypeinfo, err := cachedTypeInfo1(typ.Elem(), tags{})
+	if err != nil {
+		return nil, err
+	}
+
+	// determine nil pointer handler
+	var nilfunc func(*encbuf) error
+	kind := typ.Elem().Kind()
+	switch {
+	case kind == reflect.Array && isByte(typ.Elem().Elem()):
+		nilfunc = func(w *encbuf) error {
+			w.str = append(w.str, 0x80)
+			return nil
+		}
+	
+	return writer, err
+}
+
+
 // intsize computes the minimum number of bytes required to store i.
 func intsize(i uint64) (size int) {
 	for size = 1; ; size++ {
