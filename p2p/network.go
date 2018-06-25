@@ -95,7 +95,7 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					fmt.Println("Error accepting: ")
 					break
 				}
-				
+
 		}
 	}
 	return req, nil
