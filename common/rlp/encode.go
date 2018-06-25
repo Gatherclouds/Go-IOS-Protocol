@@ -505,6 +505,26 @@ func makePtrWriter(typ reflect.Type) (writer, error) {
 	return writer, err
 }
 
+// putint writes i to the beginning of b in big endian byte
+// order, using the least number of bytes needed to represent i.
+func putint(b []byte, i uint64) (size int) {
+	switch {
+	case i < (1 << 8):
+		b[0] = byte(i)
+		return 1
+	default:
+	b[0] = byte(i >> 56)
+	b[1] = byte(i >> 48)
+	b[2] = byte(i >> 40)
+	b[3] = byte(i >> 32)
+	b[4] = byte(i >> 24)
+	b[5] = byte(i >> 16)
+	b[6] = byte(i >> 8)
+	b[7] = byte(i)
+	return 8
+	}
+}
+
 // intsize computes the minimum number of bytes required to store i.
 func intsize(i uint64) (size int) {
 	for size = 1; ; size++ {
