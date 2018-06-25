@@ -400,6 +400,13 @@ func writeEncoder(val reflect.Value, w *encbuf) error {
 // with a pointer receiver.
 func writeEncoderNoPtr(val reflect.Value, w *encbuf) error {
 	if !val.CanAddr() {
+		// We can't get the address. It would be possible to make the
+		// value addressable by creating a shallow copy, but this
+		// creates other problems so we're not doing it (yet).
+		//
+		// package json simply doesn't call MarshalJSON for cases like
+		// this, but encodes the value as if it didn't implement the
+		// interface. We don't want to handle it that way.
 		return fmt.Errorf("rlp: game over: unadressable value of type %v, EncodeRLP is pointer method", val.Type())
 	}
 	return val.Addr().Interface().(Encoder).EncodeRLP(w)
