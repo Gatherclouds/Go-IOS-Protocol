@@ -30,16 +30,11 @@ func (b *ChainImpl) HasTx(tx *tx.Tx) (bool, error) {
 	return b.tx.Has(tx)
 }
 
-//
-//	blk, err := bc.db.Get(headHash)
-//	if err != nil {
-//		return nil, err
-//	}
-//	var block Block
-//	block.Decode(blk)
-//	return &block, nil
-//}
-//
+// GetTx 通过hash获取tx
+func (b *ChainImpl) GetTx(hash []byte) (*tx.Tx, error) {
+	return b.tx.Get(hash)
+}
+
 //func (bc *BlockChainImpl) Push(block *Block) error {
 //	err := bc.db.Put(block.HeadHash(), block.Encode())
 //	if err != nil {
