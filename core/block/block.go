@@ -1,5 +1,19 @@
 package block
 
+import (
+	"Go-IOS-Protocol/common"
+	"Go-IOS-Protocol/core/tx"
+)
+
+//go:generate gencode go -schema=structs.schema -package=block
+
+// Block 是一个区块的结构体定义
+type Block struct {
+	Head    BlockHead
+	Content []tx.Tx
+}
+
+
 func (d *Block) Encode() []byte {
 	bin, err := d.Marshal(nil)
 	if err != nil {
