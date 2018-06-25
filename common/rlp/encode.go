@@ -412,6 +412,22 @@ func writeEncoderNoPtr(val reflect.Value, w *encbuf) error {
 	return val.Addr().Interface().(Encoder).EncodeRLP(w)
 }
 
+func writeInterface(val reflect.Value, w *encbuf) error {
+	if val.IsNil() {
+		// Write empty list. This is consistent with the previous RLP
+		// encoder that we had and should therefore avoid any
+		// problems.
+		w.str = append(w.str, 0xC0)
+		return nil
+	}
+	eval := val.Elem()
+	ti, err := cachedTypeInfo(eval.Type(), tags{})
+	if err != nil {
+		return err
+	}
+	return ti.writer(eval, w)
+}
+
 func makeSliceWriter(typ reflect.Type, ts tags) (writer, error) {
 	etypeinfo, err := cachedTypeInfo1(typ.Elem(), tags{})
 	if err != nil {

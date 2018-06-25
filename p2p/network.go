@@ -109,12 +109,10 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					_buf := make([]byte, length)
 					_, err = conn.Read(_buf)
 
-					if err != nil {
-						fmt.Println("Error reading request body:", err.Error())
-					}
+
 
 				}(c)
 		}
-	}()
+	}
 	return req, nil
 }
