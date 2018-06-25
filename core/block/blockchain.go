@@ -2,6 +2,8 @@ package block
 
 import (
 	_ "github.com/gomodule/redigo/redis"
+	"Go-IOS-Protocol/db"
+	"Go-IOS-Protocol/core/tx"
 )
 
 var (
@@ -11,8 +13,11 @@ var (
 	blockPrefix       = []byte("H") //blockHashPrefix + block hash -> block data
 )
 
-type BlockChainIterator interface {
-	Next() *Block // 返回下一个块
+// ChainImpl 是已经确定block chain的结构体
+type ChainImpl struct {
+	db     db.Database
+	length uint64
+	tx     tx.TxPool
 }
 
 //func (bc *BlockChainImpl) Get(layer int) (*Block, error) {
