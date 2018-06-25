@@ -20,11 +20,12 @@ type ChainImpl struct {
 	tx     tx.TxPool
 }
 
-//func (bc *BlockChainImpl) Get(layer int) (*Block, error) {
-//
-//	if layer < 0 || layer >= bc.length {
-//		return nil, fmt.Errorf("index exceed")
-//	}
+// Length 返回已经确定链的长度
+func (b *ChainImpl) Length() uint64 {
+	return b.length
+}
+
+/
 //
 //	headHash, err := redis.Bytes(bc.redis.Do("LINDEX", IndexKey, layer))
 //	if err != nil {
