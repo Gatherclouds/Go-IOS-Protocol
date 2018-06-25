@@ -396,6 +396,7 @@ func writeString(val reflect.Value, w *encbuf) error {
 func writeEncoder(val reflect.Value, w *encbuf) error {
 	return val.Interface().(Encoder).EncodeRLP(w)
 }
+
 // writeEncoderNoPtr handles non-pointer values that implement Encoder
 // with a pointer receiver.
 func writeEncoderNoPtr(val reflect.Value, w *encbuf) error {
@@ -443,6 +444,24 @@ func makeSliceWriter(typ reflect.Type, ts tags) (writer, error) {
 				return err
 			}
 		}
+		return nil
+	}
+	return writer, nil
+}
+
+func makeStructWriter(typ reflect.Type) (writer, error) {
+	fields, err := structFields(typ)
+	if err != nil {
+		return nil, err
+	}
+	writer := func(val reflect.Value, w *encbuf) error {
+		lh := w.list()
+		for _, f := range fields {
+			if err := f.info.writer(val.Field(f.index), w); err != nil {
+				return err
+			}
+		}
+		w.listEnd(lh)
 		return nil
 	}
 	return writer, nil

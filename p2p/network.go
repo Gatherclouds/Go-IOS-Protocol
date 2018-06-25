@@ -105,12 +105,7 @@ func (nn *NaiveNetwork) Listen(port uint16) (<-chan Request, error) {
 					if err != nil {
 						fmt.Println("Error reading request head:", err.Error())
 					}
-					length := binary.BigEndian.Uint32(buf)
-					_buf := make([]byte, length)
-					_, err = conn.Read(_buf)
-
-
-
+					
 				}(c)
 		}
 	}
