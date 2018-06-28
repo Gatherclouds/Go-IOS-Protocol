@@ -10,37 +10,13 @@ This is the first release version (v0.1.0) of IOST, including the prototype of p
 
 >“I could be bounded in a nutshell, and count myself a king of infinite space!”  - Hamlet II.ii
 
-## Components and features
-
-Considering the seriously waste of power in POW and complex, unrobust implement of POS system, we using an auto devoting POB system to ensure consensus of IOST blockchain.
-
-The rotating delegates are promoted by the contribution of IOST, such as recording and spreading transactions, running smart contract, and verifying transactions, which we called as Believability. Users send their transactions to recorders they trusted, recorders deal with transactions and signed their name into transactions, finally the best of recorder promoted to have a term of replica, to make new block and get reward.
-
-For users, a good recorder can give response fastly and exactly, and user is willing to upload their transactions to such a good recorder, so the way of POB using to devote a delegate is much more natural than traditional POS. Further, cause one recorder couldn’t be the best choose of all users, the POB system has it’s power to resist centralize.
-
-
-    ├── cmd
-    ├── drp
-    ├── eds
-    ├── iosbase: base structure of IOST, including structs of UTXO, transaction, blocks
-    │   └── debug: a future debug lib, debug mode and debug related functions will be included
-    ├── mock-libs: auxiliary mock-libs of testing blockchain
-    │   ├── asset: user account lib, including user asset related operations
-    │   ├── block: block lib, including signature validation & blockchain header builder
-    │   ├── market: market lib, including two different market policy
-    │   └── transaction: transaction lib, including different transaction related operations
-    └── protocol: POB based protocol of IOST consensus
-        ├── recorder: recorder of Transactions. Collect and verify Txs from common users
-        ├── replica: rotating replicas promoted from best behaved recorder, making new Blocks,  reaching consensus with each other and broadcast to every members of IOST network
-        ├── view: PBFT view of current replicas, calculated by information in previews Blocks, determining the character of replicas
-        ├── router: the wrap of network, in
-        └── database: runtime data used in protocol
-
 ## Development Progress
 
 v0.1.0 - MVP completed and preliminary tests conducted
 
 v0.2.0 - Under development.
+
+v0.5.0 (Everest) - Developed a complete blockchain framework that supports smart contract and validated PoB consensus mechanism
 
 Our developers work in their own trees, then submit pull requests when they think their feature or bug fix is ready.
 
@@ -48,7 +24,44 @@ Although we have started to go open source on Github starting April 9th, 2018 an
 
 ## Test net
 
-The IOS Blockchain is not yet to be used in production. We have deployed a private test net for early stage testing as planned. We will open the test network to public after the official release of Janus (v0.5) by the end of Q2 2018. This document will be updated then with instructions for running on the public test net.
+Test net now is online, check further information below :
+
+[Smart Contract Handbook](https://github.com/iost-official/Go-IOS-Protocol/wiki/Smart-Contract-Handbook)
+
+[iwallet Handbook](https://github.com/iost-official/Go-IOS-Protocol/wiki/iwallet)
+
+## Installation
+
+### Building from source
+#### Prerequisites
+* Golang 1.10.1 (or newer) is required to build this project
+* Redis 4.0.10 (or newer) is required, We recommend Redis stable version
+
+#### Build
+Get this repo:
+```
+git clone git@github.com:iost-official/Go-IOS-Protocol.git
+```
+Build iserver:
+```
+make build
+```
+
+### Run server
+Start the redis
+```
+redis-server
+```
+Modify the `listener-addr` field of `iserver/iserver.yml` to the current server public IP address, then start the iserver
+```
+./build/iserver --config iserver/iserver.yml 
+```
+
+### Run wallet
+We provides a wallet tool to send transaction and deploy contract. You can check the help by running the following command. The detailed document please check [Iwallet](https://github.com/iost-official/Go-IOS-Protocol/wiki/Iwallet)
+```
+./build/iwallet -h
+```
 
 ## Contribution
 

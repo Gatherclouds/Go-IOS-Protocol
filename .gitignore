@@ -206,7 +206,6 @@ iserver/txDB/
 
 iwallet/sc/
 iwallet/testTX.py
-imonitor/iserver.yml
 netpath/
 netpath3/
 rpc/txDB/
