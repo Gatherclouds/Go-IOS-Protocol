@@ -1,8 +1,8 @@
 package mclock
 
 import (
-"github.com/aristanetworks/goarista/monotime"
-"time"
+	"github.com/aristanetworks/goarista/monotime"
+	"time"
 )
 
 type AbsTime time.Duration // absolute monotonic time

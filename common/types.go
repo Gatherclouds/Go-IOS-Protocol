@@ -18,8 +18,8 @@ func BytesToHash(b []byte) Hash {
 	return h
 }
 
-func HexToHash(s string) Hash		{ return BytesToHash(FromHex(s)) }
-func (h Hash) Bytes() []byte { return h[:] }
+func HexToHash(s string) Hash { return BytesToHash(FromHex(s)) }
+func (h Hash) Bytes() []byte  { return h[:] }
 
 func (h *Hash) SetBytes(b []byte) {
 	if len(b) > len(h) {
@@ -42,7 +42,6 @@ func BytesToInt(b []byte) int {
 	binary.Read(bytesBuffer, binary.BigEndian, &x)
 	return int(x)
 }
-
 
 func Int64ToBytes(i int64) []byte {
 	bytesBuffer := bytes.NewBuffer([]byte{})

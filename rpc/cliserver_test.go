@@ -1,29 +1,29 @@
 package rpc
 
 import (
-	"testing"
-	"Go-IOS-Protocol/vm/lua"
-	"Go-IOS-Protocol/vm"
-	"Go-IOS-Protocol/account"
+	"context"
+	"fmt"
 
 	"github.com/golang/mock/gomock"
-	//"Go-IOS-Protocol/protocol/mocks"
-	//"Go-IOS-Protocol/network"
-	"context"
-	"Go-IOS-Protocol/core/tx"
-	"Go-IOS-Protocol/core/block"
+	"github.com/iost-official/Go-IOS-Protocol/account"
+	"github.com/iost-official/Go-IOS-Protocol/core/block"
+	"github.com/iost-official/Go-IOS-Protocol/core/mocks"
+	"github.com/iost-official/Go-IOS-Protocol/core/state"
+	"github.com/iost-official/Go-IOS-Protocol/core/tx"
+	//"github.com/iost-official/Go-IOS-Protocol/network"
+	//"github.com/iost-official/Go-IOS-Protocol/network/mocks"
+	"testing"
+
+	"github.com/iost-official/Go-IOS-Protocol/vm"
+	"github.com/iost-official/Go-IOS-Protocol/vm/lua"
 	. "github.com/smartystreets/goconvey/convey"
-	"Go-IOS-Protocol/core/mocks"
-	"Go-IOS-Protocol/core/state"
-	"fmt"
-	"Go-IOS-Protocol/common"
 )
 
-func TestHttpServer(t *testing.T) {
-	Convey("Test of HttpServer", t, func() {
-		txDb:=tx.TxDbInstance()
+func TestRpcServer(t *testing.T) {
+	Convey("Test of RpcServer", t, func() {
+		txDb := tx.TxDbInstance()
 		So(txDb, ShouldNotBeNil)
-		main := lua.NewMethod("main", 0, 1)
+		main := lua.NewMethod(vm.Public, "main", 0, 1)
 		code := `function main()
 			 		Put("hello", "world")
 					return "success"
@@ -35,19 +35,6 @@ func TestHttpServer(t *testing.T) {
 		a1, _ := account.NewAccount(nil)
 		sig1, _ := tx.SignContract(_tx, a1)
 		_tx, _ = tx.SignTx(_tx, acc, sig1)
-
-		//Convey("Test of PublishTx", func() {
-		//	ctl := gomock.NewController(t)
-		//	mockRouter := protocol_mock.NewMockRouter(ctl)
-		//	mockRouter.EXPECT().Broadcast(gomock.Any()).AnyTimes().Return()
-		//	network.Route = mockRouter
-		//	txpb := Transaction{Tx: _tx.Encode()}
-		//	hs := new(HttpServer)
-		//	res, err := hs.PublishTx(context.Background(), &txpb)
-		//	So(err, ShouldBeNil)
-		//	So(res.Code, ShouldEqual, 0)
-		//})
-
 		Convey("Test of GetTransaction", func() {
 			txdb := tx.TxDb
 			fmt.Println(txdb)
@@ -55,11 +42,11 @@ func TestHttpServer(t *testing.T) {
 			So(err, ShouldBeNil)
 
 			txkey := TransactionKey{
-				Publisher: common.Base58Encode(_tx.Publisher.Pubkey),
+				Publisher: _tx.Publisher.Pubkey,
 				Nonce:     _tx.Nonce,
 			}
 			fmt.Println(txkey.Publisher)
-			hs := new(HttpServer)
+			hs := new(RpcServer)
 			_, err = hs.GetTransaction(context.Background(), &txkey)
 			So(err, ShouldBeNil)
 		})
@@ -70,11 +57,10 @@ func TestHttpServer(t *testing.T) {
 			mockPool.EXPECT().Get(gomock.Any()).AnyTimes().Return(state.MakeVString("hello"), nil)
 			state.StdPool = mockPool
 
-			hs := new(HttpServer)
+			hs := new(RpcServer)
 			_, err := hs.GetState(context.Background(), &Key{S: "HowHsu"})
 			So(err, ShouldBeNil)
 		})
-
 		Convey("Test of GetBlock", func() {
 			ctl := gomock.NewController(t)
 			mockChain := core_mock.NewMockChain(ctl)
@@ -84,7 +70,6 @@ func TestHttpServer(t *testing.T) {
 					Version:    2,
 					ParentHash: []byte("parent Hash"),
 					TreeHash:   []byte("tree hash"),
-					BlockHash:  []byte("block hash"),
 					Info:       []byte("info "),
 					Number:     int64(0),
 					Witness:    "id2,id3,id5,id6",
@@ -94,17 +79,18 @@ func TestHttpServer(t *testing.T) {
 			})
 			block.BChain = mockChain
 
-			hs := new(HttpServer)
+			hs := new(RpcServer)
 			_, err := hs.GetBlock(context.Background(), &BlockKey{Layer: 10})
 			So(err, ShouldBeNil)
 		})
+
 		Convey("Test of GetBalance", func() {
 			ctl := gomock.NewController(t)
 			mockPool := core_mock.NewMockPool(ctl)
 			mockPool.EXPECT().GetHM(gomock.Any(), gomock.Any()).AnyTimes().Return(state.MakeVFloat(18.0), nil)
 			state.StdPool = mockPool
 
-			hs := new(HttpServer)
+			hs := new(RpcServer)
 			balance, err := hs.GetBalance(context.Background(), &Key{S: "HowHsu"})
 			So(err, ShouldBeNil)
 

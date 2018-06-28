@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iserver
+package main
 
-import "github.com/spf13/cobra/cobra/cmd"
+import (
+	"github.com/iost-official/Go-IOS-Protocol/iserver/cmd"
+)
 
 func main() {
 	cmd.Execute()

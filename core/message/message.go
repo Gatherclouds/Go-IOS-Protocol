@@ -21,4 +21,3 @@ func (d *Message) GetReqType() int32 {
 func (d *Message) GetBody() []byte {
 	return d.Body
 }
-

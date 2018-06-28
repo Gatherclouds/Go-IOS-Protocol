@@ -1,8 +1,7 @@
-package iwallet
+package main
 
-import "github.com/spf13/cobra/cobra/cmd"
+import "github.com/iost-official/Go-IOS-Protocol/iwallet/cmd"
 
 func main() {
 	cmd.Execute()
 }
-

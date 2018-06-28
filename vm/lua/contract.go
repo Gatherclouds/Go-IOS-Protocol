@@ -1,8 +1,16 @@
 package lua
 
-import "fmt"
+import (
+	"fmt"
 
-// Contract lua智能合约的实现
+	"sort"
+
+	"github.com/iost-official/Go-IOS-Protocol/common"
+	"github.com/iost-official/Go-IOS-Protocol/log"
+	"github.com/iost-official/Go-IOS-Protocol/vm"
+)
+
+// contract implement of lua contract
 type Contract struct {
 	info vm.ContractInfo
 	code string
@@ -13,32 +21,28 @@ type Contract struct {
 func (c *Contract) Info() vm.ContractInfo {
 	return c.info
 }
-
 func (c *Contract) SetPrefix(prefix string) {
 	c.info.Prefix = prefix
 }
 func (c *Contract) SetSender(sender vm.IOSTAccount) {
-	c.info.Sender = sender
+	c.info.Publisher = sender
 }
 func (c *Contract) AddSigner(signer vm.IOSTAccount) {
 	c.info.Signers = append(c.info.Signers, signer)
 }
-
-func (c *Contract) Api(apiName string) (vm.Method, error) {
+func (c *Contract) API(apiName string) (vm.Method, error) {
 	if apiName == "main" {
 		return &c.main, nil
 	}
 	rtn, ok := c.apis[apiName]
 	if !ok {
-		return nil, fmt.Errorf("api %v : not found", apiName)
+		return nil, fmt.Errorf("api %v: not found", apiName)
 	}
 	return &rtn, nil
 }
-
 func (c *Contract) Code() string {
 	return c.code
 }
-
 func (c *Contract) Encode() []byte {
 	cr := contractRaw{
 		info: c.info.Encode(),
@@ -48,25 +52,27 @@ func (c *Contract) Encode() []byte {
 		name: c.main.name,
 		ic:   int32(c.main.inputCount),
 		oc:   int32(c.main.outputCount),
+		priv: int32(vm.Public),
 	}
-	cr.methods = []methodRaw{mr}
+	cr.methods = []methodRaw{}
 	for _, val := range c.apis {
-		mr = methodRaw{
+		mr2 := methodRaw{
 			name: val.name,
 			ic:   int32(val.inputCount),
 			oc:   int32(val.outputCount),
+			priv: int32(val.privilege),
 		}
-		cr.methods = append(cr.methods, mr)
+		cr.methods = append(cr.methods, mr2)
 	}
-
+	sort.Sort(methodRawSlice(cr.methods))
+	cr.methods = append(cr.methods, mr)
 	b, err := cr.Marshal(nil)
 	if err != nil {
-		panic(err)
+		log.Log.E("Error in Encode of ", c.info.Prefix, err.Error())
 		return nil
 	}
 	return append([]byte{0}, b...)
 }
-
 func (c *Contract) Decode(b []byte) error {
 	var cr contractRaw
 	_, err := cr.Unmarshal(b[1:])
@@ -77,22 +83,30 @@ func (c *Contract) Decode(b []byte) error {
 	}
 	c.info = ci
 	c.code = string(cr.code)
-	c.main = Method{
-		cr.methods[0].name,
-		int(cr.methods[0].ic),
-		int(cr.methods[0].oc),
+	if c.apis == nil {
+		c.apis = make(map[string]Method)
 	}
-	for i := 1; i < len(cr.methods); i++ {
+	for i := 0; i < len(cr.methods); i++ {
+		if cr.methods[i].name == "main" {
+			c.main = Method{
+				cr.methods[i].name,
+				int(cr.methods[i].ic),
+				int(cr.methods[i].oc),
+				vm.Public,
+			}
+			continue
+		}
+
 		c.apis[cr.methods[i].name] = Method{
 			cr.methods[i].name,
 			int(cr.methods[i].ic),
 			int(cr.methods[i].oc),
+			vm.Privilege(cr.methods[i].priv),
 		}
 	}
 
 	return err
 }
-
 func (c *Contract) Hash() []byte {
 	return common.Sha256(c.Encode())
 }
@@ -108,4 +122,16 @@ func NewContract(info vm.ContractInfo, code string, main Method, apis ...Method)
 		c.apis[api.name] = api
 	}
 	return c
+}
+
+type methodRawSlice []methodRaw
+
+func (m methodRawSlice) Len() int {
+	return len(m)
+}
+func (m methodRawSlice) Less(i, j int) bool {
+	return m[i].name < m[j].name
+}
+func (m methodRawSlice) Swap(i, j int) {
+	m[i], m[j] = m[j], m[i]
 }

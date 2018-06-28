@@ -1,15 +1,37 @@
 package network
 
 import (
-	"testing"
-	"time"
-	"bytes"
-	"Go-IOS-Protocol/common"
-	. "github.com/smartystreets/goconvey/convey"
 	"bufio"
+	"bytes"
 	"encoding/binary"
 	"log"
+	"testing"
+	"time"
+
+	"github.com/iost-official/Go-IOS-Protocol/common"
+	. "github.com/smartystreets/goconvey/convey"
 )
+
+func TestRequest_isValidNode(t *testing.T) {
+	Convey("register", t, func() {
+		bn, _ := NewBaseNetwork(&NetConfig{RegisterAddr: "127.0.0.1:30304", ListenAddr: "127.0.0.1", NodeTablePath: "iost_db_"})
+		isValid := isValidNode(&Request{From: []byte("127.0.0.1")}, bn)
+		So(isValid, ShouldBeTrue)
+		isValid = isValidNode(&Request{From: []byte("192.168.1.34")}, bn)
+		So(isValid, ShouldBeTrue)
+		isValid = isValidNode(&Request{From: []byte("13.232.79.7")}, bn)
+		So(isValid, ShouldBeTrue)
+
+		NetMode = PublicMode
+		isValid = isValidNode(&Request{From: []byte("127.0.0.1")}, bn)
+		So(isValid, ShouldBeFalse)
+		isValid = isValidNode(&Request{From: []byte("192.168.1.34")}, bn)
+		So(isValid, ShouldBeFalse)
+		isValid = isValidNode(&Request{From: []byte("13.232.79.7")}, bn)
+		So(isValid, ShouldBeTrue)
+
+	})
+}
 
 func TestRequest_Unpack(t *testing.T) {
 	tim := time.Now().UnixNano()
@@ -43,7 +65,6 @@ func TestRequest_Unpack(t *testing.T) {
 
 			}
 		}
-
 	})
 }
 

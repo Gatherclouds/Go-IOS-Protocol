@@ -1,6 +1,8 @@
 package hash
 
-import "github.com/InWeCrypto/sha3"
+import (
+	"github.com/InWeCrypto/sha3"
+)
 
 func Sha3_256(raw []byte) Hash { return Hash(sha3.Sum256(raw)) }
 

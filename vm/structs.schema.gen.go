@@ -1,9 +1,9 @@
 package vm
 
 import (
-	"unsafe"
 	"io"
 	"time"
+	"unsafe"
 )
 
 var (
@@ -39,7 +39,6 @@ func (d *contractInfoRaw) Size() (s uint64) {
 	s += 17
 	return
 }
-
 func (d *contractInfoRaw) Marshal(buf []byte) ([]byte, error) {
 	size := d.Size()
 	{

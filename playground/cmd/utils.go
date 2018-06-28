@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"os"
 	"io/ioutil"
+	"os"
 )
 
 func ReadSourceFile(file string) (code string) {
@@ -25,4 +25,3 @@ func ReadFile(src string) ([]byte, error) {
 	}
 	return fd, nil
 }
-

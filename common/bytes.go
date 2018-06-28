@@ -28,4 +28,3 @@ func CopyBytes(b []byte) (copiedBytes []byte) {
 
 	return
 }
-

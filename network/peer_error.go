@@ -1,9 +1,10 @@
 package network
 
-type DiscReason uint
+type discReason uint
 
+// const
 const (
-	DiscRequested DiscReason = iota
+	DiscRequested discReason = iota
 	DiscNetworkError
 	DiscProtocolError
 	DiscUselessPeer
@@ -17,6 +18,7 @@ const (
 	DiscReadTimeout
 	DiscSubprotocolError = 0x10
 )
+
 var discReasonToString = [...]string{
 	DiscRequested:           "disconnect requested",
 	DiscNetworkError:        "network error",
@@ -32,4 +34,3 @@ var discReasonToString = [...]string{
 	DiscReadTimeout:         "read timeout",
 	DiscSubprotocolError:    "subprotocol error",
 }
-

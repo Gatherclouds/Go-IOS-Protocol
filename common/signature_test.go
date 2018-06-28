@@ -2,7 +2,9 @@ package common
 
 import (
 	"testing"
+
 	"bytes"
+
 	. "github.com/smartystreets/goconvey/convey"
 )
 
