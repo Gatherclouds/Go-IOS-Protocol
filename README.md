@@ -32,6 +32,10 @@ Test net now is online, check further information below :
 
 ## Installation
 
+*We recommended build and test with docker to avoid NAT issues as below*
+
+[Docker Installation](https://github.com/iost-official/Go-IOS-Protocol/wiki/Docker-Installation)
+
 ### Building from source
 #### Prerequisites
 * Golang 1.10.1 (or newer) is required to build this project
