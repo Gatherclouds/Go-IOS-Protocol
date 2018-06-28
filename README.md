@@ -32,7 +32,7 @@ Test net now is online, check further information below :
 
 ## Installation
 
-*We recommended build and test with docker to avoid NAT issues as below*
+__We recommended build and test with docker to avoid NAT issues as below__
 
 [Docker Installation](https://github.com/iost-official/Go-IOS-Protocol/wiki/Docker-Installation)
 
