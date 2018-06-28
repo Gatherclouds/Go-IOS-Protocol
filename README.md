@@ -36,12 +36,12 @@ __We recommended build and test with docker to avoid NAT issues as below__
 
 [Docker Installation](https://github.com/iost-official/Go-IOS-Protocol/wiki/Docker-Installation)
 
-### Building from source
-#### Prerequisites
+### Prerequisites
 * Golang 1.10.1 (or newer) is required to build this project
 * Redis 4.0.10 (or newer) is required, We recommend Redis stable version
+* Public IP is required currently, this issue will be repaired soon
 
-#### Build
+### Build
 Get this repo:
 ```
 go get -u -v github.com/iost-official/Go-IOS-Protocol
