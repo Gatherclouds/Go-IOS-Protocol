@@ -40,7 +40,11 @@ Test net now is online, check further information below :
 #### Build
 Get this repo:
 ```
-git clone git@github.com:iost-official/Go-IOS-Protocol.git
+go get -u -v github.com/iost-official/Go-IOS-Protocol
+```
+Change Directory into project:
+```
+cd $GOPATH/src/github.com/iost-official/Go-IOS-Protocol
 ```
 Build iserver:
 ```
