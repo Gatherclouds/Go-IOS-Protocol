@@ -158,11 +158,9 @@ prototype
 
 *.log
 /core/block/database/
-core/tx/database/
 db/database/
 
 
-/core/tx/database/
 # ctags
 tags
 
@@ -180,7 +178,6 @@ consensus/common/tx/
 /consensus/dpos/tx/
 /core/block/blockDB/
 /core/block/tx/
-/core/tx/tx/
 /rpc/tx/
 /verifier/tx/
 /network/tale_test/
@@ -189,7 +186,6 @@ consensus/common/tx/
 /network/iost_db_2/
 /network/iost_node_table_/
 network/iost_db_*
-tx/
 playground/playground
 playground/test
 iserver/netpath/
